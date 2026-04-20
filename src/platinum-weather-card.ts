@@ -1400,10 +1400,9 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="slot-icon">
             <ha-icon icon="mdi:thermometer"></ha-icon>
           </div>
-          <div class="slot-text observed-min-text">${temp_min}</div>${units}
+          <div class="slot-text observed-min-text">${temp_min}</div>
           <div class="slot-text slash">/</div>
           <div class="slot-text forecast-min-text">${temp_max}</div>${units}
-          <div class="slot-text">)</div>
         </div>
       </li>
     `;
@@ -1458,7 +1457,7 @@ export class PlatinumWeatherCard extends LitElement {
   get slotWind(): TemplateResult {
     const beaufort = this._config.entity_wind_speed && this._config.option_show_beaufort ? html`<div class="slot-text"></div>BFT: ${this.currentBeaufort} -&nbsp;</div>` : "";
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
-    const units = html`<div class="slot-text unit">${this.getUOM('length')}/h</div>`;
+    const units = html`<div class="slot-text unit-small">${this.getUOM('length')}/h</div>`;
     const speed = this._config.entity_wind_speed ? html`<div class="slot-text">${this.currentWindSpeed}</div>${units}&nbsp;` : "";
     const gust = this._config.entity_wind_gust ? html`<div class="slot-text">(${this.localeTextGust} ${this.currentWindGust}</div>${units})` : "";
     return html`
