@@ -124,7 +124,7 @@ export class PlatinumWeatherCard extends LitElement {
     // check if any of the calculated forecast entities have changed, but only if the daily slot is shown
     if (this._config.show_section_daily_forecast) {
       const days = this._config.daily_forecast_days || 5;
-      for (const entity of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_1', 'entity_forecast_max_1', 'entity_pop_1', 'entity_psr_1']) {
+      for (const entity of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_temp_1', 'entity_forecast_max_temp_1', 'entity_forecast_min_rh_1', 'entity_forecast_max_rh_1', 'entity_psr_1']) {
         if ((this._config[entity] !== undefined) && (this._config[entity].match('^weather.') === null)) {
           // check there is a number in the name
           const start = this._config[entity].match(/(\d+)(?!.*\d)/g);
@@ -186,7 +186,7 @@ export class PlatinumWeatherCard extends LitElement {
         }
       }
     });
-    for (const entityName of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_1', 'entity_forecast_max_1', 'entity_pop_1', 'entity_psr_1']) {
+    for (const entityName of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_temp_1', 'entity_forecast_max_temp_1', 'entity_forecast_min_rh_1', 'entity_forecast_max_rh_1', 'entity_psr_1']) {
       if (this._config[entityName] !== undefined) {
         const entity = this.hass.states[this._config[entityName]];
         // check if we have a weather domain as the entity
@@ -201,24 +201,29 @@ export class PlatinumWeatherCard extends LitElement {
                 this._error.push(`'${entityName} attribute forecast[1].condition not found`);
               }
               break
-            case 'entity_forecast_min_1':
-              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'templow') === undefined) {
-                this._error.push(`'${entityName} attribute forecast[1].templow not found`);
+            case 'entity_forecast_min_temp_1':
+              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'forecastMintemp') === undefined) {
+                this._error.push(`'${entityName} attribute forecast[1].forecastMintemp not found`);
               }
               break
-            case 'entity_forecast_max_1':
-              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'temperature') === undefined) {
-                this._error.push(`'${entityName} attribute forecast[1].temperature not found`);
+            case 'entity_forecast_max_temp_1':
+              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'forecastMaxtemp') === undefined) {
+                this._error.push(`'${entityName} attribute forecast[1].forecastMaxtemp not found`);
               }
               break;
-            case 'entity_pop_1':
-              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'precipitation_probability') === undefined) {
-                this._error.push(`'${entityName} attribute forecast[1].precipitation_probability not found`);
+            case 'entity_forecast_min_rh_1':
+              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'forecastMinrh') === undefined) {
+                this._error.push(`'${entityName} attribute forecast[1].forecastMinrh not found`);
+              }
+              break
+            case 'entity_forecast_max_rh_1':
+              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'forecastMaxrh') === undefined) {
+                this._error.push(`'${entityName} attribute forecast[1].forecastMaxrh not found`);
               }
               break;
             case 'entity_psr_1':
-              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'precipitation') === undefined) {
-                this._error.push(`'${entityName} attribute forecast[1].precipitation not found`);
+              if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'PSR') === undefined) {
+                this._error.push(`'${entityName} attribute forecast[1].PSR not found`);
               }
               break;
           }
@@ -552,6 +557,8 @@ export class PlatinumWeatherCard extends LitElement {
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
+      var maxRH: string | undefined;
+      var minRH: string | undefined;
       if (this._config.entity_forecast_icon_1?.match('^weather.')) {
         // using a weather domain entity
         const iconEntity = this._config.entity_forecast_icon_1;
@@ -572,20 +579,20 @@ export class PlatinumWeatherCard extends LitElement {
         const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && this.hass.states[iconEntity] ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace("-night", "-day"), import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
-      if (this._config.entity_forecast_max_1?.match('^weather.')) {
-        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_1]?.attributes?.forecast, forecastDate, 'temperature');
+      if (this._config.entity_forecast_max_temp_1?.match('^weather.')) {
+        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_temp_1]?.attributes?.forecast, forecastDate, 'forecastMaxtemp');
       } else {
-        start = this._config.entity_forecast_max_1 ? this._config.entity_forecast_max_1.match(/(\d+)(?!.*\d)/g) : false;
-        maxTemp = start && this._config.entity_forecast_max_1 ? this.hass.states[this._config.entity_forecast_max_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+        start = this._config.entity_forecast_max_temp_1 ? this._config.entity_forecast_max_temp_1.match(/(\d+)(?!.*\d)/g) : false;
+        maxTemp = start && this._config.entity_forecast_max_temp_1 ? this.hass.states[this._config.entity_forecast_max_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      if (this._config.entity_forecast_min_1?.match('^weather.')) {
-        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_1]?.attributes?.forecast, forecastDate, 'templow');
+      if (this._config.entity_forecast_min_temp_1?.match('^weather.')) {
+        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_temp_1]?.attributes?.forecast, forecastDate, 'forecastMintemp');
       } else {
-        start = this._config.entity_forecast_min_1 ? this._config.entity_forecast_min_1.match(/(\d+)(?!.*\d)/g) : false;
-        minTemp = start && this._config.entity_forecast_min_1 ? this.hass.states[this._config.entity_forecast_min_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+        start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
+        minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       const tempUnit = html`<div class="unit-temp-small">${this.getUOM("temperature")}</div>`;
-      const minMax = this._config.old_daily_format === true
+      const minMaxTemp = this._config.old_daily_format === true
         ?
         html`
           <li class="f-slot-horiz-text">
@@ -624,26 +631,41 @@ export class PlatinumWeatherCard extends LitElement {
             </li>
           `;
 
-      var pop: TemplateResult;
+      if (this._config.entity_forecast_max_rh_1?.match('^weather.')) {
+        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_rh_1]?.attributes?.forecast, forecastDate, 'forecastMaxrh');
+      } else {
+        start = this._config.entity_forecast_max_rh_1 ? this._config.entity_forecast_max_rh_1.match(/(\d+)(?!.*\d)/g) : false;
+        maxTemp = start && this._config.entity_forecast_max_rh_1 ? this.hass.states[this._config.entity_forecast_max_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+      }
+      if (this._config.entity_forecast_min_rh_1?.match('^weather.')) {
+        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_rh_1]?.attributes?.forecast, forecastDate, 'forecastMinrh');
+      } else {
+        start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
+        minTemp = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+      }
+      const rhUnit = html`<div class="unit-temp-small">%</div>`;
+      const minMaxRH = 
+          html`
+            <li class="f-slot-horiz-text">
+              <span>
+                <div class="slot-text lowTemp">${minRH ? Math.round(Number(minRH)) : "---"}</div>
+                <div class="slot-text slash">-</div>
+                <div class="slot-text highTemp">${maxRH ? Math.round(Number(maxRH)) : "---"}</div>
+                ${rhUnit}
+              </span>
+            </li>
+          `;
+
       var psr: TemplateResult;
       var tooltip: TemplateResult;
-      if (this._config.entity_pop_1?.match('^weather.')) {
-        const popEntity = this._config.entity_pop_1;
-        const popData = this._getForecastPropFromWeather(this.hass.states[popEntity]?.attributes?.forecast, forecastDate, 'precipitation_probability');
-        pop = popEntity ? html`<li class="f-slot-horiz-text"><span><div class="slot-text pop">${this.hass.states[popEntity] && popData !== undefined ? Math.round(Number(popData)) : "---"}</div><div class="unit">%</div></span></li>` : html``;
-      } else {
-        start = this._config.entity_pop_1 ? this._config.entity_pop_1.match(/(\d+)(?!.*\d)/g) : false;
-        const popEntity = start && this._config.entity_pop_1 ? this._config.entity_pop_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        pop = start ? html`<li class="f-slot-horiz-text"><span><div class="slot-text pop">${popEntity && this.hass.states[popEntity] ? Math.round(Number(this.hass.states[popEntity].state)) : "---"}</div><div class="unit">%</div></span></li>` : html``;
-      }
       if (this._config.entity_psr_1?.match('^weather.')) {
         const psrEntity = this._config.entity_psr_1;
-        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'precipitation');
-        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
+        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'PSR');
+        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></span></li>` : html``;
       } else {
         start = this._config.entity_psr_1 ? this._config.entity_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_psr_1 ? this._config.entity_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
+        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div></span></li>` : html``;
       }
       if (this._config.entity_summary_1?.match('^weather.')) {
         const tooltipEntity = this._config.entity_summary_1;
@@ -665,8 +687,8 @@ export class PlatinumWeatherCard extends LitElement {
             <li class="f-slot-horiz-text"><span class="dayname">${forecastDate ? forecastDate.toLocaleDateString(this.locale, { month: 'numeric', day: 'numeric'}) : "---"}</span></li>
             <li class="f-slot-horiz-text"><span class="dayname">${forecastDate ? forecastDate.toLocaleDateString(this.locale, { weekday: 'short' }) : "---"}</span></li>
             ${htmlIcon}
-            ${minMax}
-            ${pop}
+            ${minMaxTemp}
+            ${minMaxRH}
             ${psr}
           </ul>
           ${tooltip}
@@ -721,17 +743,17 @@ export class PlatinumWeatherCard extends LitElement {
       const summary = start ? html`
         <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : ``;
 
-      if (this._config.entity_forecast_max_1?.match('^weather.')) {
-        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_1]?.attributes?.forecast, forecastDate, 'temperature');
+      if (this._config.entity_forecast_max_temp_1?.match('^weather.')) {
+        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_temp_1]?.attributes?.forecast, forecastDate, 'forecastMaxtemp');
       } else {
-        start = this._config.entity_forecast_max_1 ? this._config.entity_forecast_max_1.match(/(\d+)(?!.*\d)/g) : false;
-        maxTemp = start && this._config.entity_forecast_max_1 ? this.hass.states[this._config.entity_forecast_max_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+        start = this._config.entity_forecast_max_temp_1 ? this._config.entity_forecast_max_temp_1.match(/(\d+)(?!.*\d)/g) : false;
+        maxTemp = start && this._config.entity_forecast_max_temp_1 ? this.hass.states[this._config.entity_forecast_max_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      if (this._config.entity_forecast_min_1?.match('^weather.')) {
-        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_1]?.attributes?.forecast, forecastDate, 'templow');
+      if (this._config.entity_forecast_min_temp_1?.match('^weather.')) {
+        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_temp_1]?.attributes?.forecast, forecastDate, 'forecastMintemp');
       } else {
-        start = this._config.entity_forecast_min_1 ? this._config.entity_forecast_min_1.match(/(\d+)(?!.*\d)/g) : false;
-        minTemp = start && this._config.entity_forecast_min_1 ? this.hass.states[this._config.entity_forecast_min_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+        start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
+        minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       const tempUnit = html`<div class="unit-temp-small">${this.getUOM("temperature")}</div>`;
       const min = minTemp ? html`
@@ -744,30 +766,17 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="temp-label">Max: </div>
           <div class="high-temp">${Math.round(Number(maxTemp))}</div>${tempUnit}
         </div>` : html`---`;
-      if (this._config.entity_pop_1?.match('^weather.')) {
-        const popEntity = this._config.entity_pop_1;
-        const popData = this._getForecastPropFromWeather(this.hass.states[popEntity]?.attributes?.forecast, forecastDate, 'precipitation_probability');
-        pop = popEntity ? html`<div class="f-slot-vert"><div class="f-label">Chance of rain </div>
-        <div class="pop">${this.hass.states[popEntity] && popData !== undefined ? Math.round(Number(popData)) : "---"}</div><div class="unit">%</div></div>` : html``;
-      } else {
-        start = this._config.entity_pop_1 ? this._config.entity_pop_1.match(/(\d+)(?!.*\d)/g) : false;
-        const popEntity = start && this._config.entity_pop_1 ? this._config.entity_pop_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        pop = start ? html`
-          <div class="f-slot-vert"><div class="f-label">Chance of rain </div>
-          <div class="pop">${popEntity && this.hass.states[popEntity] ? Math.round(Number(this.hass.states[popEntity].state)) : "---"}</div><div class="unit">%</div></div>` : html``;
-      }
       if (this._config.entity_psr_1?.match('^weather.')) {
         const psrEntity = this._config.entity_psr_1;
-        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'precipitation');
+        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'PSR');
         psr = psrEntity ? html`<div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
-        <div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></div>` : html``;
+        <div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></div>` : html``;
       } else {
         start = this._config.entity_psr_1 ? this._config.entity_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_psr_1 ? this._config.entity_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         psr = start ? html`
           <div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
-          <div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div>
-          <div class="unit">${this.getUOM('precipitation')}</div></div>` : html``;
+          <div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div></div>` : html``;
       }
       start = this._config.entity_extended_1 && i < (this._config.daily_extended_forecast_days !== 0 ? this._config.daily_extended_forecast_days || 7 : 0) ? this._config.entity_extended_1.match(/(\d+)(?!.*\d)/g) : false;
       var extended: TemplateResult = html``;
