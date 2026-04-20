@@ -660,6 +660,7 @@ export class PlatinumWeatherCard extends LitElement {
       htmlDays.push(html`
         <div class="day-horiz fcasttooltip">
           <ul class="f-slot-horiz">
+            <li class="f-slot-horiz-text"><span class="dayname">${forecastDate ? forecastDate.toLocaleDateString(this.locale, { month: 'numeric', day: 'numeric'}) : "---"}</span></li>
             <li class="f-slot-horiz-text"><span class="dayname">${forecastDate ? forecastDate.toLocaleDateString(this.locale, { weekday: 'short' }) : "---"}</span></li>
             ${htmlIcon}
             ${minMax}
@@ -1425,7 +1426,7 @@ export class PlatinumWeatherCard extends LitElement {
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
     const units = html`<div class="slot-text unit">${this.getUOM('length')}/h</div>`;
     const speed = this._config.entity_wind_speed ? html`<div class="slot-text">${this.currentWindSpeed}</div>${units}&nbsp;` : "";
-    const gust = this._config.entity_wind_gust ? html`<div class="slot-text">(Gust ${this.currentWindGust}</div>${units})` : "";
+    const gust = this._config.entity_wind_gust ? html`<div class="slot-text">(${this.localeTextGust} ${this.currentWindGust}</div>${units})` : "";
     return html`
       <li>
         <div class="slot">
@@ -1443,7 +1444,7 @@ export class PlatinumWeatherCard extends LitElement {
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
     const units = html`<div class="slot-text unit">Kt</div>`;
     const speed = this._config.entity_wind_speed_kt ? html`<div class="slot-text">${this.currentWindSpeedKt}</div>${units}&nbsp;` : "";
-    const gust = this._config.entity_wind_gust_kt ? html`<div class="slot-text">(Gust ${this.currentWindGustKt}</div>${units})` : "";
+    const gust = this._config.entity_wind_gust_kt ? html`<div class="slot-text">(${this.localeTextGust} ${this.currentWindGustKt}</div>${units})` : "";
     return html`
       <li>
         <div class="slot">
@@ -2044,6 +2045,9 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "Ощущается как";
       case 'ua': return "Відчувається як";
       case 'bg': return "Усеща се като";
+      case 'zh': return "體感";
+      case 'zh-cn': return "体感";
+      case 'zh-hk': return "體感";
       default: return "Feels like";
     }
   }
@@ -2164,6 +2168,9 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "УФ";
       case 'ua': return "УФ";
       case 'bg': return "UV";
+      case 'zh': return "紫外線";
+      case 'zh-cn': return "紫外线";
+      case 'zh-hk': return "紫外線";
       default: return "UV";
     }
   }
@@ -2181,6 +2188,25 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ua': return "Вогонь";
       case 'bg': return "Пожар";
       default: return "Fire";
+    }
+  }
+
+  get localeTextGust(): string {
+    switch (this.locale) {
+      case 'it': return "Raffica";
+      case 'fr': return "Rafale";
+      case 'de': return "Böen";
+      case 'nl': return "Windvlaag";
+      case 'pl': return "Poryw";
+      case 'he': return "משב";
+      case 'da': return "Vindstød";
+      case 'ru': return "Порыв";
+      case 'ua': return "Порив";
+      case 'bg': return "Порив";
+      case 'zh': return "陣風";
+      case 'zh-cn': return "阵风";
+      case 'zh-hk': return "陣風";
+      default: return "Gust";
     }
   }
 
@@ -2244,7 +2270,7 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .updated {
         font-size: 0.9em;
-        font-weight: 300;
+        font-weight: 1em;
         color: var(--primary-text-color);
       }
       .overview-top {
@@ -2313,7 +2339,7 @@ export class PlatinumWeatherCard extends LitElement {
       .apparent {
         display: table-cell;
         color: var(--primary-text-color);
-        font-weight: 300;
+        font-weight: 1em;
         position: relative;
         line-height: 24px;
       }
@@ -2350,7 +2376,7 @@ export class PlatinumWeatherCard extends LitElement {
       .variations {
         display: flex;
         flex-flow: row wrap;
-        font-weight: 300;
+        font-weight: 1em;
         color: var(--primary-text-color);
         list-style: none;
         margin-block-start: 0px;
@@ -2372,7 +2398,7 @@ export class PlatinumWeatherCard extends LitElement {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-between;
-        font-weight: 300;
+        font-weight: 1em;
         color: var(--primary-text-color);
         list-style: none;
         margin-block-start: 0px;
@@ -2503,7 +2529,7 @@ export class PlatinumWeatherCard extends LitElement {
         text-align: center;
         list-style: none;
         overflow: hidden;
-        font-weight: 300;
+        font-weight: 1em;
         padding: 0;
         margin-block-start: 0;
         margin-block-end: -12px;
@@ -2520,14 +2546,14 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .f-firedanger-vert {
         text-align: right;
-        font-weight: 300;
+        font-weight: 1em;
         margin-top: -24px;
       }
       .f-slot-vert {
         display: table;
         overflow: hidden;
         height: 24px;
-        font-weight: 300;
+        font-weight: 1em;
       }
       .f-slot-minmax {
         width: 100%;
@@ -2535,7 +2561,7 @@ export class PlatinumWeatherCard extends LitElement {
       .f-extended {
         display: inline-table;
         font-size: 13px;
-        font-weight: 300;
+        font-weight: 1em;
         padding-top: 8px;
         line-height:20px;
       }
@@ -2548,7 +2574,7 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .lowTemp {
         display: table-cell;
-        font-weight: 300;
+        font-weight: 1em;
       }
       .slash {
         padding-left: 2px;
@@ -2562,14 +2588,14 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .low-temp {
         display: table-cell;
-        font-weight: 300;
+        font-weight: 1em;
         width: 21px;
         text-align: right;
       }
       .temp-label {
         display: table-cell;
         width: 32px;
-        font-weight: 300;
+        font-weight: 1em;
       }
       .f-label {
         display: table-cell;
@@ -2578,12 +2604,12 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .pop {
         display: table-cell;
-        font-weight: 300;
+        font-weight: 1em;
         color: var(--primary-text-color);
       }
       .pos {
         display: table-cell;
-        font-weight: 300;
+        font-weight: 1em;
         color: var(--primary-text-color);
         white-space: nowrap;
       }
