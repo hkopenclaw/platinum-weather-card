@@ -142,12 +142,12 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
 
     if (tmpConfig.entity_forecast_high_temp_1) {
-      tmpConfig['entity_forecast_max_1'] = tmpConfig.entity_forecast_high_temp_1;
+      tmpConfig['entity_forecast_max_temp_temp_1'] = tmpConfig.entity_forecast_high_temp_1;
       delete tmpConfig['entity_forecast_high_temp_1'];
     }
 
     if (tmpConfig.entity_forecast_low_temp_1) {
-      tmpConfig['entity_forecast_min_1'] = tmpConfig.entity_forecast_low_temp_1;
+      tmpConfig['entity_forecast_min_temp_1'] = tmpConfig.entity_forecast_low_temp_1;
       delete tmpConfig['entity_forecast_low_temp_1'];
     }
 
@@ -503,20 +503,24 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.entity_summary_1 || '';
   }
 
-  get _entity_forecast_min_1(): string {
-    return this._config?.entity_forecast_min_1 || '';
+  get _entity_forecast_min_temp_1(): string {
+    return this._config?.entity_forecast_min_temp_1 || '';
   }
 
-  get _entity_forecast_max_1(): string {
-    return this._config?.entity_forecast_max_1 || '';
+  get _entity_forecast_max_temp_1(): string {
+    return this._config?.entity_forecast_max_temp_1 || '';
   }
 
-  get _entity_pop_1(): string {
-    return this._config?.entity_pop_1 || '';
+  get _entity_forecast_min_rh_1(): string {
+    return this._config?.entity_forecast_min_rh_1 || '';
   }
 
-  get _entity_pos_1(): string {
-    return this._config?.entity_pos_1 || '';
+  get _entity_forecast_max_rh_1(): string {
+    return this._config?.entity_forecast_max_rh_1 || '';
+  }
+
+  get _entity_psr_1(): string {
+    return this._config?.entity_psr_1 || '';
   }
 
   get _entity_extended_1(): string {
@@ -1242,17 +1246,20 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         name="entity_summary_1" label="Entity Forecast Summary 1" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_min_1'} .value=${this._entity_forecast_min_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_forecast_min_1" label="Entity Forecast Min 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_min_temp_1'} .value=${this._entity_forecast_min_temp_1} .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_min_temp_1" label="Entity Forecast Min Temp 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_max_1'} .value=${this._entity_forecast_max_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_forecast_max_1" label="Entity Forecast Max 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_max_temp_1'} .value=${this._entity_forecast_max_temp_1} .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_max_temp_1" label="Entity Forecast Max Temp 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_pop_1'} .value=${this._entity_pop_1}  .includeDomains=${['sensor', 'weather']}
-        name="entity_pop_1" label="Entity Forecast Chance of Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_min_rh_1'} .value=${this._entity_forecast_min_rh_1} .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_min_rh_1" label="Entity Forecast Min RH 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_pos_1'} .value=${this._entity_pos_1}  .includeDomains=${['sensor', 'weather']}
-        name="entity_pos_1" label="Entity Forecast Possible Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_max_rh_1'} .value=${this._entity_forecast_max_rh_1} .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_max_rh_1" label="Entity Forecast Max RH 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+      </ha-entity-picker>
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_psr_1'} .value=${this._entity_psr_1}  .includeDomains=${['sensor', 'weather']}
+        name="entity_psr_1" label="Entity Forecast Probability of Significant Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       ${this._daily_forecast_layout === 'vertical' ? html`
         <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended_1'} .value=${this._entity_extended_1} .includeDomains=${['sensor']}
