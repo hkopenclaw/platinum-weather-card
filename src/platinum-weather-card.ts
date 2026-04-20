@@ -1393,7 +1393,7 @@ export class PlatinumWeatherCard extends LitElement {
     const digits = this._config.option_today_temperature_decimals === true ? 1 : 0;
     const temp_max = this._config.entity_daytime_high && this.hass.states[this._config.entity_daytime_high] !== undefined ? (Number(this.hass.states[this._config.entity_daytime_high].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
     const temp_min = this._config.entity_daytime_low && this.hass.states[this._config.entity_daytime_low] !== undefined ? (Number(this.hass.states[this._config.entity_daytime_low].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
-    const units = html`<div class="unit">${this.getUOM('temperature')}</div>` : html``;
+    const units = html`<div class="unit">${this.getUOM('temperature')}</div>`;
     return html`
       <li>
         <div class="slot">
