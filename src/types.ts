@@ -101,11 +101,12 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   custom4_units?: string;
 
   entity_forecast_icon_1?: string;
-  entity_pop_1?: string;
-  entity_pos_1?: string;
+  entity_forecast_min_temp_1?: string;
+  entity_forecast_max_temp_1?: string;
+  entity_forecast_min_rh_1?: string;
+  entity_forecast_max_rh_1?: string;
+  entity_psr_1?: string;
   entity_summary_1?: string;
-  entity_forecast_min_1?: string;
-  entity_forecast_max_1?: string;
   entity_extended_1?: string;
   entity_fire_danger_1?: string;
 
@@ -115,7 +116,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   daily_extended_use_attr?: boolean;
   daily_extended_name_attr?: string;
 
-  option_today_temperature_decimals?: boolean;
+  option_slot_temperature_decimals?: boolean;
   option_today_rainfall_decimals?: boolean;
   option_pressure_decimals?: pressureDecimals;
   option_color_fire_danger?: boolean;
@@ -222,11 +223,12 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'custom4_icon',
   'custom4_units',
   'entity_forecast_icon_1',
-  'entity_pop_1',
-  'entity_pos_1',
+  'entity_forecast_min_temp_1',
+  'entity_forecast_max_temp_1',
+  'entity_forecast_min_rh_1',
+  'entity_forecast_max_rh_1',
+  'entity_psr_1',
   'entity_summary_1',
-  'entity_forecast_min_1',
-  'entity_forecast_max_1',
   'entity_extended_1',
   'entity_fire_danger_1',
   'daily_forecast_layout',
@@ -234,7 +236,7 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'daily_extended_forecast_days',
   'daily_extended_use_attr',
   'daily_extended_name_attr',
-  'option_today_temperature_decimals',
+  'option_slot_temperature_decimals',
   'option_today_rainfall_decimals',
   'option_pressure_decimals',
   'option_color_fire_danger',
