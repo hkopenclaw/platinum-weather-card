@@ -124,7 +124,7 @@ export class PlatinumWeatherCard extends LitElement {
     // check if any of the calculated forecast entities have changed, but only if the daily slot is shown
     if (this._config.show_section_daily_forecast) {
       const days = this._config.daily_forecast_days || 5;
-      for (const entity of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_1', 'entity_forecast_max_1', 'entity_pop_1', 'entity_pos_1']) {
+      for (const entity of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_1', 'entity_forecast_max_1', 'entity_pop_1', 'entity_psr_1']) {
         if ((this._config[entity] !== undefined) && (this._config[entity].match('^weather.') === null)) {
           // check there is a number in the name
           const start = this._config[entity].match(/(\d+)(?!.*\d)/g);
@@ -186,7 +186,7 @@ export class PlatinumWeatherCard extends LitElement {
         }
       }
     });
-    for (const entityName of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_1', 'entity_forecast_max_1', 'entity_pop_1', 'entity_pos_1']) {
+    for (const entityName of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_1', 'entity_forecast_max_1', 'entity_pop_1', 'entity_psr_1']) {
       if (this._config[entityName] !== undefined) {
         const entity = this.hass.states[this._config[entityName]];
         // check if we have a weather domain as the entity
@@ -216,7 +216,7 @@ export class PlatinumWeatherCard extends LitElement {
                 this._error.push(`'${entityName} attribute forecast[1].precipitation_probability not found`);
               }
               break;
-            case 'entity_pos_1':
+            case 'entity_psr_1':
               if (this._getForecastPropFromWeather(entity?.attributes?.forecast, forecastDate, 'precipitation') === undefined) {
                 this._error.push(`'${entityName} attribute forecast[1].precipitation not found`);
               }
@@ -543,10 +543,12 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderHorizontalDailyForecastSection(): TemplateResult {
     const htmlDays: TemplateResult[] = [];
     const days = this._config.daily_forecast_days || 5;
+    const now = new Date().getHours();
+    const offset = now < 12 ? 0 : 1;
 
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
-      forecastDate.setDate(forecastDate.getDate() + i + 1);
+      forecastDate.setDate(forecastDate.getDate() + i + offset);
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
@@ -623,7 +625,7 @@ export class PlatinumWeatherCard extends LitElement {
           `;
 
       var pop: TemplateResult;
-      var pos: TemplateResult;
+      var psr: TemplateResult;
       var tooltip: TemplateResult;
       if (this._config.entity_pop_1?.match('^weather.')) {
         const popEntity = this._config.entity_pop_1;
@@ -634,14 +636,14 @@ export class PlatinumWeatherCard extends LitElement {
         const popEntity = start && this._config.entity_pop_1 ? this._config.entity_pop_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         pop = start ? html`<li class="f-slot-horiz-text"><span><div class="slot-text pop">${popEntity && this.hass.states[popEntity] ? Math.round(Number(this.hass.states[popEntity].state)) : "---"}</div><div class="unit">%</div></span></li>` : html``;
       }
-      if (this._config.entity_pos_1?.match('^weather.')) {
-        const posEntity = this._config.entity_pos_1;
-        const posData = this._getForecastPropFromWeather(this.hass.states[posEntity]?.attributes?.forecast, forecastDate, 'precipitation');
-        pos = posEntity ? html`<li class="f-slot-horiz-text"><span><div class="pos">${this.hass.states[posEntity] && posData !== undefined ? posData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
+      if (this._config.entity_psr_1?.match('^weather.')) {
+        const psrEntity = this._config.entity_psr_1;
+        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'precipitation');
+        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
       } else {
-        start = this._config.entity_pos_1 ? this._config.entity_pos_1.match(/(\d+)(?!.*\d)/g) : false;
-        const posEntity = start && this._config.entity_pos_1 ? this._config.entity_pos_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        pos = start ? html`<li class="f-slot-horiz-text"><span><div class="pos">${posEntity && this.hass.states[posEntity] ? this.hass.states[posEntity].state : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
+        start = this._config.entity_psr_1 ? this._config.entity_psr_1.match(/(\d+)(?!.*\d)/g) : false;
+        const psrEntity = start && this._config.entity_psr_1 ? this._config.entity_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
+        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></span></li>` : html``;
       }
       if (this._config.entity_summary_1?.match('^weather.')) {
         const tooltipEntity = this._config.entity_summary_1;
@@ -665,7 +667,7 @@ export class PlatinumWeatherCard extends LitElement {
             ${htmlIcon}
             ${minMax}
             ${pop}
-            ${pos}
+            ${psr}
           </ul>
           ${tooltip}
         </div>
@@ -681,15 +683,17 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderVerticalDailyForecastSection(): TemplateResult {
     const htmlDays: TemplateResult[] = [];
     const days = this._config.daily_forecast_days || 5;
+    const now = new Date().getHours();
+    const offset = now < 12 ? 0 : 1;
 
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
-      forecastDate.setDate(forecastDate.getDate() + i + 1);
+      forecastDate.setDate(forecastDate.getDate() + i + offset);
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
       var pop: TemplateResult;
-      var pos: TemplateResult;
+      var psr: TemplateResult;
       var fireDanger: TemplateResult;
       if (this._config.entity_forecast_icon_1?.match('^weather.')) {
         // using a weather domain entity
@@ -752,17 +756,17 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="f-slot-vert"><div class="f-label">Chance of rain </div>
           <div class="pop">${popEntity && this.hass.states[popEntity] ? Math.round(Number(this.hass.states[popEntity].state)) : "---"}</div><div class="unit">%</div></div>` : html``;
       }
-      if (this._config.entity_pos_1?.match('^weather.')) {
-        const posEntity = this._config.entity_pos_1;
-        const posData = this._getForecastPropFromWeather(this.hass.states[posEntity]?.attributes?.forecast, forecastDate, 'precipitation');
-        pos = posEntity ? html`<div class="f-slot-vert"><div class="f-label">Possible rain </div>
-        <div class="pos">${this.hass.states[posEntity] && posData !== undefined ? posData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></div>` : html``;
+      if (this._config.entity_psr_1?.match('^weather.')) {
+        const psrEntity = this._config.entity_psr_1;
+        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'precipitation');
+        psr = psrEntity ? html`<div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
+        <div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div><div class="unit">${this.getUOM('precipitation')}</div></div>` : html``;
       } else {
-        start = this._config.entity_pos_1 ? this._config.entity_pos_1.match(/(\d+)(?!.*\d)/g) : false;
-        const posEntity = start && this._config.entity_pos_1 ? this._config.entity_pos_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        pos = start ? html`
-          <div class="f-slot-vert"><div class="f-label">Possible rain </div>
-          <div class="pos">${posEntity && this.hass.states[posEntity] ? this.hass.states[posEntity].state : "---"}</div>
+        start = this._config.entity_psr_1 ? this._config.entity_psr_1.match(/(\d+)(?!.*\d)/g) : false;
+        const psrEntity = start && this._config.entity_psr_1 ? this._config.entity_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
+        psr = start ? html`
+          <div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
+          <div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div>
           <div class="unit">${this.getUOM('precipitation')}</div></div>` : html``;
       }
       start = this._config.entity_extended_1 && i < (this._config.daily_extended_forecast_days !== 0 ? this._config.daily_extended_forecast_days || 7 : 0) ? this._config.entity_extended_1.match(/(\d+)(?!.*\d)/g) : false;
@@ -820,7 +824,7 @@ export class PlatinumWeatherCard extends LitElement {
             </div>
             <div class="day-vert-rain">
               ${pop}
-              ${pos}
+              ${psr}
             </div>
           </div>
           <div class="day-vert-bottom">
@@ -2210,6 +2214,15 @@ export class PlatinumWeatherCard extends LitElement {
     }
   }
 
+  get localeTextPSR(): string {
+    switch (this.locale) {
+      case 'zh': return "顯著降雨概率";
+      case 'zh-cn': return "显著降雨概率";
+      case 'zh-hk': return "顯著降雨概率";
+      default: return "Probability of Significant Rain";
+    }
+  }
+
   getUOM(measure: string): string {
     const lengthUnit = this.hass.config.unit_system.length;
 
@@ -2408,7 +2421,7 @@ export class PlatinumWeatherCard extends LitElement {
       .ha-icon {
         height: 24px;
         margin-right: 5px;
-        color: var(--paper-item-icon-color);
+        color: var(--state-icon-color);
       }
       .unit {
         font-size: 0.8em;
@@ -2423,7 +2436,7 @@ export class PlatinumWeatherCard extends LitElement {
         position: relative;
         height: 18px;
         padding-right: 5px;
-        color: var(--paper-item-icon-color);
+        color: var(--state-icon-color);
       }
       .slot-text {
         display: table-cell;
@@ -2607,7 +2620,7 @@ export class PlatinumWeatherCard extends LitElement {
         font-weight: 1em;
         color: var(--primary-text-color);
       }
-      .pos {
+      .psr {
         display: table-cell;
         font-weight: 1em;
         color: var(--primary-text-color);
