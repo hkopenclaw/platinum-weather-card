@@ -597,13 +597,13 @@ export class PlatinumWeatherCard extends LitElement {
         html`
           <li class="f-slot-horiz-text">
             <span>
-              <div class="slot-text highTemp">${maxTemp ? Math.round(Number(maxTemp)) : '---'}</div>
+              <div class="slot-text highTemp">${maxTemp ? maxTemp : '---'}</div>
               ${tempUnit}
             </span>
           </li>
           <li class="f-slot-horiz-text">
             <span>
-              <div class="slot-text lowTemp">${minTemp ? Math.round(Number(minTemp)) : '---'}</div>
+              <div class="slot-text lowTemp">${minTemp ? minTemp : '---'}</div>
               ${tempUnit}
             </span>
           </li>`
@@ -613,9 +613,9 @@ export class PlatinumWeatherCard extends LitElement {
           html`
             <li class="f-slot-horiz-text">
               <span>
-                <div class="slot-text highTemp">${maxTemp ? Math.round(Number(maxTemp)) : "---"}</div>
+                <div class="slot-text highTemp">${maxTemp ? maxTemp : "---"}</div>
                 <div class="slot-text slash">/</div>
-                <div class="slot-text lowTemp">${minTemp ? Math.round(Number(minTemp)) : "---"}</div>
+                <div class="slot-text lowTemp">${minTemp ? minTemp : "---"}</div>
                 ${tempUnit}
               </span>
             </li>`
@@ -623,34 +623,34 @@ export class PlatinumWeatherCard extends LitElement {
           html`
             <li class="f-slot-horiz-text">
               <span>
-                <div class="slot-text lowTemp">${minTemp ? Math.round(Number(minTemp)) : "---"}</div>
+                <div class="slot-text lowTemp">${minTemp ? minTemp : "---"}</div>
                 <div class="slot-text slash">/</div>
-                <div class="slot-text highTemp">${maxTemp ? Math.round(Number(maxTemp)) : "---"}</div>
+                <div class="slot-text highTemp">${maxTemp ? maxTemp : "---"}</div>
                 ${tempUnit}
               </span>
             </li>
           `;
 
       if (this._config.entity_forecast_max_rh_1?.match('^weather.')) {
-        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_rh_1]?.attributes?.forecast, forecastDate, 'forecastMaxrh');
+        maxRH = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_rh_1]?.attributes?.forecast, forecastDate, 'forecastMaxrh');
       } else {
         start = this._config.entity_forecast_max_rh_1 ? this._config.entity_forecast_max_rh_1.match(/(\d+)(?!.*\d)/g) : false;
-        maxTemp = start && this._config.entity_forecast_max_rh_1 ? this.hass.states[this._config.entity_forecast_max_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+        maxRH = start && this._config.entity_forecast_max_rh_1 ? this.hass.states[this._config.entity_forecast_max_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       if (this._config.entity_forecast_min_rh_1?.match('^weather.')) {
-        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_rh_1]?.attributes?.forecast, forecastDate, 'forecastMinrh');
+        minRH = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_rh_1]?.attributes?.forecast, forecastDate, 'forecastMinrh');
       } else {
         start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
-        minTemp = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+        minRH = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       const rhUnit = html`<div class="unit-temp-small">%</div>`;
       const minMaxRH = 
           html`
             <li class="f-slot-horiz-text">
               <span>
-                <div class="slot-text lowTemp">${minRH ? Math.round(Number(minRH)) : "---"}</div>
+                <div class="slot-text lowTemp">${minRH ? minRH : "---"}</div>
                 <div class="slot-text slash">-</div>
-                <div class="slot-text highTemp">${maxRH ? Math.round(Number(maxRH)) : "---"}</div>
+                <div class="slot-text highTemp">${maxRH ? maxRH : "---"}</div>
                 ${rhUnit}
               </span>
             </li>
@@ -759,12 +759,12 @@ export class PlatinumWeatherCard extends LitElement {
       const min = minTemp ? html`
         <div class="f-slot-vert">
           <div class="temp-label">Min: </div>
-          <div class="low-temp">${Math.round(Number(minTemp))}</div>${tempUnit}
+          <div class="low-temp">${minTemp}</div>${tempUnit}
         </div>` : html`---`;
       const max = maxTemp ? html`
         <div class="f-slot-vert">
           <div class="temp-label">Max: </div>
-          <div class="high-temp">${Math.round(Number(maxTemp))}</div>${tempUnit}
+          <div class="high-temp">${maxTemp}</div>${tempUnit}
         </div>` : html`---`;
       if (this._config.entity_psr_1?.match('^weather.')) {
         const psrEntity = this._config.entity_psr_1;
