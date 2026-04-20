@@ -44,23 +44,6 @@ const plugins = [
     ],
   }),
   dev && serve(serveopts),
-  !dev && terser({
-    ecma: 2022,
-    module: true,
-    compress: {
-      passes: 2,
-      drop_console: true,
-      drop_debugger: true,
-      pure_getters: true,
-      unsafe_methods: true,
-    },
-    mangle: {
-      properties: false,
-    },
-    format: {
-      comments: false,
-    },
-  }),
   ignore({
     files: [...ignoreTextfieldFiles, ...ignoreSelectFiles, ...ignoreSwitchFiles].map((file) => require.resolve(file)),
   }),
