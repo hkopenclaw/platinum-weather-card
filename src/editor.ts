@@ -96,8 +96,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       delete tmpConfig['locale'];
     }
 
-    if (tmpConfig.option_today_temperature_decimals) {
-      tmpConfig['option_today_temperature_decimals'] = tmpConfig.show_today_decimals;
+    if (tmpConfig.option_slot_temperature_decimals) {
+      tmpConfig['option_slot_temperature_decimals'] = tmpConfig.show_today_decimals;
       delete tmpConfig['show_today_decimals'];
     }
 
@@ -539,8 +539,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.daily_extended_name_attr || '';
   }
 
-  get _option_today_temperature_decimals(): boolean {
-    return this._config?.option_today_temperature_decimals === true; // default off
+  get _option_slot_temperature_decimals(): boolean {
+    return this._config?.option_slot_temperature_decimals === true; // default off
   }
 
   get _option_today_rainfall_decimals(): boolean {
@@ -1188,8 +1188,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return html`
       <div class="side-by-side">
         <div>
-          <ha-formfield .label=${'Todays Temperature Decimals'}>
-            <ha-switch .checked=${this._option_today_temperature_decimals !== false} .configValue=${'option_today_temperature_decimals'}
+          <ha-formfield .label=${'Slot Temperature Decimals'}>
+            <ha-switch .checked=${this._option_slot_temperature_decimals !== false} .configValue=${'option_slot_temperature_decimals'}
               @change=${this._valueChanged}>
             </ha-switch>
           </ha-formfield>
