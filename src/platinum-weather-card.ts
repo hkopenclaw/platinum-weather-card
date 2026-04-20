@@ -643,14 +643,14 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
         minRH = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const rhUnit = html`<div class="unit-temp-small">%</div>`;
+      const rhUnit = html`<div class="unit">%</div>`;
       const minMaxRH = 
           html`
             <li class="f-slot-horiz-text">
               <span>
-                <div class="slot-text lowTemp">${minRH ? minRH : "---"}</div>
+                <div class="slot-text rh">${minRH ? minRH : "---"}</div>
                 <div class="slot-text slash">-</div>
-                <div class="slot-text highTemp">${maxRH ? maxRH : "---"}</div>
+                <div class="slot-text rh">${maxRH ? maxRH : "---"}</div>
                 ${rhUnit}
               </span>
             </li>
@@ -1047,6 +1047,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'temp_following': return this.slotTempFollowing;
       case 'temp_maximums': return this.slotTempMaximums;
       case 'temp_minimums': return this.slotTempMinimums;
+      case 'maxmin_since_midnight': return this.slotMaxMinsinceMidnight;
       case 'uv_summary': return this.slotUvSummary;
       case 'fire_danger': return this.slotFireDanger;
       case 'wind': return this.slotWind;
@@ -1064,19 +1065,19 @@ export class PlatinumWeatherCard extends LitElement {
 
     // If no value can be matched pass back a default for the slot
     switch (slot) {
-      case 'l1': return this.slotForecastMax;
-      case 'l2': return this.slotForecastMin;
+      case 'l1': return this.slotSunNext;
+      case 'l2': return this.slotMaxMinsinceMidnight;
       case 'l3': return this.slotWind;
       case 'l4': return this.slotPressure;
-      case 'l5': return this.slotSunNext;
+      case 'l5': return this.slotRemove;
       case 'l6': return this.slotRemove;
       case 'l7': return this.slotRemove;
       case 'l8': return this.slotRemove;
-      case 'r1': return this.slotPopForecast;
+      case 'r1': return this.slotSunFollowing;
       case 'r2': return this.slotHumidity;
       case 'r3': return this.slotUvSummary;
-      case 'r4': return this.slotFireDanger;
-      case 'r5': return this.slotSunFollowing;
+      case 'r4': return this.slotRainfall;
+      case 'r5': return this.slotRemove;
       case 'r6': return this.slotRemove;
       case 'r7': return this.slotRemove;
       case 'r8': return this.slotRemove;
@@ -1382,6 +1383,26 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="slot-text observed-min-text">${temp_obs}</div>${units}
           <div class="slot-text">&nbsp;(${this.localeTextFore}&nbsp;</div>
           <div class="slot-text forecast-min-text">${temp_for}</div>${units}
+          <div class="slot-text">)</div>
+        </div>
+      </li>
+    `;
+  }
+
+  get slotMaxMinsinceMidnight(): TemplateResult {
+    const digits = this._config.option_today_temperature_decimals === true ? 1 : 0;
+    const temp_max = this._config.entity_daytime_high && this.hass.states[this._config.entity_daytime_high] !== undefined ? (Number(this.hass.states[this._config.entity_daytime_high].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
+    const temp_min = this._config.entity_daytime_low && this.hass.states[this._config.entity_daytime_low] !== undefined ? (Number(this.hass.states[this._config.entity_daytime_low].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
+    const units = html`<div class="unit">${this.getUOM('temperature')}</div>` : html``;
+    return html`
+      <li>
+        <div class="slot">
+          <div class="slot-icon">
+            <ha-icon icon="mdi:thermometer"></ha-icon>
+          </div>
+          <div class="slot-text observed-min-text">${temp_min}</div>${units}
+          <div class="slot-text slash">/</div>
+          <div class="slot-text forecast-min-text">${temp_max}</div>${units}
           <div class="slot-text">)</div>
         </div>
       </li>
@@ -2432,11 +2453,16 @@ export class PlatinumWeatherCard extends LitElement {
         margin-right: 5px;
         color: var(--state-icon-color);
       }
-      .unit {
+      .unit-small {
         font-size: 0.8em;
         display: table-cell;
         padding-left: 1px;
       }
+      .unit {
+        font-size: 1em;
+        display: table-cell;
+        padding-left: 1px;
+      }      
       .slot {
         display: table-row;
       }
@@ -2624,7 +2650,7 @@ export class PlatinumWeatherCard extends LitElement {
         white-space: nowrap;
         padding-right: 0.2em;
       }
-      .pop {
+      .rh {
         display: table-cell;
         font-weight: 1em;
         color: var(--primary-text-color);
