@@ -1223,7 +1223,7 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="slot-icon">
             <ha-icon icon="mdi:gauge"></ha-icon>
           </div>
-          <div class="slot-text pressure-text">${this.currentPressure}</div>${units}
+          <div class="slot-text pressure-text">${this.currentPressure}</div> ${units}
         </div>
       </li>
     `;
@@ -1459,7 +1459,7 @@ export class PlatinumWeatherCard extends LitElement {
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
     const units = html`<div class="slot-text unit-small">${this.getUOM('length')}/h</div>`;
     const speed = this._config.entity_wind_speed ? html`<div class="slot-text">${this.currentWindSpeed}</div>${units}&nbsp;` : "";
-    const gust = this._config.entity_wind_gust ? html`<div class="slot-text">(${this.localeTextGust} ${this.currentWindGust}</div>${units})` : "";
+    const gust = this._config.entity_wind_gust ? html`<div class="slot-text">( ${this.localeTextGust} ${this.currentWindGust}</div>${units} )` : "";
     return html`
       <li>
         <div class="slot">
@@ -1477,7 +1477,7 @@ export class PlatinumWeatherCard extends LitElement {
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
     const units = html`<div class="slot-text unit">Kt</div>`;
     const speed = this._config.entity_wind_speed_kt ? html`<div class="slot-text">${this.currentWindSpeedKt}</div>${units}&nbsp;` : "";
-    const gust = this._config.entity_wind_gust_kt ? html`<div class="slot-text">(${this.localeTextGust} ${this.currentWindGustKt}</div>${units})` : "";
+    const gust = this._config.entity_wind_gust_kt ? html`<div class="slot-text">( ${this.localeTextGust} ${this.currentWindGustKt}</div>${units} )` : "";
     return html`
       <li>
         <div class="slot">
@@ -2109,7 +2109,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "Ощущается как";
       case 'ua': return "Відчувається як";
       case 'bg': return "Усеща се като";
-      case 'zh': return "體感";
+      case 'zh': return "体感";
       case 'zh-cn': return "体感";
       case 'zh-hk': return "體感";
       default: return "Feels like";
@@ -2232,7 +2232,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "УФ";
       case 'ua': return "УФ";
       case 'bg': return "UV";
-      case 'zh': return "紫外線";
+      case 'zh': return "紫外线";
       case 'zh-cn': return "紫外线";
       case 'zh-hk': return "紫外線";
       default: return "UV";
@@ -2267,7 +2267,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "Порыв";
       case 'ua': return "Порив";
       case 'bg': return "Порив";
-      case 'zh': return "陣風";
+      case 'zh': return "阵风";
       case 'zh-cn': return "阵风";
       case 'zh-hk': return "陣風";
       default: return "Gust";
@@ -2276,7 +2276,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   get localeTextPSR(): string {
     switch (this.locale) {
-      case 'zh': return "顯著降雨概率";
+      case 'zh': return "显著降雨概率";
       case 'zh-cn': return "显著降雨概率";
       case 'zh-hk': return "顯著降雨概率";
       default: return "Probability of Significant Rain";
