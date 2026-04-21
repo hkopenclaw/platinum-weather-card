@@ -1409,7 +1409,7 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   get slotUvSummary(): TemplateResult {
-    const uv = this._config.entity_uv_alert_summary && this.hass.states[this._config.entity_uv_alert_summary] !== undefined ? this.hass.states[this._config.entity_uv_alert_summary].state !== "unknown" ? this.hass.states[this._config.entity_uv_alert_summary].state : "Not Applicable" : "---";
+    const uv = this.currentUv;
     return html`
       <li>
         <div class="slot">
@@ -1791,6 +1791,35 @@ export class PlatinumWeatherCard extends LitElement {
         if (value >= 4) return '2';
         if (value >= 1) return '1';
         return '0';
+      }
+    }
+    return '---';
+  }
+
+  get currentUv(): string {
+    const entity = this._config.entity_uv_alert_summary;
+    if (entity && this.hass.states[entity] && !isNaN(Number(this.hass.states[entity].state))) {
+      const value = Number(this.hass.states[entity].state);
+      switch (this.config.locale) {
+        case 'zh-cn':
+          if (value >= 11) return '极高';
+          if (value >= 8) return '甚高';
+          if (value >= 6) return '高';
+          if (value >= 3) return '中';
+          if (value >= 0) return '低';
+        case 'zh':
+        case 'zh-hk':
+          if (value >= 11) return '極高';
+          if (value >= 8) return '甚高';
+          if (value >= 6) return '高';
+          if (value >= 3) return '中';
+          if (value >= 0) return '低';
+        default:
+          if (value >= 11) return 'Extreme';
+          if (value >= 8) return 'Very high';
+          if (value >= 6) return 'High';
+          if (value >= 3) return 'Moderate';
+          if (value >= 0) return 'Low';
       }
     }
     return '---';
