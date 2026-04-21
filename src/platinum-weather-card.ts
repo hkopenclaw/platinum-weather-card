@@ -1801,19 +1801,21 @@ export class PlatinumWeatherCard extends LitElement {
     if (entity && this.hass.states[entity] && !isNaN(Number(this.hass.states[entity].state))) {
       const value = Number(this.hass.states[entity].state);
       switch (this.config.locale) {
+        case 'zh':
         case 'zh-cn':
           if (value >= 11) return '极高';
           if (value >= 8) return '甚高';
           if (value >= 6) return '高';
           if (value >= 3) return '中';
           if (value >= 0) return '低';
-        case 'zh':
+          break;
         case 'zh-hk':
           if (value >= 11) return '極高';
           if (value >= 8) return '甚高';
           if (value >= 6) return '高';
           if (value >= 3) return '中';
           if (value >= 0) return '低';
+          break;
         default:
           if (value >= 11) return 'Extreme';
           if (value >= 8) return 'Very high';
