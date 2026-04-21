@@ -1800,7 +1800,7 @@ export class PlatinumWeatherCard extends LitElement {
     const entity = this._config.entity_uv_alert_summary;
     if (entity && this.hass.states[entity] && !isNaN(Number(this.hass.states[entity].state))) {
       const value = Number(this.hass.states[entity].state);
-      switch (this.config.locale) {
+      switch (this.locale) {
         case 'zh':
         case 'zh-cn':
           if (value >= 11) return '极高';
