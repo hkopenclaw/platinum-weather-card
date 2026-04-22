@@ -823,7 +823,7 @@ export class PlatinumWeatherCard extends LitElement {
     if (!entity) {
       return undefined;
     }
-     const list: HkoForecastDay[] | undefined = this.hass.states[entity]?.attributes?.weatherForecast;
+     const list = this.hass.states[entity]?.attributes?.weatherForecast as HkoForecastDay || undefined;
      if (!list || !list[index]) return undefined;
      const f = list[index];
      switch (propKey) {
