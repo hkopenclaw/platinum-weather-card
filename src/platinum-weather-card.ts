@@ -529,7 +529,7 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_forecast_hko === 'sensor.hko_forecast') {
         // using a weather domain entity
         const iconEntity = this._config.entity_forecast_hko;
-        const condition = this._getForecastPropFromWeather('condition', index);
+        const condition = this._getForecastPropFromWeather('ForecastIcon', index);
         if (condition === undefined) {
           break;
         }
@@ -828,11 +828,11 @@ export class PlatinumWeatherCard extends LitElement {
      const f = list[index];
      switch (propKey) {
        case 'condition':
-         return this._weatherIcon(f.ForecastIcon);
+         return f.ForecastIcon !== undefined ? String(f.ForecastIcon) : undefined;
        case 'forecastMaxtemp':
-         return f.forecastMaxTemp?.value !== undefined ? String(f.forecastMaxTemp.value) : undefined;
+         return f.forecastMaxtemp?.value !== undefined ? String(f.forecastMaxtemp.value) : undefined;
        case 'forecastMintemp':
-         return f.forecastMinTemp?.value !== undefined ? String(f.forecastMinTemp.value) : undefined;
+         return f.forecastMintemp?.value !== undefined ? String(f.forecastMintemp.value) : undefined;
        case 'forecastMaxrh':
          return f.forecastMaxrh?.value !== undefined ? String(f.forecastMaxrh.value) : undefined;
        case 'forecastMinrh':
@@ -1888,65 +1888,35 @@ export class PlatinumWeatherCard extends LitElement {
   // get the icon that matches the current conditions
   private _weatherIcon(conditions: string): string {
     switch (conditions) {
-      case 'sunny':
-      case 'clear': return this.iconClear;
-      case 'mostly-sunny':
-      case 'mostly_sunny': return this.iconMostlySunny;
-      case 'partly-cloudy':
-      case 'partly_cloudy':
-      case 'partlycloudy': return this.iconPartlyCloudy;
-      case 'cloudy': return this.iconCloudy;
-      case 'hazy':
-      case 'hazey':
-      case 'haze': return this.iconHazy;
-      case 'frost': return this.iconFrost;
-      case 'light-rain':
-      case 'light_rain': return this.iconLightRain;
-      case 'wind':
-      case 'windy': return this.iconWindy;
-      case 'fog':
-      case 'foggy': return this.iconFog;
-      case 'showers':
-      case 'shower': return this.iconShowers;
-      case 'rain':
-      case 'rainy': return this.iconRain;
-      case 'dust':
-      case 'dusty': return this.iconDust;
-      case 'snow':
-      case 'snowy': return this.iconSnow;
-      case 'snowy-rainy':
-      case 'snowy_rainy':
-      case 'snowyrainy': return this.iconSnowRain;
-      case 'storm':
-      case 'stormy': return this.iconStorm;
-      case 'light-showers':
-      case 'light-shower':
-      case 'light_showers':
-      case 'light_shower': return this.iconLightShowers;
-      case 'heavy-showers':
-      case 'heavy-shower':
-      case 'heavy_showers':
-      case 'heavy_shower':
-      case 'pouring': return this.iconHeavyShowers;
-      case 'tropical-cyclone':
-      case 'tropical_cyclone':
-      case 'tropicalcyclone': return this.iconCyclone;
-      case 'clear-day':
-      case 'clear_day': return this.iconClearDay;
-      case 'clear-night':
-      case 'clear_night': return this.iconClearNight;
-      case 'sleet': return this.iconSleet;
-      case 'partly-cloudy-day':
-      case 'partly_cloudy_day': return this.iconPartlyCloudyDay;
-      case 'partly-cloudy-night':
-      case 'partly_cloudy_night': return this.iconPartlyCloudyNight;
-      case 'hail': return this.iconHail;
-      case 'lightning':
-      case 'lightning-rainy':
-      case 'lightning_rainy':
-      case 'thunderstorm': return this.iconLightning;
-      case 'windy-variant':
-      case 'windy_variant': return this.iconWindyVariant;
+      case '50': return this.sunny_icon;
+      case '51': return this.sunny_periods_icon;
+      case '52': return this.sunny_intervals_icon;
+      case '53': return this.light_showers_icon;
+      case '54': return this.showers_icon;
+      case '60': return this.cloudy_icon;
+      case '61': return this.overcast_icon;
+      case '62': return this.light_rain_icon;
+      case '63': return this.rain_icon;
+      case '64': return this.heavy_rain_icon;
+      case '65': return this.thunderstorms_icon;
+      case '70': return this.moon_new_icon;
+      case '71': return this.moon_waxing_crescent_icon;
+      case '72': return this.moon_first_quarter_icon;
+      case '73': return this.moon_full_icon;
+      case '74': return this.moon_last_quarter_icon;
+      case '75': return this.moon_waning_crescent_icon;
+      case '76': return this.mainly_cloudy_icon;
+      case '77': return this.mainly_fine_icon;
+      case '80': return this.windy_icon;
+      case '81': return this.dry_icon;
+      case '82': return this.humid_icon;
+      case '83': return this.fog_icon;
+      case '84': return this.mist_icon;
+      case '85': return this.haze_icon;
+      case '90': return this.hot_icon;
+      case '91': return this.warm_icon;
+      case '92': return this.cool_icon;
+      case '93': return this.cold_icon;
     }
     return 'unknown';
   }
@@ -1956,108 +1926,120 @@ export class PlatinumWeatherCard extends LitElement {
     return this._config.entity_sun && this.hass.states[this._config.entity_sun] !== undefined ? transformDayNight[this.hass.states[this._config.entity_sun].state] : 'day';
   }
 
-  get iconClear(): string {
-    return `clear-${this.dayOrNight}`;
+  get sunny_icon(): string {
+    return `sunny`;
   }
 
-  get iconMostlySunny(): string {
-    return `cloudy-1-${this.dayOrNight}`;
+  get sunny_periods_icon(): string {
+    return `sunny-periods${this.wts}`;
   }
 
-  get iconPartlyCloudy(): string {
-    return `cloudy-2-${this.dayOrNight}`;
+  get sunny_intervals_icon(): string {
+    return `cloudy-day-3${this.wts}`;
   }
 
-  get iconCloudy(): string {
-    return `cloudy`;
+  get light_showers_icon(): string {
+    return `light-showers${this.wts}`;
   }
 
-  get iconHazy(): string {
-    return `haze-${this.dayOrNight}`;
+  get showers_icon(): string {
+    return `showers${this.wts}`;
   }
 
-  get iconFrost(): string {
-    return `frost-${this.dayOrNight}`;
+  get cloudy_icon(): string {
+    return `cloudy${this.wts}`;
   }
 
-  get iconLightRain(): string {
-    return `rainy-2`;
+  get overcast_icon(): string {
+    return `overcast${this.wts}`;
   }
 
-  get iconWindy(): string {
-    return `wind`;
+  get light_rain_icon(): string {
+    return `light-rain${this.wts}`;
   }
 
-  get iconFog(): string {
-    return `fog-${this.dayOrNight}`;
+  get rain_icon(): string {
+    return `rain${this.wrain}${this.wts}`;
   }
 
-  get iconShowers(): string {
-    return `rainy-1-${this.dayOrNight}`;
+  get heavy_rain_icon(): string {
+    return `heavy-rain${this.wrain}${this.wts}`;
   }
 
-  get iconRain(): string {
-    return `rainy-3`;
+  get thunderstorms_icon(): string {
+    return `thunderstorms${this.wrain}`;
   }
 
-  get iconDust(): string {
-    return `dust`;
+  get moon_new_icon(): string {
+    return `moon-new`;
   }
 
-  get iconSnow(): string {
-    return `snowy-3`;
+  get moon_waxing_crescent_icon(): string {
+    return `moon-waxing-crescent`;
   }
 
-  get iconSnowRain(): string {
-    return `snow-and-sleet-mix`;
+  get moon_first_quarter_icon(): string {
+    return `moon-first-quarter`;
   }
 
-  get iconStorm(): string {
-    return `scattered-thunderstorms-${this.dayOrNight}`;
+  get moon_full_icon(): string {
+    return `moon-full`;
   }
 
-  get iconLightShowers(): string {
-    return `rainy-1-${this.dayOrNight}`;
+  get moon_last_quarter_icon(): string {
+    return `moon-last-quarter`;
   }
 
-  get iconHeavyShowers(): string {
-    return `rainy-2-${this.dayOrNight}`;
+  get moon_waning_crescent_icon(): string {
+    return `moon-waning-crescent`;
   }
 
-  get iconCyclone(): string {
-    return `tropical-storm`;
+  get mainly_cloudy_icon(): string {
+    return `mainly-cloudy${this.wts}`;
   }
 
-  get iconClearDay(): string {
-    return `clear-day`;
+  get mainly_fine_icon(): string {
+    return `mainly-fine${this.wts}`;
   }
 
-  get iconClearNight(): string {
-    return `clear-night`;
+  get windy_icon(): string {
+    return `windy`;
   }
 
-  get iconSleet(): string {
-    return `rain-and-sleet-mix`;
+  get dry_icon(): string {
+    return `dry`;
   }
 
-  get iconPartlyCloudyDay(): string {
-    return `cloudy-1-day`;
+  get humid_icon(): string {
+    return `humid`;
   }
 
-  get iconPartlyCloudyNight(): string {
-    return `cloudy-1-night`;
+  get fog_icon(): string {
+    return `fog${this.wts}`;
   }
 
-  get iconHail(): string {
-    return `hail`;
+  get mist_icon(): string {
+    return `mist${this.wts}`;
   }
 
-  get iconLightning(): string {
-    return `isolated-thunderstorms-${this.dayOrNight}`;
+  get haze_icon(): string {
+    return `haze${this.wts}`;
   }
 
-  get iconWindyVariant(): string {
-    return `wind`;
+  get hot_icon(): string {
+    return `hot`;
+  }
+
+  get warm_icon(): string {
+    return `warm`;
+  }
+
+  get cool_icon(): string {
+    return `cool`;
+  }
+
+  get cold_icon(): string {
+    return `cold`;
   }
 
   get locale(): string | undefined {
