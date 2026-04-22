@@ -1610,17 +1610,16 @@ export class PlatinumWeatherCard extends LitElement {
 
   get currentRainfall(): string {
     const entity = this._config.entity_rainfall;
-    const digits = this._config.option_today_rainfall_decimals === true ? 1 : 0;
     return entity && this.hass.states[entity]
-      ? (Number(this.hass.states[entity].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : '---';
+      ? (Number(this.hass.states[entity].state)).toLocaleString(this.locale) : '---';
   }
 
   get currentPressure(): string {
     const entity = this._config.entity_pressure;
-    var places = this._config.option_pressure_decimals ? Math.max(Math.min(this._config.option_pressure_decimals, 3), 0) : 0;
+    const digits = this._config.option_slot_pressure_decimals === true ? 1 : 0;
     return entity && this.hass.states[entity]
       ? entity.match('^weather.') === null
-        ? (Number(this.hass.states[entity].state)).toLocaleString(this.locale, { minimumFractionDigits: places, maximumFractionDigits: places })
+        ? (Number(this.hass.states[entity].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits })
         : this.hass.states[entity].attributes.pressure !== undefined
           ? (Number(this.hass.states[entity].attributes.pressure)).toLocaleString(this.locale)
           : '---'
