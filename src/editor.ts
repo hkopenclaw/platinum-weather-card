@@ -993,11 +993,11 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           name="entity_apparent_temp" label="Entity Apparent Temperature" allow-custom-entity
           @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-            <ha-entity-picker .hass=${this.hass} .configValue=${'entity_hko_warnsum'} .value=${this.entity_hko_warnsum} .includeDomains=${['sensor', 'weather']}
+            <ha-entity-picker .hass=${this.hass} .configValue=${'entity_hko_warnsum'} .value=${this._entity_hko_warnsum} .includeDomains=${['sensor', 'weather']}
         name="entity_hko_warnsum" label="Entity HKO Warning Summary" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_hko_warninginfo'} .value=${this.entity_hko_warninginfo} .includeDomains=${['sensor', 'weather']}
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_hko_warninginfo'} .value=${this._entity_hko_warninginfo} .includeDomains=${['sensor', 'weather']}
         name="entity_hko_warninginfo" label="Entity HKO Warning Information" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>` : html``}
