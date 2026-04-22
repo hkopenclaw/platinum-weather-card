@@ -711,14 +711,14 @@ export class PlatinumWeatherCard extends LitElement {
       const summary = start ? html`
         <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : ``;
 
-      if (this._config.entity_forecast_max_temp_1?.match('^weather.')) {
-        maxTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_max_temp_1]?.attributes?.forecast, forecastDate, 'forecastMaxtemp');
+      if (this._config.entity_forecast_hko === 'sensor.hko_forecast') {
+        maxTemp = this._getForecastPropFromWeather('forecastMaxtemp', index);
       } else {
         start = this._config.entity_forecast_max_temp_1 ? this._config.entity_forecast_max_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         maxTemp = start && this._config.entity_forecast_max_temp_1 ? this.hass.states[this._config.entity_forecast_max_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      if (this._config.entity_forecast_min_temp_1?.match('^weather.')) {
-        minTemp = this._getForecastPropFromWeather(this.hass.states[this._config.entity_forecast_min_temp_1]?.attributes?.forecast, forecastDate, 'forecastMintemp');
+      if (this._config.entity_forecast_hko === 'sensor.hko_forecast') {
+        minTemp = this._getForecastPropFromWeather('forecastMintemp', index);
       } else {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
@@ -734,9 +734,9 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="temp-label">Max: </div>
           <div class="high-temp">${maxTemp}</div>${tempUnit}
         </div>` : html`---`;
-      if (this._config.entity_psr_1?.match('^weather.')) {
-        const psrEntity = this._config.entity_psr_1;
-        const psrData = this._getForecastPropFromWeather(this.hass.states[psrEntity]?.attributes?.forecast, forecastDate, 'PSR');
+      if (this._config.entity_forecast_hko === 'sensor.hko_forecast') {
+        const psrEntity = this._config.entity_forecast_hko;
+        const psrData = this._getForecastPropFromWeather('PSR', index);
         psr = psrEntity ? html`<div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
         <div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></div>` : html``;
       } else {
@@ -823,7 +823,7 @@ export class PlatinumWeatherCard extends LitElement {
     if (!entity) {
       return undefined;
     }
-     const list = this.hass.states[entity]?.attributes?.weatherForecast as HkoForecastDay || undefined;
+     const list = this.hass.states[entity]?.attributes?.weatherForecast;
      if (!list || !list[index]) return undefined;
      const f = list[index];
      switch (propKey) {
