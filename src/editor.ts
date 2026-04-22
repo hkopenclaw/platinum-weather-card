@@ -6,7 +6,7 @@ import { fireEvent } from './ha-helpers.js';
 import { mdiPencil, mdiArrowDown, mdiArrowUp, mdiApplicationEditOutline } from '@mdi/js';
 
 //import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
-import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, extendedDays, sectionType, timeFormat, sectionNames, pressureDecimals, HassCustomElement, weatherCardConfigKeys } from './types';
+import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, extendedDays, sectionType, timeFormat, sectionNames, HassCustomElement, weatherCardConfigKeys } from './types';
 import { customElement, property, state } from 'lit/decorators.js';
 import { formfieldDefinition } from '../elements/formfield';
 //import { selectDefinition } from '../elements/select';
@@ -102,7 +102,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
 
     if (tmpConfig.show_decimals_pressure) {
-      tmpConfig['option_pressure_decimals'] = tmpConfig.show_decimals_pressure;
+      tmpConfig['option_slot_pressure_decimals'] = tmpConfig.show_decimals_pressure;
       delete tmpConfig['show_decimals_pressure'];
     }
 
@@ -547,12 +547,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.option_slot_temperature_decimals === true; // default off
   }
 
-  get _option_today_rainfall_decimals(): boolean {
-    return this._config?.option_today_rainfall_decimals === true; // default off
-  }
-
-  get _option_pressure_decimals(): pressureDecimals | null {
-    return this._config?.option_pressure_decimals || null;
+  get _option_slot_pressure_decimals(): boolean {
+    return this._config?.option_slot_pressure_decimals === true; // default off
   }
 
   get _option_color_fire_danger(): boolean {
@@ -1202,7 +1198,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       <div class="side-by-side">
         <div>
           <ha-formfield .label=${'Slot Pressure Decimals'}>
-            <ha-switch .checked=${this._option_pressure_decimals !== false} .configValue=${'option_slot_pressure_decimals'}
+            <ha-switch .checked=${this._option_slot_pressure_decimals !== false} .configValue=${'option_slot_pressure_decimals'}
               @change=${this._valueChanged}>
             </ha-switch>
           </ha-formfield>
