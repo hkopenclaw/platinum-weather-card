@@ -495,6 +495,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.daily_extended_forecast_days ?? null;
   }
 
+  get _entity_forecast_hko(): string {
+    return this._config?.entity_forecast_hko || '';
+  }
+
   get _entity_forecast_icon_1(): string {
     return this._config?.entity_forecast_icon_1 || '';
   }
@@ -1194,19 +1198,11 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
             </ha-switch>
           </ha-formfield>
         </div>
-        <ha-select label="Pressure Decimals" .configValue=${'option_pressure_decimals'}
-          .value=${this._option_pressure_decimals ? this._option_pressure_decimals.toString() : null} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChangedNumber}>
-          <ha-md-list-item></ha-md-list-item>
-          <ha-md-list-item value="0">0</ha-md-list-item>
-          <ha-md-list-item value="1">1</ha-md-list-item>
-          <ha-md-list-item value="2">2</ha-md-list-item>
-          <ha-md-list-item value="3">3</ha-md-list-item>
-        </ha-select>
       </div>
       <div class="side-by-side">
         <div>
-          <ha-formfield .label=${'Todays Rainfall Decimals'}>
-            <ha-switch .checked=${this._option_today_rainfall_decimals !== false} .configValue=${'option_today_rainfall_decimals'}
+          <ha-formfield .label=${'Slot Pressure Decimals'}>
+            <ha-switch .checked=${this._option_pressure_decimals !== false} .configValue=${'option_slot_pressure_decimals'}
               @change=${this._valueChanged}>
             </ha-switch>
           </ha-formfield>
@@ -1238,6 +1234,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
 
     return html`
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_hko'} .value=${this._entity_forecast_hko} .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_hko" label="Entity Forecast HKO" allow-custom-entity
+        @value-changed=${this._valueChangedPicker}>
+      </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_icon_1'} .value=${this._entity_forecast_icon_1} .includeDomains=${['sensor', 'weather']}
         name="entity_forecast_icon_1" label="Entity Forecast Icon 1" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
