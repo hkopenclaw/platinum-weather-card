@@ -1926,6 +1926,39 @@ export class PlatinumWeatherCard extends LitElement {
     return this._config.entity_sun && this.hass.states[this._config.entity_sun] !== undefined ? transformDayNight[this.hass.states[this._config.entity_sun].state] : 'day';
   }
 
+  get wrain(): string {
+    try {
+     const entity = this._config?.entity_warnsum;
+     if (!entity) return '';
+     const wrainData = this.hass.states[entityId]?.attributes?.WRAIN;
+     if (!wrainData || wrainData.actionCode === 'CANCEL') {
+      return '';
+     }
+     switch (wrainData.code) {
+       case 'WRAINA': return '-wraina';
+       case 'WRAINR': return '-wrainr';
+       case 'WRAINB': return '-wrainb';
+       default: return '';
+     }
+    } catch {
+     return '';
+    }
+  }
+
+  get wts(): string {
+    try {
+     const entity = this._config?.entity_warnsum;
+     if (!entity) return '';
+     const wtsData = this.hass.states[entity]?.attributes?.WTS;
+     if (wtsData && wtsData.actionCode !== 'CANCEL') {
+      return '-wts';
+     }
+     return '';
+    } catch {
+     return '';
+    }
+  }
+ 
   get sunny_icon(): string {
     return `sunny`;
   }
