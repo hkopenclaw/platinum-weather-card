@@ -17,7 +17,6 @@ export type layoutOverview = "complete" | "observations" | "forecast" | "title o
 export type layoutOrientation = "horizontal" | "vertical";
 export type layoutDays = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type extendedDays = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-export type pressureDecimals = 0 | 1 | 2 | 3;
 export type timeFormat = 'system' | '12hour' | '24hour';
 
 // TODO Add your configuration elements here for type-checking
@@ -119,7 +118,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
 
   option_slot_temperature_decimals?: boolean;
   option_today_rainfall_decimals?: boolean;
-  option_pressure_decimals?: pressureDecimals;
+  option_pressure_decimals?: boolean;
   option_color_fire_danger?: boolean;
   option_daily_color_fire_danger?: boolean;
 
