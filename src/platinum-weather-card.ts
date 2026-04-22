@@ -1930,7 +1930,7 @@ export class PlatinumWeatherCard extends LitElement {
     try {
      const entity = this._config?.entity_warnsum;
      if (!entity) return '';
-     const wrainData = this.hass.states[entityId]?.attributes?.WRAIN;
+     const wrainData = this.hass.states[entity]?.attributes?.WRAIN;
      if (!wrainData || wrainData.actionCode === 'CANCEL') {
       return '';
      }
