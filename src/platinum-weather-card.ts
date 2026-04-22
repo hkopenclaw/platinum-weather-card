@@ -188,7 +188,6 @@ export class PlatinumWeatherCard extends LitElement {
     });
     for (const entityName of ['entity_forecast_icon_1', 'entity_summary_1', 'entity_forecast_min_temp_1', 'entity_forecast_max_temp_1', 'entity_forecast_min_rh_1', 'entity_forecast_max_rh_1', 'entity_psr_1']) {
       if (this._config[entityName] !== undefined) {
-        const entity = this.hass.states[this._config[entityName]];
         // check if we have a weather domain as the entity
         if (this._config.entity_forecast_hko === 'sensor.hko_forecast') {
           if (!this.hass.states[this._config.entity_forecast_hko]?.attributes?.weatherForecast) {
@@ -519,6 +518,8 @@ export class PlatinumWeatherCard extends LitElement {
     const offset = now < 12 ? 0 : 1;
 
     for (var i = 0; i < days; i++) {
+      const forecastDate = new Date();
+      forecastDate.setDate(forecastDate.getDate() + i + offset);
       const index = i + offset;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
@@ -634,7 +635,7 @@ export class PlatinumWeatherCard extends LitElement {
         psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div></span></li>` : html``;
       }
       if (this._config.entity_forecast_hko === 'sensor.hko_forecast') {
-        const tooltipEntity = _config.entity_forecast_hko;
+        const tooltipEntity = this._config.entity_forecast_hko;
         const tooltipData = this._getForecastPropFromWeather('summary', index);
         tooltip = html`<div class="fcasttooltipblock" id="fcast-summary-${i}" style="width:${days * 100}%;left:-${i * 100}%;"><div class="fcasttooltiptext">${this.hass.states[tooltipEntity] && tooltipData !== undefined ? stringComputeStateDisplay(this.hass.localize, tooltipData) : "---"}</div>
             <span style="content:'';position:absolute;top:100%;left:${(100 / days / 2) + i * (100 / days)}%;margin-left:-7.5px;border-width:7.5px;border-style:solid;border-color:#FFA100 transparent transparent transparent;"></span>
@@ -677,6 +678,7 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
+      const index = i + offset;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
@@ -686,7 +688,7 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_forecast_icon_1?.match('^weather.')) {
         // using a weather domain entity
         const iconEntity = this._config.entity_forecast_icon_1;
-        const condition = this._getForecastPropFromWeather(this.hass.states[iconEntity]?.attributes?.forecast, forecastDate, 'condition');
+        const condition = this._getForecastPropFromWeather('condition', index);
         if (condition === undefined) {
           break;
         }
