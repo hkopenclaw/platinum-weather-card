@@ -1,0 +1,22 @@
+<svg
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="64"
+    height="64"
+    viewbox="0 0 64 64">
+    <g id="moon-last-quarter">
+        <g transform="translate(20,15)">
+            <g class="am-weather-moon-star-1">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(1), translate(-2,-1)"/>
+            </g>
+            <g class="am-weather-moon-star-2">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(0.75),translate(-1,22)"/>
+            </g>
+            <g class="am-weather-moon-star-3">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(0.6),translate(40,35)"/>
+            </g>
+        </g>
+    </g>
+    <path fill="orange" stroke="orange" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" d="M 33.929 28.785 C 32.142 25.041 32.958 20.681 36.002 17.7 C 34.441 17.712 32.9 18.026 31.481 18.622 C 25.786 20.883 23.165 26.947 25.623 32.175 C 28.206 37.355 34.878 39.632 40.524 37.263 C 42.006 36.773 43.313 35.922 44.3 34.795 C 39.845 34.877 35.763 32.51 33.929 28.785 Z"></path>
+</svg>

@@ -1,0 +1,22 @@
+<svg
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="64"
+    height="64"
+    viewbox="0 0 64 64">
+    <g id="moon-waning-crescent">
+        <g transform="translate(20,15)">
+            <g class="am-weather-moon-star-1">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(1.1), translate(-3,-2)"/>
+            </g>
+            <g class="am-weather-moon-star-2">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(0.9),translate(-2,23)"/>
+            </g>
+            <g class="am-weather-moon-star-3">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(0.6),translate(42,38)"/>
+            </g>
+        </g>
+    </g>
+    <path fill="orange" stroke="orange" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" d="M 44.226 36.593 C 32.04 36.88 25.539 24.949 33.96 17.736 L 34.017 17.7 C 33.426 17.838 32.844 18.01 32.281 18.213 C 23.297 21.483 22.01 31.478 29.966 36.204 C 33.659 38.398 38.502 38.815 42.671 37.297 C 43.234 37.092 43.777 36.854 44.299 36.588 L 44.226 36.593 Z"></path>
+</svg>

@@ -1,0 +1,128 @@
+<svg
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    width="64"
+    height="64"
+    viewbox="0 0 64 64">
+    <defs>
+        <style type="text/css"><![CDATA[
+/*
+** MOON
+*/
+@keyframes am-weather-moon-star-1 {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.am-weather-moon-star-1 {
+  -webkit-animation-name: am-weather-moon-star-1;
+     -moz-animation-name: am-weather-moon-star-1;
+      -ms-animation-name: am-weather-moon-star-1;
+          animation-name: am-weather-moon-star-1;
+  -webkit-animation-delay: 3s;
+     -moz-animation-delay: 3s;
+      -ms-animation-delay: 3s;
+          animation-delay: 3s;
+  -webkit-animation-duration: 5s;
+     -moz-animation-duration: 5s;
+      -ms-animation-duration: 5s;
+          animation-duration: 5s;
+  -webkit-animation-timing-function: linear;
+     -moz-animation-timing-function: linear;
+      -ms-animation-timing-function: linear;
+          animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+     -moz-animation-iteration-count: infinite;
+      -ms-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+
+@keyframes am-weather-moon-star-2 {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.am-weather-moon-star-2 {
+  -webkit-animation-name: am-weather-moon-star-2;
+     -moz-animation-name: am-weather-moon-star-2;
+      -ms-animation-name: am-weather-moon-star-2;
+          animation-name: am-weather-moon-star-2;
+  -webkit-animation-delay: 5s;
+     -moz-animation-delay: 5s;
+      -ms-animation-delay: 5s;
+          animation-delay: 5s;
+  -webkit-animation-duration: 4s;
+     -moz-animation-duration: 4s;
+      -ms-animation-duration: 4s;
+          animation-duration: 4s;
+  -webkit-animation-timing-function: linear;
+     -moz-animation-timing-function: linear;
+      -ms-animation-timing-function: linear;
+          animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+     -moz-animation-iteration-count: infinite;
+      -ms-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+
+@keyframes am-weather-moon-star-3 {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.am-weather-moon-star-3 {
+  -webkit-animation-name: am-weather-moon-star-3;
+     -moz-animation-name: am-weather-moon-star-3;
+      -ms-animation-name: am-weather-moon-star-3;
+          animation-name: am-weather-moon-star-3;
+  -webkit-animation-delay: 7s;
+     -moz-animation-delay: 7s;
+      -ms-animation-delay: 7s;
+          animation-delay: 7s;
+  -webkit-animation-duration: 4.5s;
+     -moz-animation-duration: 4.5s;
+      -ms-animation-duration: 4.5s;
+          animation-duration: 4.5s;
+  -webkit-animation-timing-function: linear;
+     -moz-animation-timing-function: linear;
+      -ms-animation-timing-function: linear;
+          animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+     -moz-animation-iteration-count: infinite;
+      -ms-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+
+        ]]></style>
+    </defs>
+    <g id="moon-waxing-crescent">
+        <g transform="translate(20,15)">
+            <g class="am-weather-moon-star-1">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(1), translate(24,1)"/>
+            </g>
+            <g class="am-weather-moon-star-2">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(1),translate(21,19)"/>
+            </g>
+            <g class="am-weather-moon-star-3">
+                <polygon fill="orange" points="3.3,1.5 4,2.7 5.2,3.3 4,4 3.3,5.2 2.7,4 1.5,3.3 2.7,2.7" stroke="none" stroke-miterlimit="10" transform="scale(0.6),translate(0,0)"/>
+            </g>
+        </g>
+    </g>
+    <path fill="orange" stroke="orange" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" d="M 36.715 18.212 C 36.152 18.01 35.571 17.838 34.979 17.7 L 35.037 17.736 C 43.457 24.947 36.956 36.865 24.772 36.579 L 24.7 36.579 C 25.221 36.844 25.766 37.08 26.327 37.283 C 35.312 40.549 45.257 34.644 44.226 26.654 C 43.749 22.947 40.885 19.728 36.715 18.212 Z"></path>
+</svg>
