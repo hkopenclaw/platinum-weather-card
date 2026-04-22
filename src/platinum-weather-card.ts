@@ -520,7 +520,6 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      const index = i + offset;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
@@ -678,7 +677,6 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      const index = i + offset;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
