@@ -100,6 +100,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   custom4_icon?: string;
   custom4_units?: string;
 
+  entity_forecast_hko?: string;
   entity_forecast_icon_1?: string;
   entity_forecast_min_temp_1?: string;
   entity_forecast_max_temp_1?: string;
