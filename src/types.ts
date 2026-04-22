@@ -117,8 +117,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   daily_extended_name_attr?: string;
 
   option_slot_temperature_decimals?: boolean;
-  option_today_rainfall_decimals?: boolean;
-  option_pressure_decimals?: boolean;
+  option_slot_pressure_decimals?: boolean;
   option_color_fire_danger?: boolean;
   option_daily_color_fire_danger?: boolean;
 
@@ -237,8 +236,7 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'daily_extended_use_attr',
   'daily_extended_name_attr',
   'option_slot_temperature_decimals',
-  'option_today_rainfall_decimals',
-  'option_pressure_decimals',
+  'option_slot_pressure_decimals',
   'option_color_fire_danger',
   'option_daily_color_fire_danger',
   'pressure_units',
