@@ -6,7 +6,7 @@ import { HomeAssistant, LovelaceCardEditor, ActionHandlerEvent } from './ha-type
 import { getLovelace, debounce, hasAction, handleAction } from './ha-helpers.js';
 import { getLocale } from './helpers';
 import { entityComputeStateDisplay, stringComputeStateDisplay } from './compute_state_display';
-import type { timeFormat, WeatherCardConfig, HkoForecastTemperature, HkoForecastHumidity, HkoForecastDay } from './types';
+import type { timeFormat, WeatherCardConfig } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 
@@ -520,6 +520,7 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
+      const index = i;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
@@ -677,6 +678,7 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
+      const index = i;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
