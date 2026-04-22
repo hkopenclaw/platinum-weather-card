@@ -143,6 +143,32 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   style?: string;
 }
 
+export interface HkoForecastTemperature {
+  value: number;
+  unit?: string;
+}
+
+export interface HkoForecastHumidity {
+  value: number;
+  unit?: string;
+}
+
+export interface HkoForecastDay {
+  forecastDate: string;
+
+  ForecastIcon: number;
+
+  forecastMaxTemp?: HkoForecastTemperature;
+  forecastMinTemp?: HkoForecastTemperature;
+
+  forecastMaxrh?: HkoForecastHumidity;
+  forecastMinrh?: HkoForecastHumidity;
+
+  PSR?: string;
+
+  forecastWeather?: string;
+}
+
 // Valid keys for WeatherCardConfig - used to filter unknown config properties
 export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'type',
