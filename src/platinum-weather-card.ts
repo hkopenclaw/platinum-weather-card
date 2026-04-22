@@ -6,7 +6,7 @@ import { HomeAssistant, LovelaceCardEditor, ActionHandlerEvent } from './ha-type
 import { getLovelace, debounce, hasAction, handleAction } from './ha-helpers.js';
 import { getLocale } from './helpers';
 import { entityComputeStateDisplay, stringComputeStateDisplay } from './compute_state_display';
-import type { timeFormat, WeatherCardConfig } from './types';
+import type { timeFormat, WeatherCardConfig, HkoForecastTemperature, HkoForecastHumidity, HkoForecastDay } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 
