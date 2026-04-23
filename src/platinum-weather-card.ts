@@ -6,7 +6,7 @@ import { HomeAssistant, LovelaceCardEditor, ActionHandlerEvent } from './ha-type
 import { getLovelace, debounce, hasAction, handleAction } from './ha-helpers.js';
 import { getLocale } from './helpers';
 import { entityComputeStateDisplay, stringComputeStateDisplay } from './compute_state_display';
-import type { timeFormat, WeatherCardConfig } from './types';
+import type { timeFormat, WeatherCardConfig, HkoWeatherForecast } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 
@@ -823,7 +823,7 @@ export class PlatinumWeatherCard extends LitElement {
     if (!entity) {
       return undefined;
     }
-     const list = this.hass.states[entity]?.attributes?.weatherForecast;
+     const list = this.hass.states[entity]?.attributes?.weatherForecast as HkoWeatherForecast[];
      if (!list || !list[index]) return undefined;
      const f = list[index];
      switch (propKey) {
@@ -1928,7 +1928,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   get wrain(): string {
     try {
-     const entity = this._config?.entity_warnsum;
+     const entity = this._config?.entity_hko_warnsum;
      if (!entity) return '';
      const wrainData = this.hass.states[entity]?.attributes?.WRAIN;
      if (!wrainData || wrainData.actionCode === 'CANCEL') {
@@ -1947,7 +1947,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   get wts(): string {
     try {
-     const entity = this._config?.entity_warnsum;
+     const entity = this._config?.entity_hko_warnsum;
      if (!entity) return '';
      const wtsData = this.hass.states[entity]?.attributes?.WTS;
      if (wtsData && wtsData.actionCode !== 'CANCEL') {
