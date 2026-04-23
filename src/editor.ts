@@ -142,7 +142,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
 
     if (tmpConfig.entity_forecast_high_temp_1) {
-      tmpConfig['entity_forecast_max_temp_temp_1'] = tmpConfig.entity_forecast_high_temp_1;
+      tmpConfig['entity_forecast_max_temp_1'] = tmpConfig.entity_forecast_high_temp_1;
       delete tmpConfig['entity_forecast_high_temp_1'];
     }
 
@@ -1259,16 +1259,16 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_min_temp_1'} .value=${this._entity_forecast_min_temp_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_forecast_min_temp_1" label="Entity Forecast Min Temp 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+        name="entity_forecast_min_temp_1" label="Entity Forecast Min Temperature 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_max_temp_1'} .value=${this._entity_forecast_max_temp_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_forecast_max_temp_1" label="Entity Forecast Max Temp 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+        name="entity_forecast_max_temp_1" label="Entity Forecast Max Temperature 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_min_rh_1'} .value=${this._entity_forecast_min_rh_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_forecast_min_rh_1" label="Entity Forecast Min RH 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+        name="entity_forecast_min_rh_1" label="Entity Forecast Min Relative Humidity 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_max_rh_1'} .value=${this._entity_forecast_max_rh_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_forecast_max_rh_1" label="Entity Forecast Max RH 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+        name="entity_forecast_max_rh_1" label="Entity Forecast Max Relative Humidity 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_psr_1'} .value=${this._entity_psr_1}  .includeDomains=${['sensor', 'weather']}
         name="entity_psr_1" label="Entity Forecast Probability of Significant Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
