@@ -99,7 +99,6 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   custom4_icon?: string;
   custom4_units?: string;
 
-  entity_forecast_hko?: string;
   entity_forecast_icon_1?: string;
   entity_forecast_min_temp_1?: string;
   entity_forecast_max_temp_1?: string;
@@ -110,6 +109,10 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   entity_extended_1?: string;
   entity_fire_danger_1?: string;
 
+  entity_hko_forecast?: string;
+  entity_hko_warnsum?: string;
+  entity_hko_warninginfo?: string;
+  
   daily_forecast_layout?: layoutOrientation;
   daily_forecast_days?: layoutDays;
   daily_extended_forecast_days?: extendedDays;
