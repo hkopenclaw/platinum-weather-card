@@ -146,26 +146,21 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   style?: string;
 }
 
-export interface HkoForecastTemperature {
+export interface HkoValueUnit {
   value: number;
   unit?: string;
 }
 
-export interface HkoForecastHumidity {
-  value: number;
-  unit?: string;
-}
-
-export interface HkoForecastDay {
+export interface HkoWeatherForecast {
   forecastDate: string;
 
   ForecastIcon: number;
 
-  forecastMaxtemp?: HkoForecastTemperature;
-  forecastMintemp?: HkoForecastTemperature;
+  forecastMaxtemp?: HkoValueUnit;
+  forecastMintemp?: HkoValueUnit;
 
-  forecastMaxrh?: HkoForecastHumidity;
-  forecastMinrh?: HkoForecastHumidity;
+  forecastMaxrh?: HkoValueUnit;
+  forecastMinrh?: HkoValueUnit;
 
   PSR?: string;
 
