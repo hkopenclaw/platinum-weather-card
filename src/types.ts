@@ -161,8 +161,8 @@ export interface HkoForecastDay {
 
   ForecastIcon: number;
 
-  forecastMaxTemp?: HkoForecastTemperature;
-  forecastMinTemp?: HkoForecastTemperature;
+  forecastMaxtemp?: HkoForecastTemperature;
+  forecastMintemp?: HkoForecastTemperature;
 
   forecastMaxrh?: HkoForecastHumidity;
   forecastMinrh?: HkoForecastHumidity;
