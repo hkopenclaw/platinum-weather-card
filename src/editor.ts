@@ -588,19 +588,19 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     const entities = new Set();
     for (const slot of
       [
-        this._config?.slot_l1 || 'forecast_max' as string,
-        this._config?.slot_l2 || 'forecast_min' as string,
+        this._config?.slot_l1 || 'sun_next' as string,
+        this._config?.slot_l2 || 'maxmin_since_midnight' as string,
         this._config?.slot_l3 || 'wind' as string,
         this._config?.slot_l4 || 'pressure' as string,
-        this._config?.slot_l5 || 'sun_next' as string,
+        this._config?.slot_l5 || 'remove' as string,
         this._config?.slot_l6 || 'remove' as string,
         this._config?.slot_l7 || 'remove' as string,
         this._config?.slot_l8 || 'remove' as string,
-        this._config?.slot_r1 || 'popforecast' as string,
+        this._config?.slot_r1 || 'sun_following' as string,
         this._config?.slot_r2 || 'humidity' as string,
         this._config?.slot_r3 || 'uv_summary' as string,
-        this._config?.slot_r4 || 'fire_danger' as string,
-        this._config?.slot_r5 || 'sun_following' as string,
+        this._config?.slot_r4 || 'rainfall' as string,
+        this._config?.slot_r5 || 'remove' as string,
         this._config?.slot_r6 || 'remove' as string,
         this._config?.slot_r7 || 'remove' as string,
         this._config?.slot_r8 || 'remove' as string,
@@ -629,6 +629,9 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           break;
         case 'temp_minimums':
           entities.add('entity_forecast_min').add('entity_observed_min');
+          break;
+        case 'maxmin_since_midnight':
+          entities.add('entity_observed_max').add('entity_observed_min');
           break;
         case 'wind':
           entities.add('entity_wind_bearing').add('entity_wind_speed').add('entity_wind_gust');
@@ -1101,6 +1104,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       <ha-dropdown-item value="temp_following">Following temp min/max</ha-dropdown-item>
       <ha-dropdown-item value="temp_maximums">Observed/forecast max</ha-dropdown-item>
       <ha-dropdown-item value="temp_minimums">Observed/forecast min</ha-dropdown-item>
+      <ha-dropdown-item value="maxmin_since_midnight">Max & Min Temp since midnight</ha-dropdown-item>
       <ha-dropdown-item value="sun_next">Next sun rise/set time</ha-dropdown-item>
       <ha-dropdown-item value="sun_following">Following sun rise/set time</ha-dropdown-item>
       <ha-dropdown-item value="pop">Chance of rain</ha-dropdown-item>
@@ -1654,22 +1658,27 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     if (!this._config || !this.hass) {
       return;
     }
-    const target = ev.target;
-    if (this[`_${target.configValue}`] === target.value) {
+    const target = ev.target as any;
+    const configValue = target.configValue;
+    if (!configValue) {
       return;
     }
-    if (target.configValue) {
-      if (target.value === '') {
-        const tmpConfig = { ...this._config };
-        delete tmpConfig[target.configValue];
-        this._config = tmpConfig;
-      } else {
-        this._config = {
-          ...this._config,
-          [target.configValue]: target.checked !== undefined ? target.checked : target.value,
-        };
-      }
+    const value =
+      ev.detail?.value !== undefined
+        ? ev.detail.value
+        : target.checked !== undefined
+          ? target.checked
+          : target.value;
+    if (this._config[configValue] === value) {
+      return;
     }
+    const tmpConfig = { ...this._config };
+    if (value === '' || value === undefined || value === null) {
+      delete tmpConfig[configValue];
+    } else {
+      tmpConfig[configValue] = value;
+    }
+    this._config = tmpConfig;
     fireEvent(this, 'config-changed', { config: this.sortObjectByKeys(this._config) });
   }
 
