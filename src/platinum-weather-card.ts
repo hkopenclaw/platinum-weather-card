@@ -575,7 +575,7 @@ export class PlatinumWeatherCard extends LitElement {
             </span>
           </li>`
         :
-        this._config.daily_forecast_tempformat === "highlow"
+        this._config.tempformat === "highlow"
           ?
           html`
             <li class="f-slot-horiz-text">
