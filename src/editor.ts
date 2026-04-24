@@ -491,8 +491,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.daily_forecast_days || null;
   }
 
-  get _daily_forecast_tempformat(): boolean {
-    return this._config?.daily_forecast_tempformat === true; // default off
+  get _old_daily_format(): boolean {
+    return this._config?.old_daily_format === true; // default off
   }
 
   get _daily_extended_forecast_days(): extendedDays | null {
@@ -1355,8 +1355,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         <div class="side-by-side">
           <div>
             ${this._daily_forecast_layout !== 'vertical' ? html`
-              <ha-formfield .label=${'Show Max / Min Temp in Daily Forecast'}>
-                <ha-switch .checked = ${this._daily_forecast_tempformat !== false} .configValue = ${'daily_forecast_tempformat'} @change=${this._valueChanged}>
+              <ha-formfield .label=${'Old Daily Format'}>
+                <ha-switch .checked = ${this._old_daily_format !== false} .configValue = ${'old_daily_format'} @change=${this._valueChanged}>
                 </ha-switch>
               </ha-formfield>` : html``}
           </div>
