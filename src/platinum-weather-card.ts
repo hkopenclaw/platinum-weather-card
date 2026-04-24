@@ -1364,8 +1364,8 @@ export class PlatinumWeatherCard extends LitElement {
 
   get slotMaxMinsinceMidnight(): TemplateResult {
     const digits = this._config.option_slot_temperature_decimals === true ? 1 : 0;
-    const temp_max = this._config.entity_daytime_high && this.hass.states[this._config.entity_daytime_high] !== undefined ? (Number(this.hass.states[this._config.entity_daytime_high].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
-    const temp_min = this._config.entity_daytime_low && this.hass.states[this._config.entity_daytime_low] !== undefined ? (Number(this.hass.states[this._config.entity_daytime_low].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
+    const obs_max = this._config.entity_observed_max && this.hass.states[this._config.entity_observed_max] !== undefined ? (Number(this.hass.states[this._config.entity_observed_max].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
+    const obs_min = this._config.entity_observed_min && this.hass.states[this._config.entity_observed_min] !== undefined ? (Number(this.hass.states[this._config.entity_observed_min].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
     const units = html`<div class="unit">${this.getUOM('temperature')}</div>`;
     return html`
       <li>
@@ -1373,9 +1373,9 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="slot-icon">
             <ha-icon icon="mdi:thermometer"></ha-icon>
           </div>
-          <div class="slot-text observed-min-text">${temp_min}</div>
+          <div class="slot-text observed-min-text">${obs_min}</div>
           <div class="slot-text slash">/</div>
-          <div class="slot-text forecast-min-text">${temp_max}</div>${units}
+          <div class="slot-text forecast-min-text">${obs_max}</div>${units}
         </div>
       </li>
     `;
