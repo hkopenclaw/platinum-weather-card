@@ -1017,11 +1017,11 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       <div class="side-by-side">
         <ha-select label="Overview Layout" .configValue=${'overview_layout'}
           .value=${this._overview_layout} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
-          <ha-md-list-item></ha-md-list-item>
-          <ha-md-list-item value="complete">complete</ha-md-list-item>
-          <ha-md-list-item value="observations">observations</ha-md-list-item>
-          <ha-md-list-item value="forecast">forecast</ha-md-list-item>
-          <ha-md-list-item value="title only">title only</ha-md-list-item>
+          <ha-list-item></ha-list-item>
+          <ha-list-item value="complete">complete</ha-list-item>
+          <ha-list-item value="observations">observations</ha-list-item>
+          <ha-list-item value="forecast">forecast</ha-list-item>
+          <ha-list-item value="title only">title only</ha-list-item>
         </ha-select>
         <div></div>
       </div>
@@ -1049,7 +1049,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     if (this._extended_use_attr === true) {
       const attrs = this.hass !== undefined && this.hass.states[this._entity_extended] !== undefined ? this.hass.states[this._entity_extended].attributes : [];
       for (const element in attrs) {
-        attr_names.push(html`<ha-md-list-item value="${element}">${element}</ha-md-list-item>`);
+        attr_names.push(html`<ha-list-item value="${element}">${element}</ha-list-item>`);
       }
     }
 
@@ -1087,34 +1087,34 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   private _sectionSlotsEditor(): TemplateResult {
     const slotValues = html`
-      <ha-md-list-item value="humidity">Current humidity</ha-md-list-item>
-      <ha-md-list-item value="rainfall">Today's recorded rainfall</ha-md-list-item>
-      <ha-md-list-item value="pressure">Current air pressure</ha-md-list-item>
-      <ha-md-list-item value="wind">Current wind conditions</ha-md-list-item>
-      <ha-md-list-item value="wind_kt">Current wind conditions kts</ha-md-list-item>
-      <ha-md-list-item value="visibility">Current visibility</ha-md-list-item>
-      <ha-md-list-item value="observed_max">Today's observed max</ha-md-list-item>
-      <ha-md-list-item value="observed_min">Today's observed min</ha-md-list-item>
-      <ha-md-list-item value="forecast_max">Today's forecast max</ha-md-list-item>
-      <ha-md-list-item value="forecast_min">Today's forecast min</ha-md-list-item>
-      <ha-md-list-item value="temp_next">Next temp min/max</ha-md-list-item>
-      <ha-md-list-item value="temp_following">Following temp min/max</ha-md-list-item>
-      <ha-md-list-item value="temp_maximums">Observed/forecast max</ha-md-list-item>
-      <ha-md-list-item value="temp_minimums">Observed/forecast min</ha-md-list-item>
-      <ha-md-list-item value="sun_next">Next sun rise/set time</ha-md-list-item>
-      <ha-md-list-item value="sun_following">Following sun rise/set time</ha-md-list-item>
-      <ha-md-list-item value="pop">Chance of rain</ha-md-list-item>
-      <ha-md-list-item value="popforecast">Rainfall forecast</ha-md-list-item>
-      <ha-md-list-item value="possible_today">Today's forecast rainfall</ha-md-list-item>
-      <ha-md-list-item value="possible_tomorrow">Tomorrow's forecast rainfall</ha-md-list-item>
-      <ha-md-list-item value="uv_summary">Today's uv forecast</ha-md-list-item>
-      <ha-md-list-item value="fire_danger">Today's fire danger</ha-md-list-item>
-      <ha-md-list-item value="custom1">Custom entity 1</ha-md-list-item>
-      <ha-md-list-item value="custom2">Custom entity 2</ha-md-list-item>
-      <ha-md-list-item value="custom3">Custom entity 3</ha-md-list-item>
-      <ha-md-list-item value="custom4">Custom entity 4</ha-md-list-item>
-      <ha-md-list-item value="empty">Blank slot</ha-md-list-item>
-      <ha-md-list-item value="remove">Remove slot</ha-md-list-item>`;
+      <ha-list-item value="humidity">Current humidity</ha-list-item>
+      <ha-list-item value="rainfall">Today's recorded rainfall</ha-list-item>
+      <ha-list-item value="pressure">Current air pressure</ha-list-item>
+      <ha-list-item value="wind">Current wind conditions</ha-list-item>
+      <ha-list-item value="wind_kt">Current wind conditions kts</ha-list-item>
+      <ha-list-item value="visibility">Current visibility</ha-list-item>
+      <ha-list-item value="observed_max">Today's observed max</ha-list-item>
+      <ha-list-item value="observed_min">Today's observed min</ha-list-item>
+      <ha-list-item value="forecast_max">Today's forecast max</ha-list-item>
+      <ha-list-item value="forecast_min">Today's forecast min</ha-list-item>
+      <ha-list-item value="temp_next">Next temp min/max</ha-list-item>
+      <ha-list-item value="temp_following">Following temp min/max</ha-list-item>
+      <ha-list-item value="temp_maximums">Observed/forecast max</ha-list-item>
+      <ha-list-item value="temp_minimums">Observed/forecast min</ha-list-item>
+      <ha-list-item value="sun_next">Next sun rise/set time</ha-list-item>
+      <ha-list-item value="sun_following">Following sun rise/set time</ha-list-item>
+      <ha-list-item value="pop">Chance of rain</ha-list-item>
+      <ha-list-item value="popforecast">Rainfall forecast</ha-list-item>
+      <ha-list-item value="possible_today">Today's forecast rainfall</ha-list-item>
+      <ha-list-item value="possible_tomorrow">Tomorrow's forecast rainfall</ha-list-item>
+      <ha-list-item value="uv_summary">Today's uv forecast</ha-list-item>
+      <ha-list-item value="fire_danger">Today's fire danger</ha-list-item>
+      <ha-list-item value="custom1">Custom entity 1</ha-list-item>
+      <ha-list-item value="custom2">Custom entity 2</ha-list-item>
+      <ha-list-item value="custom3">Custom entity 3</ha-list-item>
+      <ha-list-item value="custom4">Custom entity 4</ha-list-item>
+      <ha-list-item value="empty">Blank slot</ha-list-item>
+      <ha-list-item value="remove">Remove slot</ha-list-item>`;
 
     return html`
       <div class="side-by-side">
@@ -1242,7 +1242,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     if (this._daily_extended_use_attr === true) {
       const attrs = this.hass !== undefined && this.hass.states[this._entity_extended_1] !== undefined ? this.hass.states[this._entity_extended_1].attributes : [];
       for (const element in attrs) {
-        attr_names.push(html`<ha-md-list-item value="${element}">${element}</ha-md-list-item>`);
+        attr_names.push(html`<ha-list-item value="${element}">${element}</ha-list-item>`);
       }
     }
 
@@ -1305,37 +1305,37 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       <div class="side-by-side">
         <ha-select label="Daily Forecast Layout" .configValue=${'daily_forecast_layout'}
           .value=${this._daily_forecast_layout} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
-          <ha-md-list-item></ha-md-list-item>
-          <ha-md-list-item value="horizontal">horizontal</ha-md-list-item>
-          <ha-md-list-item value="vertical">vertical</ha-md-list-item>
+          <ha-list-item></ha-list-item>
+          <ha-list-item value="horizontal">horizontal</ha-list-item>
+          <ha-list-item value="vertical">vertical</ha-list-item>
         </ha-select>
         <div></div>
       </div>
       <div class="side-by-side">
         <ha-select label="Daily Forecast Days" .configValue=${'daily_forecast_days'}
           .value=${this._daily_forecast_days ? this._daily_forecast_days.toString() : null} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChangedNumber}>
-          <ha-md-list-item></ha-md-list-item>
-          <ha-md-list-item value="1">1</ha-md-list-item>
-          <ha-md-list-item value="2">2</ha-md-list-item>
-          <ha-md-list-item value="3">3</ha-md-list-item>
-          <ha-md-list-item value="4">4</ha-md-list-item>
-          <ha-md-list-item value="5">5</ha-md-list-item>
+          <ha-list-item></ha-list-item>
+          <ha-list-item value="1">1</ha-list-item>
+          <ha-list-item value="2">2</ha-list-item>
+          <ha-list-item value="3">3</ha-list-item>
+          <ha-list-item value="4">4</ha-list-item>
+          <ha-list-item value="5">5</ha-list-item>
           ${this._daily_forecast_layout === 'vertical' ? html`
-            <ha-md-list-item value="6">6</ha-md-list-item>
-            <ha-md-list-item value="7">7</ha-md-list-item>` : html``}
+            <ha-list-item value="6">6</ha-list-item>
+            <ha-list-item value="7">7</ha-list-item>` : html``}
         </ha-select>
         ${this._daily_forecast_layout === 'vertical' ? html`<ha-select label="Daily Extended Days"
           .configValue=${'daily_extended_forecast_days'} .value=${this._daily_extended_forecast_days !== null ?
           this._daily_extended_forecast_days.toString() : null} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChangedNumber}>
-          <ha-md-list-item></ha-md-list-item>
-          <ha-md-list-item value="0">0</ha-md-list-item>
-          <ha-md-list-item value="1">1</ha-md-list-item>
-          <ha-md-list-item value="2">2</ha-md-list-item>
-          <ha-md-list-item value="3">3</ha-md-list-item>
-          <ha-md-list-item value="4">4</ha-md-list-item>
-          <ha-md-list-item value="5">5</ha-md-list-item>
-          <ha-md-list-item value="6">6</ha-md-list-item>
-          <ha-md-list-item value="7">7</ha-md-list-item>
+          <ha-list-item></ha-list-item>
+          <ha-list-item value="0">0</ha-list-item>
+          <ha-list-item value="1">1</ha-list-item>
+          <ha-list-item value="2">2</ha-list-item>
+          <ha-list-item value="3">3</ha-list-item>
+          <ha-list-item value="4">4</ha-list-item>
+          <ha-list-item value="5">5</ha-list-item>
+          <ha-list-item value="6">6</ha-list-item>
+          <ha-list-item value="7">7</ha-list-item>
         </ha-select>` : html`<div></div>`}
       </div>
 
@@ -1386,10 +1386,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       </div>
       <div class="side-by-side">
         <ha-select label="Time Format" .configValue=${'option_time_format'} .value=${this._option_time_format} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
-          <ha-md-list-item></ha-md-list-item>
-          <ha-md-list-item value="system">System</ha-md-list-item>
-          <ha-md-list-item value="12hour">12 hour</ha-md-list-item>
-          <ha-md-list-item value="24hour">24 hour</ha-md-list-item>
+          <ha-list-item></ha-list-item>
+          <ha-list-item value="system">System</ha-list-item>
+          <ha-list-item value="12hour">12 hour</ha-list-item>
+          <ha-list-item value="24hour">24 hour</ha-list-item>
         </ha-select>
         <ha-textfield label="Locale" .value=${this._option_locale} .configValue=${'option_locale'} @input=${this._valueChanged}>
         </ha-textfield>
