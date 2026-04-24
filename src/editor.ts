@@ -28,9 +28,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   static elementDefinitions = {
     "ha-card": customElements.get("ha-card"),  // This works because ha-card is ALWAYS loaded before custom cards (for now)
-    ...textfieldDefinition,
-    ...switchDefinition,
-    ...formfieldDefinition,
   };
 
   public setConfig(config: WeatherCardConfig): void {
