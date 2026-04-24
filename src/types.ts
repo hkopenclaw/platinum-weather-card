@@ -126,7 +126,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
 
   // Display formatting options (used directly by the card rendering/CSS)
   pressure_units?: string;
-  tempformat?: string;
+  daily_forecast_tempformat?: boolean;
   use_old_column_format?: boolean;
   temp_font_weight?: string;
   temp_font_size?: string;
@@ -256,6 +256,7 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'entity_fire_danger_1',
   'daily_forecast_layout',
   'daily_forecast_days',
+  'daily_forecast_tempformat',
   'daily_extended_forecast_days',
   'daily_extended_use_attr',
   'daily_extended_name_attr',
@@ -264,7 +265,6 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'option_color_fire_danger',
   'option_daily_color_fire_danger',
   'pressure_units',
-  'tempformat',
   'use_old_column_format',
   'temp_font_weight',
   'temp_font_size',
