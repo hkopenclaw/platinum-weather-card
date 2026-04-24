@@ -425,7 +425,7 @@ export class PlatinumWeatherCard extends LitElement {
     if (this.hass.states[extendedEntity] !== undefined) {
       if (this._config.extended_use_attr === true) {
         if (this._config.extended_name_attr !== undefined) {
-          const attribute = this._config.extended_name_attr.toLowerCase().split(".").reduce((retval, value) => retval !== undefined ? retval[value] : undefined, this.hass.states[extendedEntity].attributes);
+          const attribute = this._config.extended_name_attr.split(".").reduce((retval, value) => retval !== undefined ? retval[value] : undefined, this.hass.states[extendedEntity].attributes);
           if (attribute !== undefined) extended.push(html`${attribute}`);
         }
       } else {
@@ -575,7 +575,7 @@ export class PlatinumWeatherCard extends LitElement {
             </span>
           </li>`
         :
-        this._config.tempformat === "highlow"
+        this._config.daily_forecast_tempformat === "highlow"
           ?
           html`
             <li class="f-slot-horiz-text">
@@ -685,9 +685,9 @@ export class PlatinumWeatherCard extends LitElement {
       var pop: TemplateResult;
       var psr: TemplateResult;
       var fireDanger: TemplateResult;
-      if (this._config.entity_forecast_icon_1?.match('^weather.')) {
+      if (this._config.entity_hko_forecast) {
         // using a weather domain entity
-        const iconEntity = this._config.entity_forecast_icon_1;
+        const iconEntity = this._config.entity_hko_forecast;
         const condition = this._getForecastPropFromWeather('condition', index);
         if (condition === undefined) {
           break;
