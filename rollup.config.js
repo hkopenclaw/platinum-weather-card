@@ -5,10 +5,10 @@ import babel from '@rollup/plugin-babel';
 import terser from '@rollup/plugin-terser';
 import serve from 'rollup-plugin-serve';
 import json from '@rollup/plugin-json';
-import ignore from './rollup-plugins/ignore.js';
-import { ignoreTextfieldFiles } from './elements/ignore/textfield.js';
-import { ignoreSelectFiles } from './elements/ignore/select.js';
-import { ignoreSwitchFiles } from './elements/ignore/switch.js';
+//import ignore from './rollup-plugins/ignore.js';
+//import { ignoreTextfieldFiles } from './elements/ignore/textfield.js';
+//import { ignoreSelectFiles } from './elements/ignore/select.js';
+//import { ignoreSwitchFiles } from './elements/ignore/switch.js';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -44,9 +44,9 @@ const plugins = [
     ],
   }),
   dev && serve(serveopts),
-  ignore({
-    files: [...ignoreTextfieldFiles, ...ignoreSelectFiles, ...ignoreSwitchFiles].map((file) => require.resolve(file)),
-  }),
+//  ignore({
+//    files: [...ignoreTextfieldFiles, ...ignoreSelectFiles, ...ignoreSwitchFiles].map((file) => require.resolve(file)),
+//  }),
 ];
 
 export default [
