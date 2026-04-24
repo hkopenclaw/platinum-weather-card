@@ -8,10 +8,10 @@ import { mdiPencil, mdiArrowDown, mdiArrowUp, mdiApplicationEditOutline } from '
 //import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
 import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, extendedDays, sectionType, timeFormat, sectionNames, HassCustomElement, weatherCardConfigKeys } from './types';
 import { customElement, property, state } from 'lit/decorators.js';
-import { formfieldDefinition } from '../elements/formfield';
+//import { formfieldDefinition } from '../elements/formfield';
 //import { selectDefinition } from '../elements/select';
-import { switchDefinition } from '../elements/switch';
-import { textfieldDefinition } from '../elements/textfield';
+//import { switchDefinition } from '../elements/switch';
+//import { textfieldDefinition } from '../elements/textfield';
 
 @customElement('platinum-weather-card-editor')
 export class WeatherCardEditor extends LitElement implements LovelaceCardEditor {
