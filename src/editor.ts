@@ -124,12 +124,12 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
 
     if (tmpConfig.entity_current_conditions) {
-      tmpConfig['entity_forecast_icon'] = tmpConfig.entity_current_conditions;
+      tmpConfig['entity_current_icon'] = tmpConfig.entity_current_conditions;
       delete tmpConfig['entity_current_conditions'];
     }
 
     if (tmpConfig.entity_current_text) {
-      tmpConfig['entity_summary'] = tmpConfig.entity_current_text;
+      tmpConfig['entity_current_summary'] = tmpConfig.entity_current_text;
       delete tmpConfig['entity_current_text'];
     }
 
@@ -240,12 +240,12 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.entity_apparent_temp || '';
   }
 
-  get _entity_forecast_icon(): string {
-    return this._config?.entity_forecast_icon || '';
+  get _entity_current_icon(): string {
+    return this._config?.entity_current_icon || '';
   }
 
-  get _entity_summary(): string {
-    return this._config?.entity_summary || '';
+  get _entity_current_summary(): string {
+    return this._config?.entity_current_summary || '';
   }
 
   get _option_show_overview_decimals(): boolean {
@@ -1006,11 +1006,11 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>` : html``}
       ${this._overview_layout !== 'observations' ?
-        html`<ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_icon'} .value=${this._entity_forecast_icon} .includeDomains=${['sensor', 'weather']}
-          name="entity_forecast_icon" label="Entity Forecast Icon" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+        html`<ha-entity-picker .hass=${this.hass} .configValue=${'entity_current_icon'} .value=${this._entity_current_icon} .includeDomains=${['sensor', 'weather']}
+          name="entity_current_icon" label="Entity Current Icon" allow-custom-entity @value-changed=${this._valueChangedPicker}>
           </ha-entity-picker>
-          <ha-entity-picker .hass=${this.hass} .configValue=${'entity_summary'} .value=${this._entity_summary} .includeDomains=${['sensor', 'weather']}
-            name="entity_summary" label="Entity Forecast Summary" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+          <ha-entity-picker .hass=${this.hass} .configValue=${'entity_current_summary'} .value=${this._entity_current_summary} .includeDomains=${['sensor', 'weather']}
+            name="entity_current_summary" label="Entity Current Summary" allow-custom-entity @value-changed=${this._valueChangedPicker}>
           </ha-entity-picker>` : html``}
     `;
   }
