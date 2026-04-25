@@ -512,8 +512,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.entity_forecast_icon_1 || '';
   }
 
-  get _entity_summary_1(): string {
-    return this._config?.entity_summary_1 || '';
+  get _entity_forecast_summary_1(): string {
+    return this._config?.entity_forecast_summary_1 || '';
   }
 
   get _entity_forecast_min_temp_1(): string {
@@ -1259,8 +1259,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         name="entity_forecast_icon_1" label="Entity Forecast Icon 1" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_summary_1'} .value=${this._entity_summary_1} .includeDomains=${['sensor', 'weather']}
-        name="entity_summary_1" label="Entity Forecast Summary 1" allow-custom-entity
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_summary_1'} .value=${this._entity_forecast_summary_1} .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_summary_1" label="Entity Forecast Summary 1" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_min_temp_1'} .value=${this._entity_forecast_min_temp_1} .includeDomains=${['sensor', 'weather']}
