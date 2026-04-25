@@ -37,8 +37,8 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   text_update_time_prefix?: string;
   entity_temperature?: string;
   entity_apparent_temp?: string;
-  entity_forecast_icon?: string;
-  entity_summary?: string;
+  entity_current_icon?: string;
+  entity_current_summary?: string;
   option_show_overview_decimals?: boolean;
   option_show_overview_separator?: boolean;
   entity_extended?: string;
@@ -104,8 +104,8 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   entity_forecast_max_temp_1?: string;
   entity_forecast_min_rh_1?: string;
   entity_forecast_max_rh_1?: string;
-  entity_psr_1?: string;
-  entity_summary_1?: string;
+  entity_forecast_psr_1?: string;
+  entity_forecast_summary_1?: string;
   entity_extended_1?: string;
   entity_fire_danger_1?: string;
 
@@ -185,8 +185,8 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'text_update_time_prefix',
   'entity_temperature',
   'entity_apparent_temp',
-  'entity_forecast_icon',
-  'entity_summary',
+  'entity_current_icon',
+  'entity_current_summary',
   'option_show_overview_decimals',
   'option_show_overview_separator',
   'entity_extended',
@@ -250,8 +250,8 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'entity_forecast_max_temp_1',
   'entity_forecast_min_rh_1',
   'entity_forecast_max_rh_1',
-  'entity_psr_1',
-  'entity_summary_1',
+  'entity_forecast_psr_1',
+  'entity_forecast_summary_1',
   'entity_extended_1',
   'entity_fire_danger_1',
   'daily_forecast_layout',
