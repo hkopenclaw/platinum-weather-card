@@ -532,8 +532,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.entity_forecast_max_rh_1 || '';
   }
 
-  get _entity_psr_1(): string {
-    return this._config?.entity_psr_1 || '';
+  get _entity_forecast_psr_1(): string {
+    return this._config?.entity_forecast_psr_1 || '';
   }
 
   get _entity_extended_1(): string {
@@ -1275,8 +1275,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_max_rh_1'} .value=${this._entity_forecast_max_rh_1} .includeDomains=${['sensor', 'weather']}
         name="entity_forecast_max_rh_1" label="Entity Forecast Max Relative Humidity 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
-      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_psr_1'} .value=${this._entity_psr_1}  .includeDomains=${['sensor', 'weather']}
-        name="entity_psr_1" label="Entity Forecast Probability of Significant Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+      <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_psr_1'} .value=${this._entity_forecast_psr_1}  .includeDomains=${['sensor', 'weather']}
+        name="entity_forecast_psr_1" label="Entity Forecast Probability of Significant Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       ${this._daily_forecast_layout === 'vertical' ? html`
         <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended_1'} .value=${this._entity_extended_1} .includeDomains=${['sensor']}
