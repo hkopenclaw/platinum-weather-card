@@ -2354,7 +2354,7 @@ export class PlatinumWeatherCard extends LitElement {
         flex-direction: column;
       }
       .big-icon {
-        height: 120px;
+        height: 140px;
         width: 140px;
         position: relative;
       }
@@ -2572,16 +2572,16 @@ export class PlatinumWeatherCard extends LitElement {
         padding-top: 0.5em;
       }
       .dayname {
-        text-transform: uppercase;
+        text-transform: capitalize;
       }
       .dayname-vert {
         min-width: 40px;
         max-width: 40px;
-        text-transform: uppercase;
+        text-transform: capitalize;
       }
       .icon {
-        width: 49px;
-        height: 42px;
+        width: 55px;
+        height: 55px;
         margin: auto;
         display: inline-block;
         background-size: contain;
