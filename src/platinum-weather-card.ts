@@ -250,7 +250,7 @@ export class PlatinumWeatherCard extends LitElement {
     if (this._config?.show_section_overview === false) return html``;
 
     const weatherIcon = this._weatherIcon(this.currentIcon);
-    const url = new URL((this._config.option_static_icons ? 's-' : 'a-') + weatherIcon + '.svg', import.meta.url);
+    const url = new URL('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + weatherIcon + '.svg', import.meta.url);
     const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.currentIcon}`;
     const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.currentIcon}</div>`;
     const biggerIcon = html`<div class="big-icon"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
@@ -346,7 +346,7 @@ export class PlatinumWeatherCard extends LitElement {
     if (this._config?.show_section_overview === false) return html``;
 
     const weatherIcon = this._weatherIcon(this.currentIcon);
-    const url = new URL((this._config.option_static_icons ? 's-' : 'a-') + weatherIcon + '.svg', import.meta.url);
+    const url = new URL('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + weatherIcon + '.svg', import.meta.url);
     const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.currentIcon}`;
     const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.currentIcon}</div>`;
     const biggerIcon = html`<div class="big-icon"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
@@ -533,7 +533,7 @@ export class PlatinumWeatherCard extends LitElement {
           break;
         }
 
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
+        const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
         htmlIcon = html`<li class="f-slot-horiz-icon"><i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i></li>`;
       } else {
         // using sensor domain entities
@@ -542,7 +542,7 @@ export class PlatinumWeatherCard extends LitElement {
         if ((iconEntity === undefined) || (this.hass.states[iconEntity] === undefined)) { // if there is no data then cut the forecast short
           break;
         }
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && this.hass.states[iconEntity] ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
+        const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (iconEntity && this.hass.states[iconEntity] ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
       if (this._config.entity_hko_forecast) {
@@ -564,13 +564,13 @@ export class PlatinumWeatherCard extends LitElement {
           <li class="f-slot-horiz-text">
             <span>
               <div class="slot-text highTemp">${maxTemp ? maxTemp : '---'}</div>
-              ${tempUnit}
+              <div class="unit-temp-small highTemp">${this.getUOM("temperature")}</div>
             </span>
           </li>
           <li class="f-slot-horiz-text">
             <span>
               <div class="slot-text lowTemp">${minTemp ? minTemp : '---'}</div>
-              ${tempUnit}
+              <div class="unit-temp-small lowTemp">${this.getUOM("temperature")}</div>
             </span>
           </li>`
         :
@@ -691,7 +691,7 @@ export class PlatinumWeatherCard extends LitElement {
           break;
         }
 
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
+        const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i><br>`;
       } else {
         // using sensor domain entities
@@ -700,7 +700,7 @@ export class PlatinumWeatherCard extends LitElement {
         if (!iconEntity || this.hass.states[iconEntity] === undefined || this.hass.states[iconEntity].state === 'unknown') { // Stop adding forecast days as soon as an undefined entity is encountered
           break;
         }
-        const url = new URL(((this._config.option_static_icons ? 's-' : 'a-') + (this.hass.states[iconEntity] !== undefined ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
+        const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (this.hass.states[iconEntity] !== undefined ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i><br>`;
       }
 
@@ -1364,14 +1364,14 @@ export class PlatinumWeatherCard extends LitElement {
     const digits = this._config.option_slot_temperature_decimals === true ? 1 : 0;
     const obs_max = this._config.entity_observed_max && this.hass.states[this._config.entity_observed_max] !== undefined ? (Number(this.hass.states[this._config.entity_observed_max].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
     const obs_min = this._config.entity_observed_min && this.hass.states[this._config.entity_observed_min] !== undefined ? (Number(this.hass.states[this._config.entity_observed_min].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
-    const units = html`<div class="unit">${this.getUOM('temperature')}</div>`;
+    const units = html`<div class="unit-temp-small">${this.getUOM('temperature')}</div>`;
     return html`
       <li>
         <div class="slot">
           <div class="slot-icon">
             <ha-icon icon="mdi:thermometer"></ha-icon>
           </div>
-          <div class="slot-text observed-min-text">${obs_min}</div>
+          <div class="slot-text observed-min-text lowTemp">${obs_min}</div>
           <div class="slot-text slash">/</div>
           <div class="slot-text forecast-min-text">${obs_max}</div>${units}
         </div>
@@ -2623,8 +2623,7 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .f-extended {
         display: inline-table;
-        font-size: 13px;
-        font-weight: 1em;
+        font-size: 1em;
         padding-top: 8px;
         line-height:20px;
       }
@@ -2638,6 +2637,7 @@ export class PlatinumWeatherCard extends LitElement {
       .lowTemp {
         display: table-cell;
         font-weight: 1em;
+        color: var(--secondary-text-color);
       }
       .slash {
         padding-left: 2px;
