@@ -1659,7 +1659,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       return;
     }
     const target = ev.target;
-    const value = ev.detail.value !== undefined ? ev.detail.value : target.checked !== undefined ? target.checked : target.value;
+    const value = ev.detail?.value !== undefined ? ev.detail.value : target.checked !== undefined ? target.checked : target.value;
     if (this[`_${target.configValue}`] === value) {
       return;
     }
@@ -1683,7 +1683,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       return;
     }
     const target = ev.target;
-    const value = ev.detail.value !== undefined ? ev.detail.value : target.value;
+    const value = ev.detail?.value !== undefined ? ev.detail.value : target.value;
     if (this[`_${target.configValue}`] === value) {
       return;
     }
