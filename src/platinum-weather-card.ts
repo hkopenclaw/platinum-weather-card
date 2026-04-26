@@ -1430,7 +1430,7 @@ export class PlatinumWeatherCard extends LitElement {
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
     const units = html`<div class="slot-text unit-small">${this.getUOM('length')}/h</div>`;
     const speed = this._config.entity_wind_speed ? html`<div class="slot-text">${this.currentWindSpeed}</div>${units}&nbsp;` : "";
-    const gust = this._config.entity_wind_gust ? html`<div class="slot-text">( ${this.localeTextGust} ${this.currentWindGust}</div>${units} )` : "";
+    const gust = this._config.entity_wind_gust ? html`<div class="slot-text">( ${this.localeTextGust} ${this.currentWindGust}</div>${units}&nbsp)` : "";
     return html`
       <li>
         <div class="slot">
@@ -1448,7 +1448,7 @@ export class PlatinumWeatherCard extends LitElement {
     const bearing = this._config.entity_wind_bearing ? html`<div class="slot-text">${this.currentWindBearing}&nbsp;</div>` : "";
     const units = html`<div class="slot-text unit">Kt</div>`;
     const speed = this._config.entity_wind_speed_kt ? html`<div class="slot-text">${this.currentWindSpeedKt}</div>${units}&nbsp;` : "";
-    const gust = this._config.entity_wind_gust_kt ? html`<div class="slot-text">( ${this.localeTextGust} ${this.currentWindGustKt}</div>${units} )` : "";
+    const gust = this._config.entity_wind_gust_kt ? html`<div class="slot-text">( ${this.localeTextGust} ${this.currentWindGustKt}</div>${units}&nbsp)` : "";
     return html`
       <li>
         <div class="slot">
