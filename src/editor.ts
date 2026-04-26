@@ -67,8 +67,12 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
   }
 
   private sortObjectByKeys(object: { [x: string]: any; }) {
-    return Object.keys(object).sort().reduce((r, k) => (r[k] = object[k], r), {});
-  }
+    const sorted: any = {};
+    if (object.type !== undefined) {
+     sorted.type = object.type;
+    }
+    return Object.keys(object).filter((k) => k !== 'type').sort().reduce((r, k) => ((r[k] = object[k]), r), sorted);
+}
 
   private _configCleanup() {
     if (!this._config || !this.hass) {
