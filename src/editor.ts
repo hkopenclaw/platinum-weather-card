@@ -256,6 +256,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.option_show_overview_decimals === true; // default off
   }
 
+  get _option_show_overview_apparent_decimals(): boolean {
+    return this._config?.option_show_overview_apparent_decimals === true; // default off
+  }
+
   get _option_show_overview_separator(): boolean {
     return this._config?.option_show_overview_separator === true; // default off
   }
@@ -1041,13 +1045,31 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           </ha-formfield>
         </div>
         <div>
+        </div>
+      </div>
+      <div class="side-by-side">
+        <div>
+          <ha-formfield .label=${'Show apparent decimals'}>
+            <ha-switch .checked=${this._option_show_overview_apparent_decimals !== false} .configValue=${'option_show_overview_apparent_decimals'}
+              @change=${this._valueChanged}>
+            </ha-switch>
+          </ha-formfield>
+        </div>
+        <div>
+        </div>
+      </div>
+      <div class="side-by-side">
+        <div>
           <ha-formfield .label=${'Show separator'}>
             <ha-switch .checked=${this._option_show_overview_separator !== false} .configValue=${'option_show_overview_separator'}
               @change=${this._valueChanged}>
             </ha-switch>
           </ha-formfield>
         </div>
+        <div>
+        </div>
       </div>
+
     `;
   }
 
