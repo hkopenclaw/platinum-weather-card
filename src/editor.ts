@@ -1658,27 +1658,23 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     if (!this._config || !this.hass) {
       return;
     }
-    const target = ev.target as any;
-    const configValue = target.configValue;
-    if (!configValue) {
+    const target = ev.target;
+    const value = ev.detail.value !== undefined ? ev.detail.value : target.checked !== undefined ? target.checked : target.value;
+    if (this[`_${target.configValue}`] === value) {
       return;
     }
-    const value =
-      ev.detail?.value !== undefined
-        ? ev.detail.value
-        : target.checked !== undefined
-          ? target.checked
-          : target.value;
-    if (this._config[configValue] === value) {
-      return;
+    if (target.configValue) {
+      if (value === '') {
+        const tmpConfig = { ...this._config };
+        delete tmpConfig[target.configValue];
+        this._config = tmpConfig;
+      } else {
+        this._config = {
+          ...this._config,
+          [target.configValue]: value,
+        };
+      }
     }
-    const tmpConfig = { ...this._config };
-    if (value === '' || value === undefined || value === null) {
-      delete tmpConfig[configValue];
-    } else {
-      tmpConfig[configValue] = value;
-    }
-    this._config = tmpConfig;
     fireEvent(this, 'config-changed', { config: this.sortObjectByKeys(this._config) });
   }
 
@@ -1687,16 +1683,17 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       return;
     }
     const target = ev.target;
-    if (this[`_${target.configValue}`] === target.value) {
+    const value = ev.detail.value !== undefined ? ev.detail.value : target.value;
+    if (this[`_${target.configValue}`] === value) {
       return;
     }
     if (target.configValue) {
-      if (target.value === '' || target.value === null) {
+      if (value === '' || value === null) {
         delete this._config[target.configValue];
       } else {
         this._config = {
           ...this._config,
-          [target.configValue]: Number(target.value),
+          [target.configValue]: Number(value),
         };
       }
     }
