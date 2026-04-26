@@ -1562,7 +1562,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   get currentApparentTemperature(): string {
     const entity = this._config.entity_apparent_temp;
-    const digits = this._config.option_show_overview_decimals === true ? 1 : 0;
+    const digits = this._config.option_show_overview_apparent_decimals === true ? 1 : 0;
     return entity && this.hass.states[entity]
       ? (Number(this.hass.states[entity].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits })
       : '';
