@@ -520,7 +520,6 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      const index = i;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
@@ -529,7 +528,7 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
-        const condition = this._getForecastPropFromWeather('condition', index);
+        const condition = this._getForecastPropFromWeather('condition', i);
         if (condition === undefined) {
           break;
         }
@@ -547,13 +546,13 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
       if (this._config.entity_hko_forecast) {
-        maxTemp = this._getForecastPropFromWeather('forecastMaxtemp', index);
+        maxTemp = this._getForecastPropFromWeather('forecastMaxtemp', i);
       } else {
         start = this._config.entity_forecast_max_temp_1 ? this._config.entity_forecast_max_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         maxTemp = start && this._config.entity_forecast_max_temp_1 ? this.hass.states[this._config.entity_forecast_max_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       if (this._config.entity_hko_forecast) {
-        minTemp = this._getForecastPropFromWeather('forecastMintemp', index);
+        minTemp = this._getForecastPropFromWeather('forecastMintemp', i);
       } else {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
@@ -599,13 +598,13 @@ export class PlatinumWeatherCard extends LitElement {
           `;
 
       if (this._config.entity_hko_forecast) {
-        maxRH = this._getForecastPropFromWeather('forecastMaxrh', index);
+        maxRH = this._getForecastPropFromWeather('forecastMaxrh', i);
       } else {
         start = this._config.entity_forecast_max_rh_1 ? this._config.entity_forecast_max_rh_1.match(/(\d+)(?!.*\d)/g) : false;
         maxRH = start && this._config.entity_forecast_max_rh_1 ? this.hass.states[this._config.entity_forecast_max_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       if (this._config.entity_hko_forecast) {
-        minRH = this._getForecastPropFromWeather('forecastMinrh', index);
+        minRH = this._getForecastPropFromWeather('forecastMinrh', i);
       } else {
         start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
         minRH = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
@@ -627,7 +626,7 @@ export class PlatinumWeatherCard extends LitElement {
       var tooltip: TemplateResult;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
-        const psrData = this._getForecastPropFromWeather('PSR', index);
+        const psrData = this._getForecastPropFromWeather('PSR', i);
         psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></span></li>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
@@ -636,7 +635,7 @@ export class PlatinumWeatherCard extends LitElement {
       }
       if (this._config.entity_hko_forecast) {
         const tooltipEntity = this._config.entity_hko_forecast;
-        const tooltipData = this._getForecastPropFromWeather('summary', index);
+        const tooltipData = this._getForecastPropFromWeather('summary', i);
         tooltip = html`<div class="fcasttooltipblock" id="fcast-summary-${i}" style="width:${days * 100}%;left:-${i * 100}%;"><div class="fcasttooltiptext">${this.hass.states[tooltipEntity] && tooltipData !== undefined ? stringComputeStateDisplay(this.hass.localize, tooltipData) : "---"}</div>
             <span style="content:'';position:absolute;top:100%;left:${(100 / days / 2) + i * (100 / days)}%;margin-left:-7.5px;border-width:7.5px;border-style:solid;border-color:#FFA100 transparent transparent transparent;"></span>
           </div>`;
@@ -678,7 +677,6 @@ export class PlatinumWeatherCard extends LitElement {
     for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      const index = i;
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
@@ -688,7 +686,7 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
-        const condition = this._getForecastPropFromWeather('condition', index);
+        const condition = this._getForecastPropFromWeather('condition', i);
         if (condition === undefined) {
           break;
         }
@@ -712,13 +710,13 @@ export class PlatinumWeatherCard extends LitElement {
         <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : ``;
 
       if (this._config.entity_hko_forecast) {
-        maxTemp = this._getForecastPropFromWeather('forecastMaxtemp', index);
+        maxTemp = this._getForecastPropFromWeather('forecastMaxtemp', i);
       } else {
         start = this._config.entity_forecast_max_temp_1 ? this._config.entity_forecast_max_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         maxTemp = start && this._config.entity_forecast_max_temp_1 ? this.hass.states[this._config.entity_forecast_max_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
       if (this._config.entity_hko_forecast) {
-        minTemp = this._getForecastPropFromWeather('forecastMintemp', index);
+        minTemp = this._getForecastPropFromWeather('forecastMintemp', i);
       } else {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
@@ -736,7 +734,7 @@ export class PlatinumWeatherCard extends LitElement {
         </div>` : html`---`;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
-        const psrData = this._getForecastPropFromWeather('PSR', index);
+        const psrData = this._getForecastPropFromWeather('PSR', i);
         psr = psrEntity ? html`<div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
         <div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></div>` : html``;
       } else {
@@ -840,7 +838,7 @@ export class PlatinumWeatherCard extends LitElement {
        case 'PSR':
          return f.PSR !== undefined ? String(f.PSR) : undefined;
        case 'summary':
-         return f.forecastWeather;
+         return f.forecastWeather !== undefined ? String(f.forecastWeather) : undefined;
        default:
          return undefined;
      }
