@@ -1610,16 +1610,21 @@ export class PlatinumWeatherCard extends LitElement {
 
   get currentWindBearing(): string {
     const entity = this._config.entity_wind_bearing;
+    const value = entity && this.hass.states[entity]
+      ? this.hass.states[entity].state
+      : '';
     return entity && this.hass.states[entity]
-      ? entity.match('^weather.') === null
-        ? isNaN(Number(this.hass.states[entity].state))
-          ? this.hass.states[entity].state
-          : this.windDirections[(Math.round((Number(this.hass.states[entity].state) / 360) * 16))]
-        : this.hass.states[entity].attributes.wind_bearing !== undefined
-          ? isNaN(Number(this.hass.states[entity].attributes.wind_bearing))
-            ? this.hass.states[entity].attributes.wind_bearing
-            : this.windDirections[(Math.round((Number(this.hass.states[entity].attributes.wind_bearing) / 360) * 16))]
-          : '---'
+      ? entity.match('^sensor\\.hko_') !== null
+        ? this._hkoWindDirections(value)
+        : entity.match('^weather.') === null
+          ? isNaN(Number(value))
+            ? value
+            : this.windDirections[(Math.round((Number(value) / 360) * 16))]
+          : this.hass.states[entity].attributes.wind_bearing !== undefined
+            ? isNaN(Number(this.hass.states[entity].attributes.wind_bearing))
+              ? this.hass.states[entity].attributes.wind_bearing
+              : this.windDirections[(Math.round((Number(this.hass.states[entity].attributes.wind_bearing) / 360) * 16))]
+            : '---'
       : '---';
   }
 
@@ -1689,6 +1694,42 @@ export class PlatinumWeatherCard extends LitElement {
     }
   }
 
+  private _hkoWindDirections(dir: string): string {
+    const locale = (this.locale || '').toLowerCase();
+    const isTC = locale === 'zh-hk';
+    const isSC = locale === 'zh-cn';
+    const mapping: Record<string, { tc: string; sc: string; en: string }> = {
+      'North':     { tc: '北',   sc: '北',   en: 'N' },
+      '北':        { tc: '北',   sc: '北',   en: 'N' },
+      'Northeast': { tc: '東北', sc: '东北', en: 'NE' },
+      '東北':      { tc: '東北', sc: '东北', en: 'NE' },
+      'East':      { tc: '東',   sc: '东',   en: 'E' },
+      '東':        { tc: '東',   sc: '东',   en: 'E' },
+      'Southeast': { tc: '東南', sc: '东南', en: 'SE' },
+      '東南':      { tc: '東南', sc: '东南', en: 'SE' },
+      'South':     { tc: '南',   sc: '南',   en: 'S' },
+      '南':        { tc: '南',   sc: '南',   en: 'S' },
+      'Southwest': { tc: '西南', sc: '西南', en: 'SW' },
+      '西南':      { tc: '西南', sc: '西南', en: 'SW' },
+      'West':      { tc: '西',   sc: '西',   en: 'W' },
+      '西':        { tc: '西',   sc: '西',   en: 'W' },
+      'Northwest': { tc: '西北', sc: '西北', en: 'NW' },
+      '西北':      { tc: '西北', sc: '西北', en: 'NW' },
+      'Variable':  { tc: '不定', sc: '不定', en: 'VRB' },
+      '風向不定':  { tc: '不定', sc: '不定', en: 'VRB' },
+      'Calm':      { tc: '無風', sc: '无风', en: 'O' },
+      '無風':      { tc: '無風', sc: '无风', en: 'O' },
+      'N/A':       { tc: '維修', sc: '维修', en: 'M' }
+    };
+    const result = mapping[dir];
+    if (result) {
+      if (isTC) return result.tc;
+      if (isSC) return result.sc;
+      return result.en;
+    }
+    return dir;
+  }
+ 
   // beaufortWind - returns the wind speed on the beaufort scale
   // reference https://en.wikipedia.org/wiki/Beaufort_scale
   get currentBeaufort(): string {
