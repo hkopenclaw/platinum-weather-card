@@ -821,28 +821,28 @@ export class PlatinumWeatherCard extends LitElement {
     if (!entity) {
       return undefined;
     }
-     const list = this.hass.states[entity]?.attributes?.weatherForecast as HkoWeatherForecast[];
-     if (!list || !list[index]) return undefined;
-     const f = list[index];
-     switch (propKey) {
-       case 'condition':
-         return f.ForecastIcon !== undefined ? String(f.ForecastIcon) : undefined;
-       case 'forecastMaxtemp':
-         return f.forecastMaxtemp?.value !== undefined ? String(f.forecastMaxtemp.value) : undefined;
-       case 'forecastMintemp':
-         return f.forecastMintemp?.value !== undefined ? String(f.forecastMintemp.value) : undefined;
-       case 'forecastMaxrh':
-         return f.forecastMaxrh?.value !== undefined ? String(f.forecastMaxrh.value) : undefined;
-       case 'forecastMinrh':
-         return f.forecastMinrh?.value !== undefined ? String(f.forecastMinrh.value) : undefined;
-       case 'PSR':
-         return f.PSR !== undefined ? String(f.PSR) : undefined;
-       case 'summary':
-         return f.forecastWeather !== undefined ? String(f.forecastWeather) : undefined;
-       default:
-         return undefined;
-     }
-   }
+    const list = this.hass.states[entity]?.attributes?.weatherForecast as HkoWeatherForecast[];
+    if (!list || !list[index]) return undefined;
+    const f = list[index];
+    switch (propKey) {
+      case 'condition':
+        return f.ForecastIcon !== undefined ? String(f.ForecastIcon) : undefined;
+      case 'forecastMaxtemp':
+        return f.forecastMaxtemp?.value !== undefined ? String(f.forecastMaxtemp.value) : undefined;
+      case 'forecastMintemp':
+        return f.forecastMintemp?.value !== undefined ? String(f.forecastMintemp.value) : undefined;
+      case 'forecastMaxrh':
+        return f.forecastMaxrh?.value !== undefined ? String(f.forecastMaxrh.value) : undefined;
+      case 'forecastMinrh':
+        return f.forecastMinrh?.value !== undefined ? String(f.forecastMinrh.value) : undefined;
+      case 'PSR':
+        return f.PSR !== undefined ? String(f.PSR) : undefined;
+      case 'summary':
+        return f.forecastWeather !== undefined ? String(f.forecastWeather) : undefined;
+      default:
+        return undefined;
+    }
+  }
 
   private _getCardSizeDailyForecastSection(): number {
     var sectionHeight = 0;
@@ -1012,13 +1012,13 @@ export class PlatinumWeatherCard extends LitElement {
       case 'pressure': return this.slotPressure;
       case 'observed_max': return this.slotObservedMax;
       case 'observed_min': return this.slotObservedMin;
+      case 'observed_maxmin': return this.slotObservedMaxMin;
       case 'forecast_max': return this.slotForecastMax;
       case 'forecast_min': return this.slotForecastMin;
       case 'temp_next': return this.slotTempNext;
       case 'temp_following': return this.slotTempFollowing;
       case 'temp_maximums': return this.slotTempMaximums;
       case 'temp_minimums': return this.slotTempMinimums;
-      case 'maxmin_since_midnight': return this.slotMaxMinsinceMidnight;
       case 'uv_summary': return this.slotUvSummary;
       case 'fire_danger': return this.slotFireDanger;
       case 'wind': return this.slotWind;
@@ -1037,7 +1037,7 @@ export class PlatinumWeatherCard extends LitElement {
     // If no value can be matched pass back a default for the slot
     switch (slot) {
       case 'l1': return this.slotSunNext;
-      case 'l2': return this.slotMaxMinsinceMidnight;
+      case 'l2': return this.slotObservedMaxMin;
       case 'l3': return this.slotWind;
       case 'l4': return this.slotPressure;
       case 'l5': return this.slotRemove;
@@ -1194,7 +1194,7 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="slot-icon">
             <ha-icon icon="mdi:gauge"></ha-icon>
           </div>
-          <div class="slot-text pressure-text">${this.currentPressure}</div> ${units}
+          <div class="slot-text pressure-text">${this.currentPressure}</div>${units}
         </div>
       </li>
     `;
@@ -1229,6 +1229,25 @@ export class PlatinumWeatherCard extends LitElement {
           </div>
           <div class="slot-text">${this.localeTextObservedMin}&nbsp;</div>
           <div class="slot-text observed-min-text">${temp}</div>${units}
+        </div>
+      </li>
+    `;
+  }
+
+  get slotObservedMaxMin(): TemplateResult {
+    const digits = this._config.option_slot_temperature_decimals === true ? 1 : 0;
+    const obs_max = this._config.entity_observed_max && this.hass.states[this._config.entity_observed_max] !== undefined ? (Number(this.hass.states[this._config.entity_observed_max].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
+    const obs_min = this._config.entity_observed_min && this.hass.states[this._config.entity_observed_min] !== undefined ? (Number(this.hass.states[this._config.entity_observed_min].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
+    const units = html`<div class="unit-temp-small">${this.getUOM('temperature')}</div>`;
+    return html`
+      <li>
+        <div class="slot">
+          <div class="slot-icon">
+            <ha-icon icon="mdi:thermometer"></ha-icon>
+          </div>
+          <div class="slot-text observed-min-text lowTemp">${obs_min}</div>
+          <div class="slot-text slash">/</div>
+          <div class="slot-text forecast-min-text">${obs_max}</div>${units}
         </div>
       </li>
     `;
@@ -1355,25 +1374,6 @@ export class PlatinumWeatherCard extends LitElement {
           <div class="slot-text">&nbsp;(${this.localeTextFore}&nbsp;</div>
           <div class="slot-text forecast-min-text">${temp_for}</div>${units}
           <div class="slot-text">)</div>
-        </div>
-      </li>
-    `;
-  }
-
-  get slotMaxMinsinceMidnight(): TemplateResult {
-    const digits = this._config.option_slot_temperature_decimals === true ? 1 : 0;
-    const obs_max = this._config.entity_observed_max && this.hass.states[this._config.entity_observed_max] !== undefined ? (Number(this.hass.states[this._config.entity_observed_max].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
-    const obs_min = this._config.entity_observed_min && this.hass.states[this._config.entity_observed_min] !== undefined ? (Number(this.hass.states[this._config.entity_observed_min].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
-    const units = html`<div class="unit-temp-small">${this.getUOM('temperature')}</div>`;
-    return html`
-      <li>
-        <div class="slot">
-          <div class="slot-icon">
-            <ha-icon icon="mdi:thermometer"></ha-icon>
-          </div>
-          <div class="slot-text observed-min-text lowTemp">${obs_min}</div>
-          <div class="slot-text slash">/</div>
-          <div class="slot-text forecast-min-text">${obs_max}</div>${units}
         </div>
       </li>
     `;
@@ -2135,7 +2135,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "Ощущается как";
       case 'ua': return "Відчувається як";
       case 'bg': return "Усеща се като";
-      case 'zh': return "体感";
+      case 'zh':
       case 'zh-cn': return "体感";
       case 'zh-hk': return "體感";
       default: return "Feels like";
@@ -2258,7 +2258,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "УФ";
       case 'ua': return "УФ";
       case 'bg': return "UV";
-      case 'zh': return "紫外线";
+      case 'zh':
       case 'zh-cn': return "紫外线";
       case 'zh-hk': return "紫外線";
       default: return "UV";
@@ -2293,7 +2293,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'ru': return "Порыв";
       case 'ua': return "Порив";
       case 'bg': return "Порив";
-      case 'zh': return "阵风";
+      case 'zh':
       case 'zh-cn': return "阵风";
       case 'zh-hk': return "陣風";
       default: return "Gust";
@@ -2302,7 +2302,7 @@ export class PlatinumWeatherCard extends LitElement {
 
   get localeTextPSR(): string {
     switch (this.locale) {
-      case 'zh': return "显著降雨概率";
+      case 'zh':
       case 'zh-cn': return "显著降雨概率";
       case 'zh-hk': return "顯著降雨概率";
       default: return "Probability of Significant Rain";
