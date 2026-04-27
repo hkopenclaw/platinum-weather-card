@@ -2344,6 +2344,8 @@ export class PlatinumWeatherCard extends LitElement {
   // https://lit.dev/docs/components/styles/
   get styles(): CSSResult {
     // Get config flags or set defaults if not configured
+    const biggerIconHeight = this._config.bigger_icon_height || "140px";
+    const biggerIconWidth = this._config.bigger_icon_width || "140px";
     const tooltipVisible = this._config.option_tooltips ? "visible" : "hidden";
     const tempFontWeight = this._config.temp_font_weight || "300";
     const tempFontSize = this._config.temp_font_size || "4em";
@@ -2393,8 +2395,8 @@ export class PlatinumWeatherCard extends LitElement {
         flex-direction: column;
       }
       .big-icon {
-        height: 140px;
-        width: 140px;
+        height: ${unsafeCSS(biggerIconHeight)};
+        width: ${unsafeCSS(biggerIconWidth)};
         position: relative;
       }
       .unknown-forecast {
