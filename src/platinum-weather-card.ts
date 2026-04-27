@@ -1695,9 +1695,9 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   private _hkoWindDirections(dir: string): string {
-    const locale = (this.locale || '').toLowerCase();
-    const isTC = locale === 'zh-hk';
-    const isSC = locale === 'zh-cn';
+    const locale = this.locale || '';
+    const isTC = /^zh-(?:hant|hk|mo|tw)$/i.test(locale);
+    const isSC = /^(?:zh|zh-(?:hans|cn))$/i.test(locale);
     const mapping: Record<string, { tc: string; sc: string; en: string }> = {
       'North':     { tc: '北',   sc: '北',   en: 'N' },
       '北':        { tc: '北',   sc: '北',   en: 'N' },
