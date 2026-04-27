@@ -597,7 +597,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     for (const slot of
       [
         this._config?.slot_l1 || 'sun_next' as string,
-        this._config?.slot_l2 || 'maxmin_since_midnight' as string,
+        this._config?.slot_l2 || 'observed_maxmin' as string,
         this._config?.slot_l3 || 'wind' as string,
         this._config?.slot_l4 || 'pressure' as string,
         this._config?.slot_l5 || 'remove' as string,
@@ -620,6 +620,9 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         case 'observed_min':
           entities.add('entity_observed_min');
           break;
+        case 'observed_maxmin':
+          entities.add('entity_observed_max').add('entity_observed_min');
+          break;
         case 'forecast_max':
           entities.add('entity_forecast_max');
           break;
@@ -637,9 +640,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           break;
         case 'temp_minimums':
           entities.add('entity_forecast_min').add('entity_observed_min');
-          break;
-        case 'maxmin_since_midnight':
-          entities.add('entity_observed_max').add('entity_observed_min');
           break;
         case 'wind':
           entities.add('entity_wind_bearing').add('entity_wind_speed').add('entity_wind_gust');
@@ -1124,13 +1124,13 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       <ha-dropdown-item value="visibility">Current visibility</ha-dropdown-item>
       <ha-dropdown-item value="observed_max">Today's observed max</ha-dropdown-item>
       <ha-dropdown-item value="observed_min">Today's observed min</ha-dropdown-item>
+      <ha-dropdown-item value="observed_maxmin">Today's observed max / min</ha-dropdown-item>
       <ha-dropdown-item value="forecast_max">Today's forecast max</ha-dropdown-item>
       <ha-dropdown-item value="forecast_min">Today's forecast min</ha-dropdown-item>
       <ha-dropdown-item value="temp_next">Next temp min/max</ha-dropdown-item>
       <ha-dropdown-item value="temp_following">Following temp min/max</ha-dropdown-item>
       <ha-dropdown-item value="temp_maximums">Observed/forecast max</ha-dropdown-item>
       <ha-dropdown-item value="temp_minimums">Observed/forecast min</ha-dropdown-item>
-      <ha-dropdown-item value="maxmin_since_midnight">Max & Min Temp since midnight</ha-dropdown-item>
       <ha-dropdown-item value="sun_next">Next sun rise/set time</ha-dropdown-item>
       <ha-dropdown-item value="sun_following">Following sun rise/set time</ha-dropdown-item>
       <ha-dropdown-item value="pop">Chance of rain</ha-dropdown-item>
@@ -1158,7 +1158,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         </ha-select>
       </div>
       <div class="side-by-side">
-        <ha-select label="Slot Left 2" .configValue=${'slot_l2'} .value=${this._slot_l2 || 'maxmin_since_midnight'}
+        <ha-select label="Slot Left 2" .configValue=${'slot_l2'} .value=${this._slot_l2 || 'observed_maxmin'}
           @selected=${this._valueChanged} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()}>
           ${slotValues}
         </ha-select>
