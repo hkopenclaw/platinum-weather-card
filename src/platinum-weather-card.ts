@@ -822,6 +822,8 @@ export class PlatinumWeatherCard extends LitElement {
         return f.PSR !== undefined ? String(f.PSR) : undefined;
       case 'summary':
         return f.forecastWeather !== undefined ? String(f.forecastWeather) : undefined;
+      case 'forecastWind':
+        return f.forecastWind?.value !== undefined ? String(f.forecastWind.value) : undefined;
       default:
         return undefined;
     }
@@ -1718,16 +1720,16 @@ export class PlatinumWeatherCard extends LitElement {
     const isTC = /^zh-(?:hant|hk|mo|tw)$/i.test(locale);
     const isSC = /^(?:zh|zh-(?:hans|cn))$/i.test(locale);
     const mapping = {
-      'High': { tc: '高', sc: '高', en: 'H' },
-      '高': { tc: '高', sc: '高', en: 'H' },
-      'Medium High': { tc: '中高', sc: '中高', en: 'MH' },
-      '中高': { tc: '中高', sc: '中高', en: 'MH' },
-      'Medium': { tc: '東', sc: '东', en: 'M' },
-      '中': { tc: '中', sc: '中', en: 'M' },
-      'Medium Low': { tc: '中低', sc: '中低', en: 'ML' },
-      '中低': { tc: '中低', sc: '中低', en: 'ML' },
-      'Low': { tc: '低', sc: '低', en: 'L' },
-      '低': { tc: '低', sc: '低', en: 'L' }
+      'High': { tc: '高', sc: '高', en: 'Hi' },
+      '高': { tc: '高', sc: '高', en: 'Hi' },
+      'Medium High': { tc: '中高', sc: '中高', en: 'Med Hi' },
+      '中高': { tc: '中高', sc: '中高', en: 'Med Hi' },
+      'Medium': { tc: '東', sc: '东', en: 'Med' },
+      '中': { tc: '中', sc: '中', en: 'Med' },
+      'Medium Low': { tc: '中低', sc: '中低', en: 'Med Lo' },
+      '中低': { tc: '中低', sc: '中低', en: 'Med Lo' },
+      'Low': { tc: '低', sc: '低', en: 'Lo' },
+      '低': { tc: '低', sc: '低', en: 'Lo' }
     };
     const result = mapping[psr];
     if (result) {
