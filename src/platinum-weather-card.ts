@@ -627,11 +627,11 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
-        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></span></li>` : html``;
+        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData) : "---"}</div></span></li>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div></span></li>` : html``;
+        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state) : "---"}</div></span></li>` : html``;
       }
       if (this._config.entity_hko_forecast) {
         const tooltipEntity = this._config.entity_hko_forecast;
@@ -680,7 +680,8 @@ export class PlatinumWeatherCard extends LitElement {
       var htmlIcon: TemplateResult;
       var maxTemp: string | undefined;
       var minTemp: string | undefined;
-      var pop: TemplateResult;
+      var maxRH: string | undefined;
+      var minRH: string | undefined;
       var psr: TemplateResult;
       var fireDanger: TemplateResult;
       if (this._config.entity_hko_forecast) {
@@ -692,7 +693,7 @@ export class PlatinumWeatherCard extends LitElement {
         }
 
         const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
-        htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i><br>`;
+        htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       } else {
         // using sensor domain entities
         var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
@@ -701,7 +702,7 @@ export class PlatinumWeatherCard extends LitElement {
           break;
         }
         const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (this.hass.states[iconEntity] !== undefined ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
-        htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i><br>`;
+        htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
 
       start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
@@ -721,28 +722,48 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const tempUnit = html`<div class="unit-temp-small">${this.getUOM("temperature")}</div>`;
-      const min = minTemp ? html`
-        <div class="f-slot-vert">
-          <div class="temp-label">Min: </div>
-          <div class="low-temp">${minTemp}</div>${tempUnit}
-        </div>` : html`---`;
-      const max = maxTemp ? html`
-        <div class="f-slot-vert">
-          <div class="temp-label">Max: </div>
-          <div class="high-temp">${maxTemp}</div>${tempUnit}
-        </div>` : html`---`;
+      const tempUnit = html`<div class="unit-small-vert">${this.getUOM("temperature")}</div>`;
+      const minMaxTemp = html`
+        <span class="metric-inline">
+          <span class="metric-label">
+            <ha-icon icon="mdi:thermometer"></ha-icon>
+          ️</span>
+          <span class="metric-value">
+            <div class="lowTemp-vert">${minTemp ? minTemp : "---"}</div> / <div class="highTemp-vert">${maxTemp ? maxTemp : "---"}</div>${tempUnit}
+          </span>
+        </span>`;
+      if (this._config.entity_hko_forecast) {
+        maxRH = this._getForecastPropFromWeather('forecastMaxrh', i);
+      } else {
+        start = this._config.entity_forecast_max_rh_1 ? this._config.entity_forecast_max_rh_1.match(/(\d+)(?!.*\d)/g) : false;
+        maxRH = start && this._config.entity_forecast_max_rh_1 ? this.hass.states[this._config.entity_forecast_max_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+      }
+      if (this._config.entity_hko_forecast) {
+        minRH = this._getForecastPropFromWeather('forecastMinrh', i);
+      } else {
+        start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
+        minRH = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
+      }
+      const rhUnit = html`<div class="unit-small-vert">%</div>`;
+      const minMaxRH = html`
+        <span class="metric-inline">
+          <span class="metric-label">
+            <ha-icon icon="mdi:water-percent"></ha-icon>
+          </span>
+            <span class="metric-value">${minRH ? minRH : "---"} - ${maxRH ? maxRH : "---"}${rhUnit}
+          </span>
+        </span>`;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
-        psr = psrEntity ? html`<div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
-        <div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? psrData : "---"}</div></div>` : html``;
+        psr = psrEntity ? html`<span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
+        <span class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData) : "---"}</span></span>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         psr = start ? html`
-          <div class="f-slot-vert"><div class="f-label">${this.localeTextPSR} </div>
-          <div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.hass.states[psrEntity].state : "---"}</div></div>` : html``;
+          <span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
+          <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state) : "---"}</span></span>` : html``;
       }
       start = this._config.entity_extended_1 && i < (this._config.daily_extended_forecast_days !== 0 ? this._config.daily_extended_forecast_days || 7 : 0) ? this._config.entity_extended_1.match(/(\d+)(?!.*\d)/g) : false;
       var extended: TemplateResult = html``;
@@ -781,29 +802,27 @@ export class PlatinumWeatherCard extends LitElement {
       }
 
       htmlDays.push(html`
-        <div class="day-vert fcasttooltip">
-          <div class="day-vert-top">
-            <div class="dayname-vert">${forecastDate ? forecastDate.toLocaleDateString(this.locale, { weekday: 'short' }) : "---"}</div>
-            ${summary}
-          </div>
-          <div>
-            ${fireDanger}
-          </div>
-          <div class="day-vert-middle">
-            <div class="day-vert-dayicon">
+        <div class="day-vert fcasttooltip day-vert-hko2">
+          <div class="day-vert-left">
+            <div class="dayname-vert dayname-vert-hko2">
+              <div class="day-vert-date-hko2">
+                ${forecastDate ? forecastDate.toLocaleDateString(this.locale, { month: 'numeric', day: 'numeric' }) : "---"}
+              </div>
+              <div class="day-vert-weekday-hko2">
+                ${forecastDate ? forecastDate.toLocaleDateString(this.locale, { weekday: 'short' }) : "---"}
+              </div>
+            </div>
+            <div class="day-vert-dayicon day-vert-dayicon-hko2">
               ${htmlIcon}
             </div>
-            <div class="day-vert-temps">
-              ${min}
-              ${max}
-            </div>
-            <div class="day-vert-rain">
-              ${pop}
-              ${psr}
-            </div>
           </div>
-          <div class="day-vert-bottom">
-            ${extended}
+          <div class="day-vert-right2">
+            <div class="day-vert-metrics2">
+              ${minMaxTemp}${minMaxRH}${psr}
+            </div>
+            <div class="day-vert-summary2">
+              ${summary}
+            </div>
           </div>
         </div>
       `);
@@ -1729,6 +1748,31 @@ export class PlatinumWeatherCard extends LitElement {
     }
     return dir;
   }
+
+  private _localeTextPSR(psr: string): string {
+    const locale = this.locale || '';
+    const isTC = /^zh-(?:hant|hk|mo|tw)$/i.test(locale);
+    const isSC = /^(?:zh|zh-(?:hans|cn))$/i.test(locale);
+    const mapping = {
+      'High': { tc: '高', sc: '高', en: 'H' },
+      '高': { tc: '高', sc: '高', en: 'H' },
+      'Medium High': { tc: '中高', sc: '中高', en: 'MH' },
+      '中高': { tc: '中高', sc: '中高', en: 'MH' },
+      'Medium': { tc: '東', sc: '东', en: 'M' },
+      '中': { tc: '中', sc: '中', en: 'M' },
+      'Medium Low': { tc: '中低', sc: '中低', en: 'ML' },
+      '中低': { tc: '中低', sc: '中低', en: 'ML' },
+      'Low': { tc: '低', sc: '低', en: 'L' },
+      '低': { tc: '低', sc: '低', en: 'L' }
+    };
+    const result = mapping[psr];
+    if (result) {
+      if (isTC) return result.tc;
+      if (isSC) return result.sc;
+      return result.en;
+    }
+    return psr;
+  }
  
   // beaufortWind - returns the wind speed on the beaufort scale
   // reference https://en.wikipedia.org/wiki/Beaufort_scale
@@ -2300,15 +2344,6 @@ export class PlatinumWeatherCard extends LitElement {
     }
   }
 
-  get localeTextPSR(): string {
-    switch (this.locale) {
-      case 'zh':
-      case 'zh-cn': return "显著降雨概率";
-      case 'zh-hk': return "顯著降雨概率";
-      default: return "Probability of Significant Rain";
-    }
-  }
-
   getUOM(measure: string): string {
     const lengthUnit = this.hass.config.unit_system.length;
 
@@ -2579,39 +2614,6 @@ export class PlatinumWeatherCard extends LitElement {
         box-sizing: border-box;
         padding-bottom: 8px;
       }
-      .day-vert-top {
-        display: flex;
-        width: 100%;
-      }
-      .day-vert-middle {
-        display: flex;
-        float: left;
-        width: 100%;
-      }
-      .day-vert-bottom {
-        text-align: left;
-        float: left;
-      }
-      .day-vert-dayicon {
-        width: 40px;
-        text-align: left;
-        float: left;
-        margin-bottom: -8px;
-      }
-      .day-vert-temps {
-        flex: 1;
-        text-align: left;
-        float: left;
-        padding-left: 1em;
-        padding-top: 0.5em;
-      }
-      .day-vert-rain {
-        flex: 2;
-        text-align: left;
-        float: left;
-        padding-left: 1em;
-        padding-top: 0.5em;
-      }
       .dayname {
         text-transform: capitalize;
       }
@@ -2686,18 +2688,6 @@ export class PlatinumWeatherCard extends LitElement {
         padding-left: 2px;
         padding-right: 2px;
       }
-      .high-temp {
-        display: table-cell;
-        font-weight: bold;
-        width: 21px;
-        text-align: right;
-      }
-      .low-temp {
-        display: table-cell;
-        font-weight: 1em;
-        width: 21px;
-        text-align: right;
-      }
       .temp-label {
         display: table-cell;
         width: 32px;
@@ -2744,6 +2734,121 @@ export class PlatinumWeatherCard extends LitElement {
       .fcasttooltiptext {
         padding-left: 8px;
         padding-right: 8px;
+      }
+      .day-vert-hko2 {
+        display: flex;
+        width: 100%;
+        align-items: flex-start;
+        gap: 10px;
+        float: none;
+        padding-top: 6px;
+        padding-bottom: 8px;
+      }  
+      .day-vert-left {
+        flex: 0 0 64px;
+        width: 64px;
+        min-width: 64px;
+        max-width: 64px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      .dayname-vert-hko2 {
+        width: 64px;
+        min-width: 64px;
+        max-width: 64px;
+        text-transform: none;
+        text-align: center;
+        line-height: 20px;
+        padding-top: 2px;
+      }
+      .day-vert-date-hko2 {
+        color: var(--primary-text-color);
+        text-align: center;
+      }
+      .day-vert-weekday-hko2 {
+        color: var(--primary-text-color);
+        text-align: center;
+      }
+      .day-vert-dayicon-hko2 {
+        width: 64px;
+        min-width: 64px;
+        max-width: 64px;
+        float: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 4px;
+        margin-bottom: 0;
+        text-align: center;
+      }
+      .day-vert-dayicon-hko2 .icon {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto;
+        display: block;
+      }
+      .day-vert-right2 {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        padding-top: 2px;
+      }
+      .day-vert-metrics2 {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px 10px;
+        line-height: 22px;
+      }
+      .metric-inline {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+      .metric-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 4px;
+        white-space: nowrap;
+        color: var(--state-icon-color); 
+      }
+      .metric-value{
+        white-space: nowrap;
+      }
+      .day-vert-wind2 {
+        display: block;
+        padding-top: 4px;
+        text-align: left;
+        line-height: 22px;
+      }
+      .day-vert-summary2 {
+        display: block;
+        padding-top: 4px;
+        text-align: left;
+        line-height: 22px;
+      }
+      .day-vert-summary2 .f-summary-vert {
+        padding-left: 0;
+        font-weight: 400;
+        display: block;
+      }
+      .highTemp-vert {
+        display: inline-block;
+        font-weight: bold;
+      }
+      .lowTemp-vert {
+        display: inline-block;
+        font-weight: 1em;
+        color: var(--secondary-text-color);
+      }
+      .unit-small-vert {
+        display: inline-block;
+        font-size: 10.5px;
       }
     `;
   }
