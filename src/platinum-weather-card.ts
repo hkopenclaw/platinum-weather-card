@@ -776,7 +776,7 @@ export class PlatinumWeatherCard extends LitElement {
                 ${forecastDate ? forecastDate.toLocaleDateString(this.locale, { weekday: 'short' }) : "---"}
               </div>
             </div>
-            <div class="day-vert-dayicon day-vert-dayicon-hko2">
+            <div class="day-vert-dayicon">
               ${htmlIcon}
             </div>
           </div>
@@ -2613,15 +2613,6 @@ export class PlatinumWeatherCard extends LitElement {
         padding-left: 1em;
         font-weight: 400;
       }
-      .f-slot-vert {
-        display: table;
-        overflow: hidden;
-        height: 24px;
-        font-weight: 1em;
-      }
-      .f-slot-minmax {
-        width: 100%;
-      }
       .f-extended {
         display: inline-table;
         font-size: 1em;
@@ -2643,16 +2634,6 @@ export class PlatinumWeatherCard extends LitElement {
       .slash {
         padding-left: 2px;
         padding-right: 2px;
-      }
-      .temp-label {
-        display: table-cell;
-        width: 32px;
-        font-weight: 1em;
-      }
-      .f-label {
-        display: table-cell;
-        white-space: nowrap;
-        padding-right: 0.2em;
       }
       .rh {
         display: table-cell;
@@ -2727,7 +2708,7 @@ export class PlatinumWeatherCard extends LitElement {
         color: var(--primary-text-color);
         text-align: center;
       }
-      .day-vert-dayicon-hko2 {
+      .day-vert-dayicon {
         width: 64px;
         min-width: 64px;
         max-width: 64px;
@@ -2739,7 +2720,7 @@ export class PlatinumWeatherCard extends LitElement {
         margin-bottom: 0;
         text-align: center;
       }
-      .day-vert-dayicon-hko2 .icon {
+      .day-vert-dayicon .icon {
         width: 55px;
         height: 55px;
         margin: 0 auto;
@@ -2776,7 +2757,7 @@ export class PlatinumWeatherCard extends LitElement {
       .metric-value{
         white-space: nowrap;
       }
-      .day-vert-wind2 {
+      .day-vert-wind {
         display: block;
         padding-top: 4px;
         text-align: left;
