@@ -544,20 +544,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     return this._config?.entity_forecast_psr_1 || '';
   }
 
-  get _entity_extended_1(): string {
-    return this._config?.entity_extended_1 || '';
-  }
-
-  get _entity_fire_danger_1(): string {
-    return this._config?.entity_fire_danger_1 || '';
-  }
-
-  get _daily_extended_use_attr(): boolean {
-    return this._config?.daily_extended_use_attr === true; // default off
-  }
-
-  get _daily_extended_name_attr(): string {
-    return this._config?.daily_extended_name_attr || '';
+  get _entity_forecast_wind_1(): string {
+    return this._config?.entity_forecast_wind_1 || '';
   }
 
   get _option_slot_temperature_decimals(): boolean {
@@ -570,10 +558,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   get _option_color_fire_danger(): boolean {
     return this._config?.option_color_fire_danger !== false; // default on
-  }
-
-  get _option_daily_color_fire_danger(): boolean {
-    return this._config?.option_daily_color_fire_danger !== false; // default on
   }
 
   get _option_tooltips(): boolean {
@@ -1268,14 +1252,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
   }
 
   private _sectionDailyForecastEditor(): TemplateResult {
-    const attr_names: TemplateResult[] = [];
-    if (this._daily_extended_use_attr === true) {
-      const attrs = this.hass !== undefined && this.hass.states[this._entity_extended_1] !== undefined ? this.hass.states[this._entity_extended_1].attributes : [];
-      for (const element in attrs) {
-        attr_names.push(html`<ha-dropdown-item value="${element}">${element}</ha-dropdown-item>`);
-      }
-    }
-
     return html`
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_hko_forecast'} .value=${this._entity_hko_forecast} .includeDomains=${['sensor', 'weather']}
         name="entity_hko_forecast" label="Entity HKO Forecast 9-day" allow-custom-entity
@@ -1305,26 +1281,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         name="entity_forecast_psr_1" label="Entity Forecast Probability of Significant Rain 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
       </ha-entity-picker>
       ${this._daily_forecast_layout === 'vertical' ? html`
-        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_extended_1'} .value=${this._entity_extended_1} .includeDomains=${['sensor']}
-          name="entity_extended_1" label="Entity Extended Forecast 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
-        </ha-entity-picker>
-        ${this._entity_extended_1 !== '' ? html`
-          <div class="side-by-side">
-            <div>
-              <ha-formfield .label=${'Use Attribute'}>
-                <ha-switch .checked=${this._daily_extended_use_attr !== false} .configValue=${'daily_extended_use_attr'}
-                  @change=${this._valueChanged}>
-                </ha-switch>
-              </ha-formfield>
-            </div>
-            ${this._entity_extended_1 !== '' && this._daily_extended_use_attr === true ? html`
-              <ha-selector .hass=${this.hass} .entityId=${this._entity_extended_1} .configValue=${'daily_extended_name_attr'} .value=${this._daily_extended_name_attr} .includeDomains=${['sensor']}
-                .selector = ${{ attribute: { entity_id: this._entity_extended_1 } }} .required=${false}
-                name="daily_extended_name_attr" label="Attribute" allow-custom-value @value-changed=${this._valueChangedPicker}>
-              </ha-selector>` : html``}
-          </div>` : html``}
-        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_fire_danger_1'} .value=${this._entity_fire_danger_1} .includeDomains=${['sensor']}
-          name="entity_fire_danger_1" label="Entity Fire Danger 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
+        <ha-entity-picker .hass=${this.hass} .configValue=${'entity_forecast_wind_1'} .value=${this._entity_forecast_wind_1} .includeDomains=${['sensor']}
+          name="entity_forecast_wind_1" label="Entity Extended Forecast 1" allow-custom-entity @value-changed=${this._valueChangedPicker}>
         </ha-entity-picker>
       ` : ``}
     `;
@@ -1354,19 +1312,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
             <ha-dropdown-item value="6">6</ha-dropdown-item>
             <ha-dropdown-item value="7">7</ha-dropdown-item>` : html``}
         </ha-select>
-        ${this._daily_forecast_layout === 'vertical' ? html`<ha-select label="Daily Extended Days"
-          .configValue=${'daily_extended_forecast_days'} .value=${this._daily_extended_forecast_days !== null ?
-          this._daily_extended_forecast_days.toString() : null} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChangedNumber}>
-          <ha-dropdown-item></ha-dropdown-item>
-          <ha-dropdown-item value="0">0</ha-dropdown-item>
-          <ha-dropdown-item value="1">1</ha-dropdown-item>
-          <ha-dropdown-item value="2">2</ha-dropdown-item>
-          <ha-dropdown-item value="3">3</ha-dropdown-item>
-          <ha-dropdown-item value="4">4</ha-dropdown-item>
-          <ha-dropdown-item value="5">5</ha-dropdown-item>
-          <ha-dropdown-item value="6">6</ha-dropdown-item>
-          <ha-dropdown-item value="7">7</ha-dropdown-item>
-        </ha-select>` : html`<div></div>`}
       </div>
 
         <div class="side-by-side">
@@ -1389,17 +1334,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           </div>
           <div></div>
         </div>
-        <div class="side-by-side">
-        ${this._daily_forecast_layout === 'vertical' ? html`<div>
-          <ha-formfield .label=${'Colour Fire Danger'}>
-            <ha-switch .checked=${this._option_daily_color_fire_danger !== false} .configValue=${'option_daily_color_fire_danger'}
-              @change=${this._valueChanged}>
-            </ha-switch>
-          </ha-formfield>
-        </div>` : html``}
-        <div>
-        </div>
-      </div>
     `;
   }
 
