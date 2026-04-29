@@ -1308,6 +1308,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
             <ha-dropdown-item value="6">6</ha-dropdown-item>
             <ha-dropdown-item value="7">7</ha-dropdown-item>` : html``}
         </ha-select>
+        <div></div>
       </div>
 
         <div class="side-by-side">
