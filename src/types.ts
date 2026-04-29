@@ -16,7 +16,6 @@ export type sectionType = typeof sectionNames[number];
 export type layoutOverview = "complete" | "observations" | "forecast" | "title only";
 export type layoutOrientation = "horizontal" | "vertical";
 export type layoutDays = 1 | 2 | 3 | 4 | 5 | 6 | 7;
-export type extendedDays = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type timeFormat = 'system' | '12hour' | '24hour';
 
 // TODO Add your configuration elements here for type-checking
@@ -106,8 +105,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   entity_forecast_max_rh_1?: string;
   entity_forecast_psr_1?: string;
   entity_forecast_summary_1?: string;
-  entity_extended_1?: string;
-  entity_fire_danger_1?: string;
+  entity_forecast_wind_1?: string;
 
   entity_hko_forecast?: string;
   entity_hko_warnsum?: string;
@@ -115,14 +113,10 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   
   daily_forecast_layout?: layoutOrientation;
   daily_forecast_days?: layoutDays;
-  daily_extended_forecast_days?: extendedDays;
-  daily_extended_use_attr?: boolean;
-  daily_extended_name_attr?: string;
 
   option_slot_temperature_decimals?: boolean;
   option_slot_pressure_decimals?: boolean;
   option_color_fire_danger?: boolean;
-  option_daily_color_fire_danger?: boolean;
 
   // Display formatting options (used directly by the card rendering/CSS)
   pressure_units?: string;
@@ -252,17 +246,12 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'entity_forecast_max_rh_1',
   'entity_forecast_psr_1',
   'entity_forecast_summary_1',
-  'entity_extended_1',
-  'entity_fire_danger_1',
+  'entity_forecast_wind_1',
   'daily_forecast_layout',
   'daily_forecast_days',
-  'daily_extended_forecast_days',
-  'daily_extended_use_attr',
-  'daily_extended_name_attr',
   'option_slot_temperature_decimals',
   'option_slot_pressure_decimals',
   'option_color_fire_danger',
-  'option_daily_color_fire_danger',
   'pressure_units',
   'tempformat',
   'use_old_column_format',
