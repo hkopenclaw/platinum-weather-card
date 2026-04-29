@@ -823,7 +823,7 @@ export class PlatinumWeatherCard extends LitElement {
       case 'summary':
         return f.forecastWeather !== undefined ? String(f.forecastWeather) : undefined;
       case 'forecastWind':
-        return f.forecastWind?.value !== undefined ? String(f.forecastWind.value) : undefined;
+        return f.forecastWind !== undefined ? String(f.forecastWind) : undefined;
       default:
         return undefined;
     }
