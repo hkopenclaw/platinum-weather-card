@@ -6,7 +6,7 @@ import { fireEvent } from './ha-helpers.js';
 import { mdiPencil, mdiArrowDown, mdiArrowUp, mdiApplicationEditOutline } from '@mdi/js';
 
 //import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
-import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, extendedDays, sectionType, timeFormat, sectionNames, HassCustomElement, weatherCardConfigKeys } from './types';
+import { WeatherCardConfig, layoutOverview, layoutOrientation, layoutDays, sectionType, timeFormat, sectionNames, HassCustomElement, weatherCardConfigKeys } from './types';
 import { customElement, property, state } from 'lit/decorators.js';
 //import { formfieldDefinition } from '../elements/formfield';
 //import { selectDefinition } from '../elements/select';
@@ -498,10 +498,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   get _old_daily_format(): boolean {
     return this._config?.old_daily_format === true; // default off
-  }
-
-  get _daily_extended_forecast_days(): extendedDays | null {
-    return this._config?.daily_extended_forecast_days ?? null;
   }
 
   get _entity_hko_forecast(): string {
