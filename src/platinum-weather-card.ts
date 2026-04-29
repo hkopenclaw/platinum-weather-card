@@ -721,7 +721,7 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const tempUnit = html`<div class="unit-small-vert">${this.getUOM("temperature")}</div>`;
+      const tempUnit = html`<span class="unit-small-vert">${this.getUOM("temperature")}</span>`;
       const minMaxTemp = html`
         <span class="metric-inline">
           <span class="metric-label">
@@ -743,7 +743,7 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
         minRH = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const rhUnit = html`<div class="unit-small-vert">%</div>`;
+      const rhUnit = html`<span class="unit-small-vert">%</span>`;
       const minMaxRH = html`
         <span class="metric-inline">
           <span class="metric-label">
