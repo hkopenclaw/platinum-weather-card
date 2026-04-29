@@ -683,7 +683,6 @@ export class PlatinumWeatherCard extends LitElement {
       var maxRH: string | undefined;
       var minRH: string | undefined;
       var psr: TemplateResult;
-      var fireDanger: TemplateResult;
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
@@ -765,50 +764,15 @@ export class PlatinumWeatherCard extends LitElement {
           <span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
           <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state) : "---"}</span></span>` : html``;
       }
-      start = this._config.entity_extended_1 && i < (this._config.daily_extended_forecast_days !== 0 ? this._config.daily_extended_forecast_days || 7 : 0) ? this._config.entity_extended_1.match(/(\d+)(?!.*\d)/g) : false;
-      var extended: TemplateResult = html``;
-      if (i < (this._config.daily_extended_forecast_days ? this._config.daily_extended_forecast_days : 7)) {
-        if (this._config.daily_extended_use_attr === true) {
-          start = this._config.entity_extended_1 ? this._config.entity_extended_1.match(/(\d+)(?!.*\d)/g) : false;
-          const extendedEntity = start && this._config.entity_extended_1 ? this._config.entity_extended_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : this._config.entity_extended_1;
-          if (extendedEntity && this.hass.states[extendedEntity] !== undefined) {
-            start = this._config.daily_extended_name_attr && i < (this._config.daily_extended_forecast_days !== 0 ? this._config.daily_extended_forecast_days || 7 : 0) ? this._config.daily_extended_name_attr.match(/(\d+)(?!.*\d)/g) : false;
-            const attribute = start == null && extendedEntity && this._config.daily_extended_name_attr ? this.hass.states[extendedEntity].attributes[this._config.daily_extended_name_attr] : start && this._config.daily_extended_name_attr && extendedEntity ? this._config.daily_extended_name_attr.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)).toLowerCase().split(".").reduce((retval, value) => retval !== undefined ? retval[value] : undefined, this.hass.states[extendedEntity].attributes) : undefined;
-            extended = attribute ? html`<div class="f-extended">${attribute}</div>` : html``;
-          }
-        } else {
-          const extendedEntity = start && this._config.entity_extended_1 ? this._config.entity_extended_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-          extended = start ? html`<div class="f-extended">${extendedEntity && this.hass.states[extendedEntity] ? this.hass.states[extendedEntity].state :
-            "---"}</div>` : html``;
-        }
-      }
-      start = this._config.entity_fire_danger_1 ? this._config.entity_fire_danger_1.match(/(\d+)(?!.*\d)/g) : false;
-      var fireDanger: TemplateResult = html``;
-      const fireDangerEntity = start && this._config.entity_fire_danger_1 ? this._config.entity_fire_danger_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-      if ((start) && (fireDangerEntity)) {
-        var fireStyle = this._config.option_daily_color_fire_danger !== false && this.hass.states[fireDangerEntity].attributes.color_fill ? `background-color:${this.hass.states[fireDangerEntity].attributes.color_fill}; color:${this.hass.states[fireDangerEntity].attributes.color_text};` : "";
-        if (this._config.option_daily_color_fire_danger === false) {
-          fireDanger = start && this.hass.states[fireDangerEntity].state !== 'unknown' ? html`
-          <div class="f-firedanger-vert">${fireDangerEntity && this.hass.states[fireDangerEntity] ? this.hass.states[fireDangerEntity].state : "---"}</div>` : html``;
-        } else {
-          if (fireStyle === '') {
-            fireStyle = "font-weight:300;";
-          }
-          fireDanger = start && this.hass.states[fireDangerEntity].state !== 'unknown' ? html`
-          <div class="f-firedanger-vert">
-            <p class="fire-danger-text-color" style="${fireStyle}">${fireDangerEntity && this.hass.states[fireDangerEntity] ? this.hass.states[fireDangerEntity].state.toUpperCase() : "---"}</p>
-          </div>` : html``;
-        }
-      }
 
       htmlDays.push(html`
         <div class="day-vert fcasttooltip day-vert-hko2">
           <div class="day-vert-left">
-            <div class="dayname-vert dayname-vert-hko2">
-              <div class="day-vert-date-hko2">
+            <div class="dayname-vert">
+              <div class="day-vert-date">
                 ${forecastDate ? forecastDate.toLocaleDateString(this.locale, { month: 'numeric', day: 'numeric' }) : "---"}
               </div>
-              <div class="day-vert-weekday-hko2">
+              <div class="day-vert-weekday">
                 ${forecastDate ? forecastDate.toLocaleDateString(this.locale, { weekday: 'short' }) : "---"}
               </div>
             </div>
@@ -816,11 +780,11 @@ export class PlatinumWeatherCard extends LitElement {
               ${htmlIcon}
             </div>
           </div>
-          <div class="day-vert-right2">
-            <div class="day-vert-metrics2">
+          <div class="day-vert-right">
+            <div class="day-vert-metrics">
               ${minMaxTemp}${minMaxRH}${psr}
             </div>
-            <div class="day-vert-summary2">
+            <div class="day-vert-summary">
               ${summary}
             </div>
           </div>
@@ -2617,11 +2581,6 @@ export class PlatinumWeatherCard extends LitElement {
       .dayname {
         text-transform: capitalize;
       }
-      .dayname-vert {
-        min-width: 40px;
-        max-width: 40px;
-        text-transform: capitalize;
-      }
       .icon {
         width: 55px;
         height: 55px;
@@ -2651,11 +2610,6 @@ export class PlatinumWeatherCard extends LitElement {
       .f-summary-vert {
         padding-left: 1em;
         font-weight: 400;
-      }
-      .f-firedanger-vert {
-        text-align: right;
-        font-weight: 1em;
-        margin-top: -24px;
       }
       .f-slot-vert {
         display: table;
@@ -2754,20 +2708,20 @@ export class PlatinumWeatherCard extends LitElement {
         align-items: center;
         justify-content: flex-start;
       }
-      .dayname-vert-hko2 {
-        width: 64px;
+      .dayname-vert {
         min-width: 64px;
         max-width: 64px;
         text-transform: none;
         text-align: center;
         line-height: 20px;
         padding-top: 2px;
+        text-transform: capitalize;
       }
-      .day-vert-date-hko2 {
+      .day-vert-date {
         color: var(--primary-text-color);
         text-align: center;
       }
-      .day-vert-weekday-hko2 {
+      .day-vert-weekday {
         color: var(--primary-text-color);
         text-align: center;
       }
@@ -2789,14 +2743,14 @@ export class PlatinumWeatherCard extends LitElement {
         margin: 0 auto;
         display: block;
       }
-      .day-vert-right2 {
+      .day-vert-right {
         flex: 1 1 auto;
         min-width: 0;
         display: flex;
         flex-direction: column;
         padding-top: 2px;
       }
-      .day-vert-metrics2 {
+      .day-vert-metrics {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -2826,13 +2780,13 @@ export class PlatinumWeatherCard extends LitElement {
         text-align: left;
         line-height: 22px;
       }
-      .day-vert-summary2 {
+      .day-vert-summary {
         display: block;
         padding-top: 4px;
         text-align: left;
         line-height: 22px;
       }
-      .day-vert-summary2 .f-summary-vert {
+      .day-vert-summary .f-summary-vert {
         padding-left: 0;
         font-weight: 400;
         display: block;
