@@ -147,18 +147,14 @@ export interface HkoValueUnit {
 
 export interface HkoWeatherForecast {
   forecastDate: string;
-
   ForecastIcon: number;
-
   forecastMaxtemp?: HkoValueUnit;
   forecastMintemp?: HkoValueUnit;
-
   forecastMaxrh?: HkoValueUnit;
   forecastMinrh?: HkoValueUnit;
-
   PSR?: string;
-
   forecastWeather?: string;
+  forecastWind?: string;
 }
 
 // Valid keys for WeatherCardConfig - used to filter unknown config properties
