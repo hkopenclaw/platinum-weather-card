@@ -517,14 +517,14 @@ export class PlatinumWeatherCard extends LitElement {
     const now = new Date().getHours();
     const offset = now < 12 ? 0 : 1;
 
-    for (var i = 0; i < days; i++) {
+    for (let i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      var htmlIcon: TemplateResult;
-      var maxTemp: string | undefined;
-      var minTemp: string | undefined;
-      var maxRH: string | undefined;
-      var minRH: string | undefined;
+      let htmlIcon: TemplateResult;
+      let maxTemp: string | undefined;
+      let minTemp: string | undefined;
+      let maxRH: string | undefined;
+      let minRH: string | undefined;
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
@@ -537,7 +537,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<li class="f-slot-horiz-icon"><i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i></li>`;
       } else {
         // using sensor domain entities
-        var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        let start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
         const iconEntity = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         if ((iconEntity === undefined) || (this.hass.states[iconEntity] === undefined)) { // if there is no data then cut the forecast short
           break;
@@ -622,16 +622,16 @@ export class PlatinumWeatherCard extends LitElement {
             </li>
           `;
 
-      var psr: TemplateResult;
-      var tooltip: TemplateResult;
+      let psr: TemplateResult;
+      let tooltip: TemplateResult;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
-        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData) : "---"}</div></span></li>` : html``;
+        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData, 'short') : "---"}</div></span></li>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state) : "---"}</div></span></li>` : html``;
+        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state, 'short') : "---"}</div></span></li>` : html``;
       }
       if (this._config.entity_hko_forecast) {
         const tooltipEntity = this._config.entity_hko_forecast;
@@ -673,16 +673,18 @@ export class PlatinumWeatherCard extends LitElement {
     const days = this._config.daily_forecast_days || 5;
     const now = new Date().getHours();
     const offset = now < 12 ? 0 : 1;
+    const widthClass = this._forecastWidthClass;
 
-    for (var i = 0; i < days; i++) {
+    for (let i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      var htmlIcon: TemplateResult;
-      var maxTemp: string | undefined;
-      var minTemp: string | undefined;
-      var maxRH: string | undefined;
-      var minRH: string | undefined;
-      var psr: TemplateResult;
+      let htmlIcon: TemplateResult;
+      let maxTemp: string | undefined;
+      let minTemp: string | undefined;
+      let maxRH: string | undefined;
+      let minRH: string | undefined;
+      let psr: TemplateResult;
+
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
@@ -695,7 +697,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       } else {
         // using sensor domain entities
-        var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        let start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
         const iconEntity = start && this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         if (!iconEntity || this.hass.states[iconEntity] === undefined || this.hass.states[iconEntity].state === 'unknown') { // Stop adding forecast days as soon as an undefined entity is encountered
           break;
@@ -704,7 +706,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
 
-      start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
+      let start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
       const summaryEntity = start && this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
       const summary = start ? html`
         <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : html``;
@@ -726,9 +728,9 @@ export class PlatinumWeatherCard extends LitElement {
         <span class="metric-inline">
           <span class="metric-label">
             <ha-icon icon="mdi:thermometer"></ha-icon>
-          ️</span>
+          </span>
           <span class="metric-value">
-            <div class="lowTemp-vert">${minTemp ? minTemp : "---"}</div> / <div class="highTemp-vert">${maxTemp ? maxTemp : "---"}</div>${tempUnit}
+            <span class="lowTemp-vert">${minTemp ? minTemp : "---"}</span> / <span class="highTemp-vert">${maxTemp ? maxTemp : "---"}</span>${tempUnit}
           </span>
         </span>`;
       if (this._config.entity_hko_forecast) {
@@ -749,24 +751,24 @@ export class PlatinumWeatherCard extends LitElement {
           <span class="metric-label">
             <ha-icon icon="mdi:water-percent"></ha-icon>
           </span>
-            <span class="metric-value">${minRH ? minRH : "---"} - ${maxRH ? maxRH : "---"}${rhUnit}
+          <span class="metric-value">${minRH ? minRH : "---"} - ${maxRH ? maxRH : "---"}${rhUnit}
           </span>
         </span>`;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
         psr = psrEntity ? html`<span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
-        <span class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData) : "---"}</span></span>` : html``;
+        <span class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this.localeTextPSR(psrData, this._psrVariant) : "---"}</span></span>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         psr = start ? html`
           <span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
-          <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state) : "---"}</span></span>` : html``;
+          <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this.localeTextPSR(this.hass.states[psrEntity].state, this._psrVariant) : "---"}</span></span>` : html``;
       }
 
       htmlDays.push(html`
-        <div class="day-vert">
+        <div class="day-vert ${widthClass}">
           <div class="day-vert-left">
             <div class="dayname-vert">
               <div class="day-vert-date">
@@ -1715,31 +1717,71 @@ export class PlatinumWeatherCard extends LitElement {
     return dir;
   }
 
-  private _localeTextPSR(psr: string): string {
+  localeTextPSR(psr: string, variant: 'short' | 'full' = 'short'): string {
     const locale = this.locale || '';
     const isTC = /^zh-(?:hant|hk|mo|tw)$/i.test(locale);
     const isSC = /^(?:zh|zh-(?:hans|cn))$/i.test(locale);
-    const mapping = {
-      'High': { tc: '高', sc: '高', en: 'Hi' },
-      '高': { tc: '高', sc: '高', en: 'Hi' },
-      'Medium High': { tc: '中高', sc: '中高', en: 'Med Hi' },
-      '中高': { tc: '中高', sc: '中高', en: 'Med Hi' },
-      'Medium': { tc: '東', sc: '东', en: 'Med' },
-      '中': { tc: '中', sc: '中', en: 'Med' },
-      'Medium Low': { tc: '中低', sc: '中低', en: 'Med Lo' },
-      '中低': { tc: '中低', sc: '中低', en: 'Med Lo' },
-      'Low': { tc: '低', sc: '低', en: 'Lo' },
-      '低': { tc: '低', sc: '低', en: 'Lo' }
+    type PsrKey = 'high' | 'medium_high' | 'medium' | 'medium_low' | 'low';
+    const normalizeMap: Record<string, PsrKey> = {
+      'High': 'high',
+      '高': 'high',
+      'Medium High': 'medium_high',
+      '中高': 'medium_high',
+      'Medium': 'medium',
+      '中': 'medium',
+      'Medium Low': 'medium_low',
+      '中低': 'medium_low',
+      'Low': 'low',
+      '低': 'low'
     };
-    const result = mapping[psr];
-    if (result) {
-      if (isTC) return result.tc;
-      if (isSC) return result.sc;
-      return result.en;
-    }
-    return psr;
+    const labels: Record<PsrKey, {
+      tc: { short: string; full: string };
+      sc: { short: string; full: string };
+      en: { short: string; full: string };
+    }> = {
+      high: {
+        tc: { short: '高', full: '高' },
+        sc: { short: '高', full: '高' },
+        en: { short: 'Hi', full: 'High' }
+      },
+      medium_high: {
+        tc: { short: '中高', full: '中高' },
+        sc: { short: '中高', full: '中高' },
+        en: { short: 'Med Hi', full: 'Medium High' }
+      },
+      medium: {
+        tc: { short: '中', full: '中' },
+        sc: { short: '中', full: '中' },
+        en: { short: 'Med', full: 'Medium' }
+      },
+      medium_low: {
+        tc: { short: '中低', full: '中低' },
+        sc: { short: '中低', full: '中低' },
+        en: { short: 'Med Lo', full: 'Medium Low' }
+      },
+      low: {
+        tc: { short: '低', full: '低' },
+        sc: { short: '低', full: '低' },
+        en: { short: 'Lo', full: 'Low' }
+      }
+    };
+    const key = normalizeMap[psr?.trim()];
+    if (!key) return psr;
+    if (isTC) return labels[key].tc[variant];
+    if (isSC) return labels[key].sc[variant];
+    return labels[key].en[variant];
   }
- 
+
+  get _forecastWidthClass(): string {
+    if (this._cardWidth >= 430) return 'is-wide';
+    if (this._cardWidth < 387) return 'is-narrow';
+    return 'is-normal';
+  }
+
+  get _psrVariant(): 'short' | 'full' {
+    return this._cardWidth >= 430 ? 'full' : 'short';
+  }
+
   // beaufortWind - returns the wind speed on the beaufort scale
   // reference https://en.wikipedia.org/wiki/Beaufort_scale
   get currentBeaufort(): string {
@@ -2779,6 +2821,30 @@ export class PlatinumWeatherCard extends LitElement {
       .unit-small-vert {
         display: inline-block;
         font-size: 10.5px;
+      }      .day-vert.is-normal .day-vert-metrics {
+        gap: 6px 10px;
+      }
+      .day-vert.is-narrow .day-vert-metrics {
+        gap: 4px 6px;
+        line-height: 20px;
+      }
+
+      .day-vert.is-narrow .metric-label {
+        margin-right: 2px;
+      }
+
+      .day-vert.is-narrow .metric-value,
+      .day-vert.is-narrow .psr {
+        font-size: 0.95em;
+      }
+
+      .day-vert.is-wide .day-vert-metrics {
+        gap: 6px 10px;
+      }
+
+      .day-vert.is-wide .metric-value,
+      .day-vert.is-wide .psr {
+        font-size: 1em;
       }
     `;
   }
