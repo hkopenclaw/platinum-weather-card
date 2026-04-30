@@ -2610,8 +2610,9 @@ export class PlatinumWeatherCard extends LitElement {
         height:50px;
       }
       .f-summary-vert {
-        padding-left: 1em;
+        padding-left: 0;
         font-weight: 400;
+        display: block;
       }
       .f-extended {
         display: inline-table;
@@ -2769,11 +2770,6 @@ export class PlatinumWeatherCard extends LitElement {
         padding-top: 4px;
         text-align: left;
         line-height: 22px;
-      }
-      .day-vert-summary .f-summary-vert {
-        padding-left: 0;
-        font-weight: 400;
-        display: block;
       }
       .highTemp-vert {
         display: inline-block;
