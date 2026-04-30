@@ -40,6 +40,7 @@ export interface WeatherCardConfig extends LovelaceCardConfig {
   entity_current_summary?: string;
   option_show_overview_decimals?: boolean;
   option_show_overview_separator?: boolean;
+  option_show_overview_cardwidth?: boolean;
   entity_extended?: string;
   extended_use_attr?: boolean;
   extended_name_attr?: string;
@@ -179,6 +180,7 @@ export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'entity_current_summary',
   'option_show_overview_decimals',
   'option_show_overview_separator',
+  'option_show_overview_cardwidth',
   'entity_extended',
   'extended_use_attr',
   'extended_name_attr',
