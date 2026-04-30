@@ -335,6 +335,7 @@ export class PlatinumWeatherCard extends LitElement {
 
     return html`
       <div class="overview-section section">
+        ${this._config.option_show_overview_cardwidth === true ? html`<div style="font-size:12px; opacity:0.7;">cardWidth: ${Math.round(this._cardWidth)}px</div>` : html``}
         ${this._config.text_card_title ? html`<div class="card-header">${this._config.text_card_title}</div>` : html``}
         ${this._config.text_card_title_2 ? html`<div class="card-header">${this._config.text_card_title_2}</div>` : html``}
         ${this._config.entity_update_time ? html`<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : html``}
@@ -517,14 +518,14 @@ export class PlatinumWeatherCard extends LitElement {
     const now = new Date().getHours();
     const offset = now < 12 ? 0 : 1;
 
-    for (var i = 0; i < days; i++) {
+    for (let i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      var htmlIcon: TemplateResult;
-      var maxTemp: string | undefined;
-      var minTemp: string | undefined;
-      var maxRH: string | undefined;
-      var minRH: string | undefined;
+      let htmlIcon: TemplateResult;
+      let maxTemp: string | undefined;
+      let minTemp: string | undefined;
+      let maxRH: string | undefined;
+      let minRH: string | undefined;
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
@@ -537,7 +538,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<li class="f-slot-horiz-icon"><i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i></li>`;
       } else {
         // using sensor domain entities
-        var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        const start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
         const iconEntity = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         if ((iconEntity === undefined) || (this.hass.states[iconEntity] === undefined)) { // if there is no data then cut the forecast short
           break;
@@ -622,8 +623,8 @@ export class PlatinumWeatherCard extends LitElement {
             </li>
           `;
 
-      var psr: TemplateResult;
-      var tooltip: TemplateResult;
+      let psr: TemplateResult;
+      let tooltip: TemplateResult;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
@@ -675,15 +676,15 @@ export class PlatinumWeatherCard extends LitElement {
     const offset = now < 12 ? 0 : 1;
     const widthClass = this._forecastWidthClass;
 
-    for (var i = 0; i < days; i++) {
+    for (let i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      var htmlIcon: TemplateResult;
-      var maxTemp: string | undefined;
-      var minTemp: string | undefined;
-      var maxRH: string | undefined;
-      var minRH: string | undefined;
-      var psr: TemplateResult;
+      let htmlIcon: TemplateResult;
+      let maxTemp: string | undefined;
+      let minTemp: string | undefined;
+      let maxRH: string | undefined;
+      let minRH: string | undefined;
+      let psr: TemplateResult;
 
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
@@ -697,7 +698,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       } else {
         // using sensor domain entities
-        var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        const start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
         const iconEntity = start && this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         if (!iconEntity || this.hass.states[iconEntity] === undefined || this.hass.states[iconEntity].state === 'unknown') { // Stop adding forecast days as soon as an undefined entity is encountered
           break;
@@ -706,7 +707,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
 
-      var start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
+      const start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
       const summaryEntity = start && this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
       const summary = start ? html`
         <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : html``;
@@ -757,13 +758,13 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
-        psr = psrEntity ? html`<span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
+        psr = psrEntity ? html`<span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella"></ha-icon></span>
         <span class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this.localeTextPSR(psrData, this._psrVariant) : "---"}</span></span>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         psr = start ? html`
-          <span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella-outline"></ha-icon></span>
+          <span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella"></ha-icon></span>
           <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this.localeTextPSR(this.hass.states[psrEntity].state, this._psrVariant) : "---"}</span></span>` : html``;
       }
 
