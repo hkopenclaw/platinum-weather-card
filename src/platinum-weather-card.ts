@@ -627,11 +627,11 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
-        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData, 'short') : "---"}</div></span></li>` : html``;
+        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this.localeTextPSR(psrData, 'short') : "---"}</div></span></li>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state, 'short') : "---"}</div></span></li>` : html``;
+        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.localeTextPSR(this.hass.states[psrEntity].state, 'short') : "---"}</div></span></li>` : html``;
       }
       if (this._config.entity_hko_forecast) {
         const tooltipEntity = this._config.entity_hko_forecast;
