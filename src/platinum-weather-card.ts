@@ -270,7 +270,7 @@ export class PlatinumWeatherCard extends LitElement {
       </div>
     ` : html``;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : ``;
+    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
 
     const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
       html`<div class="forecast-text">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text">---</div>` : html``;
@@ -310,7 +310,7 @@ export class PlatinumWeatherCard extends LitElement {
       </div>
     ` : html``;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : ``;
+    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
 
     return html`
       <div class="overview-section section${stack}">
@@ -331,7 +331,7 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderTitleOnlyOverviewSection(): TemplateResult {
     if (this._config?.show_section_overview === false) return html``;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : ``;
+    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
 
     return html`
       <div class="overview-section section">
@@ -351,7 +351,7 @@ export class PlatinumWeatherCard extends LitElement {
     const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.currentIcon}</div>`;
     const biggerIcon = html`<div class="big-icon"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : ``;
+    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
 
     const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
       html`<div class="forecast-text-right">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text-right">---</div>` : html``;
@@ -692,7 +692,7 @@ export class PlatinumWeatherCard extends LitElement {
         }
 
         const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (iconEntity && condition ? this._weatherIcon(condition) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
-        htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
+        htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       } else {
         // using sensor domain entities
         var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
@@ -701,13 +701,13 @@ export class PlatinumWeatherCard extends LitElement {
           break;
         }
         const url = new URL(('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + (this.hass.states[iconEntity] !== undefined ? this._weatherIcon(this.hass.states[iconEntity].state) : 'unknown') + '.svg').replace(/-wrain[arb]|-wts/g, ""), import.meta.url);
-        htmlIcon = html`<i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
+        htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
 
       start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
       const summaryEntity = start && this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
       const summary = start ? html`
-        <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : ``;
+        <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : html``;
 
       if (this._config.entity_hko_forecast) {
         maxTemp = this._getForecastPropFromWeather('forecastMaxtemp', i);
@@ -2698,15 +2698,16 @@ export class PlatinumWeatherCard extends LitElement {
         text-align: center;
         line-height: 20px;
         padding-top: 2px;
-        text-transform: capitalize;
       }
       .day-vert-date {
         color: var(--primary-text-color);
         text-align: center;
+        text-transform: capitalize;
       }
       .day-vert-weekday {
         color: var(--primary-text-color);
         text-align: center;
+        text-transform: capitalize;
       }
       .day-vert-dayicon {
         width: 64px;
@@ -2720,7 +2721,7 @@ export class PlatinumWeatherCard extends LitElement {
         margin-bottom: 0;
         text-align: center;
       }
-      .day-vert-dayicon .icon {
+      .icon-vert {
         width: 55px;
         height: 55px;
         margin: 0 auto;
