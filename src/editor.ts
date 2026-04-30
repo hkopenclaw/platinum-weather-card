@@ -1049,7 +1049,19 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
         <div>
         </div>
       </div>
-
+      ${this._overview_layout === 'title only' ? html`
+        <div class="side-by-side">
+          <div>
+            <ha-formfield .label=${'Show cardwidth'}>
+              <ha-switch .checked=${this._option_show_overview_cardwidth !== false} .configValue=${'option_show_overview_cardwidth'}
+                @change=${this._valueChanged}>
+              </ha-switch>
+            </ha-formfield>
+          </div>
+          <div>
+          </div>
+        </div>
+      ` : ``}
     `;
   }
 
