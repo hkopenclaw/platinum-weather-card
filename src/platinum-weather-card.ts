@@ -766,7 +766,7 @@ export class PlatinumWeatherCard extends LitElement {
       }
 
       htmlDays.push(html`
-        <div class="day-vert fcasttooltip day-vert-hko2">
+        <div class="day-vert">
           <div class="day-vert-left">
             <div class="dayname-vert">
               <div class="day-vert-date">
@@ -2573,11 +2573,16 @@ export class PlatinumWeatherCard extends LitElement {
         clear: both;
       }
       .day-vert {
+        display: flex;
         flex: 1;
+        width: 100%;
+        align-items: flex-start;
+        gap: 10px;
         color: var(--primary-text-color);
         border-top: 1px solid #d9d9d9;
         line-height: 24px;
         box-sizing: border-box;
+        padding-top: 6px;
         padding-bottom: 8px;
       }
       .dayname {
@@ -2673,15 +2678,6 @@ export class PlatinumWeatherCard extends LitElement {
         padding-left: 8px;
         padding-right: 8px;
       }
-      .day-vert-hko2 {
-        display: flex;
-        width: 100%;
-        align-items: flex-start;
-        gap: 10px;
-        float: none;
-        padding-top: 6px;
-        padding-bottom: 8px;
-      }  
       .day-vert-left {
         flex: 0 0 64px;
         width: 64px;
