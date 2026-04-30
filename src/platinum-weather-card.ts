@@ -517,14 +517,14 @@ export class PlatinumWeatherCard extends LitElement {
     const now = new Date().getHours();
     const offset = now < 12 ? 0 : 1;
 
-    for (let i = 0; i < days; i++) {
+    for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      let htmlIcon: TemplateResult;
-      let maxTemp: string | undefined;
-      let minTemp: string | undefined;
-      let maxRH: string | undefined;
-      let minRH: string | undefined;
+      var htmlIcon: TemplateResult;
+      var maxTemp: string | undefined;
+      var minTemp: string | undefined;
+      var maxRH: string | undefined;
+      var minRH: string | undefined;
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
         const iconEntity = this._config.entity_hko_forecast;
@@ -537,7 +537,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<li class="f-slot-horiz-icon"><i class="icon" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i></li>`;
       } else {
         // using sensor domain entities
-        let start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
         const iconEntity = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         if ((iconEntity === undefined) || (this.hass.states[iconEntity] === undefined)) { // if there is no data then cut the forecast short
           break;
@@ -622,8 +622,8 @@ export class PlatinumWeatherCard extends LitElement {
             </li>
           `;
 
-      let psr: TemplateResult;
-      let tooltip: TemplateResult;
+      var psr: TemplateResult;
+      var tooltip: TemplateResult;
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
@@ -675,15 +675,15 @@ export class PlatinumWeatherCard extends LitElement {
     const offset = now < 12 ? 0 : 1;
     const widthClass = this._forecastWidthClass;
 
-    for (let i = 0; i < days; i++) {
+    for (var i = 0; i < days; i++) {
       const forecastDate = new Date();
       forecastDate.setDate(forecastDate.getDate() + i + offset);
-      let htmlIcon: TemplateResult;
-      let maxTemp: string | undefined;
-      let minTemp: string | undefined;
-      let maxRH: string | undefined;
-      let minRH: string | undefined;
-      let psr: TemplateResult;
+      var htmlIcon: TemplateResult;
+      var maxTemp: string | undefined;
+      var minTemp: string | undefined;
+      var maxRH: string | undefined;
+      var minRH: string | undefined;
+      var psr: TemplateResult;
 
       if (this._config.entity_hko_forecast) {
         // using a weather domain entity
@@ -697,7 +697,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       } else {
         // using sensor domain entities
-        let start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
+        var start = this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.match(/(\d+)(?!.*\d)/g) : false;
         const iconEntity = start && this._config.entity_forecast_icon_1 ? this._config.entity_forecast_icon_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         if (!iconEntity || this.hass.states[iconEntity] === undefined || this.hass.states[iconEntity].state === 'unknown') { // Stop adding forecast days as soon as an undefined entity is encountered
           break;
@@ -706,7 +706,7 @@ export class PlatinumWeatherCard extends LitElement {
         htmlIcon = html`<i class="icon-vert" style="background: none, url(${url.href}) no-repeat; background-size: contain;"></i>`;
       }
 
-      let start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
+      var start = this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.match(/(\d+)(?!.*\d)/g) : false;
       const summaryEntity = start && this._config.entity_forecast_summary_1 ? this._config.entity_forecast_summary_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
       const summary = start ? html`
         <div class="f-summary-vert">${summaryEntity && this.hass.states[summaryEntity] ? this.hass.states[summaryEntity].state : "---"}</div>` : html``;
