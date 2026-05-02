@@ -628,11 +628,11 @@ export class PlatinumWeatherCard extends LitElement {
       if (this._config.entity_hko_forecast) {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
-        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this.localeTextPSR(psrData, 'short') : "---"}</div></span></li>` : html``;
+        psr = psrEntity ? html`<li class="f-slot-horiz-text"><span><div class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData, 'short') : "---"}</div></span></li>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
-        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this.localeTextPSR(this.hass.states[psrEntity].state, 'short') : "---"}</div></span></li>` : html``;
+        psr = start ? html`<li class="f-slot-horiz-text"><span><div class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state, 'short') : "---"}</div></span></li>` : html``;
       }
       if (this._config.entity_hko_forecast) {
         const tooltipEntity = this._config.entity_hko_forecast;
@@ -759,13 +759,13 @@ export class PlatinumWeatherCard extends LitElement {
         const psrEntity = this._config.entity_hko_forecast;
         const psrData = this._getForecastPropFromWeather('PSR', i);
         psr = psrEntity ? html`<span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella"></ha-icon></span>
-        <span class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this.localeTextPSR(psrData, this._psrVariant) : "---"}</span></span>` : html``;
+        <span class="psr">${this.hass.states[psrEntity] && psrData !== undefined ? this._localeTextPSR(psrData, this._psrVariant) : "---"}</span></span>` : html``;
       } else {
         start = this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.match(/(\d+)(?!.*\d)/g) : false;
         const psrEntity = start && this._config.entity_forecast_psr_1 ? this._config.entity_forecast_psr_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i)) : undefined;
         psr = start ? html`
           <span class="metric-inline"><span class="metric-label"><ha-icon icon="mdi:umbrella"></ha-icon></span>
-          <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this.localeTextPSR(this.hass.states[psrEntity].state, this._psrVariant) : "---"}</span></span>` : html``;
+          <span class="psr">${psrEntity && this.hass.states[psrEntity] ? this._localeTextPSR(this.hass.states[psrEntity].state, this._psrVariant) : "---"}</span></span>` : html``;
       }
 
       htmlDays.push(html`
@@ -1602,16 +1602,12 @@ export class PlatinumWeatherCard extends LitElement {
       ? this.hass.states[entity].state
       : '';
     return entity && this.hass.states[entity]
-      ? entity.match('^sensor\\.hko_') !== null
-        ? this._hkoWindDirections(value)
+      ? entity.match('^sensor\\.hko_wind') !== null
+        ? this._WindDirections(value)
         : entity.match('^weather.') === null
-          ? isNaN(Number(value))
-            ? value
-            : this.windDirections[(Math.round((Number(value) / 360) * 16))]
+          ? value
           : this.hass.states[entity].attributes.wind_bearing !== undefined
-            ? isNaN(Number(this.hass.states[entity].attributes.wind_bearing))
-              ? this.hass.states[entity].attributes.wind_bearing
-              : this.windDirections[(Math.round((Number(this.hass.states[entity].attributes.wind_bearing) / 360) * 16))]
+            ? this.hass.states[entity].attributes.wind_bearing
             : '---'
       : '---';
   }
@@ -1651,38 +1647,8 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   // windDirections - returns set of possible wind directions by specified language
-  get windDirections(): string[] {
-    const windDirections_en = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-    const windDirections_fr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO', 'N'];
-    const windDirections_de = ['N', 'NNO', 'NO', 'ONO', 'O', 'OSO', 'SO', 'SSO', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-    const windDirections_nl = ['N', 'NNO', 'NO', 'ONO', 'O', 'OZO', 'ZO', 'ZZO', 'Z', 'ZZW', 'ZW', 'WZW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-    const windDirections_he = ['צפון', 'צ-צ-מז', 'צפון מזרח', 'מז-צ-מז', 'מזרח', 'מז-ד-מז', 'דרום מזרח', 'ד-ד-מז', 'דרום', 'ד-ד-מע', 'דרום מערב', 'מע-ד-מע', 'מערב', 'מע-צ-מע', 'צפון מערב', 'צ-צ-מע', 'צפון'];
-    const windDirections_da = ['N', 'NNØ', 'NØ', 'ØNØ', 'Ø', 'ØSØ', 'SØ', 'SSØ', 'S', 'SSV', 'SV', 'VSV', 'V', 'VNV', 'NV', 'NNV', 'N'];
-    const windDirections_ru = ['С', 'ССВ', 'СВ', 'ВСВ', 'В', 'ВЮВ', 'ЮВ', 'ЮЮВ', 'Ю', 'ЮЮЗ', 'ЮЗ', 'ЗЮЗ', 'З', 'ЗСЗ', 'СЗ', 'ССЗ', 'С'];
-    const windDirections_bg = ['С', 'ССИ', 'СИ', 'ИСИ', 'И', 'ИЮИ', 'ЮИ', 'ЮЮИ', 'Ю', 'ЮЮЗ', 'ЮЗ', 'ЗЮЗ', 'З', 'ЗСЗ', 'СЗ', 'ССЗ', 'С'];
-
-    switch (this.locale) {
-      case "it":
-      case "fr":
-        return windDirections_fr;
-      case "de":
-        return windDirections_de;
-      case "nl":
-        return windDirections_nl;
-      case "he":
-        return windDirections_he;
-      case "ru":
-        return windDirections_ru;
-      case "da":
-        return windDirections_da;
-      case "bg":
-        return windDirections_bg;
-      default:
-        return windDirections_en;
-    }
-  }
-
-  private _hkoWindDirections(dir: string): string {
+  // https://www.hko.gov.hk/en/wxinfo/ts/index_wind.htm
+  _WindDirections(dir: string): string {
     const locale = this.locale || '';
     const isTC = /^zh-(?:hant|hk|mo|tw)$/i.test(locale);
     const isSC = /^(?:zh|zh-(?:hans|cn))$/i.test(locale);
@@ -1718,7 +1684,8 @@ export class PlatinumWeatherCard extends LitElement {
     return dir;
   }
 
-  localeTextPSR(psr: string, variant: 'short' | 'full' = 'short'): string {
+  // https://www.hko.gov.hk/en/wxinfo/uvinfo/uvinfo.html
+  _localeTextPSR(psr: string, variant: 'short' | 'full' = 'short'): string {
     const locale = this.locale || '';
     const isTC = /^zh-(?:hant|hk|mo|tw)$/i.test(locale);
     const isSC = /^(?:zh|zh-(?:hans|cn))$/i.test(locale);
