@@ -1314,9 +1314,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           <ha-dropdown-item value="horizontal">horizontal</ha-dropdown-item>
           <ha-dropdown-item value="vertical">vertical</ha-dropdown-item>
         </ha-select>
-        <div></div>
-      </div>
-      <div class="side-by-side">
         <ha-select label="Daily Forecast Days" .configValue=${'daily_forecast_days'}
           .value=${this._daily_forecast_days ? this._daily_forecast_days.toString() : null} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChangedNumber}>
           <ha-dropdown-item></ha-dropdown-item>
@@ -1329,7 +1326,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
             <ha-dropdown-item value="6">6</ha-dropdown-item>
             <ha-dropdown-item value="7">7</ha-dropdown-item>` : html``}
         </ha-select>
-        <div></div>
       </div>
 
         <div class="side-by-side">
@@ -1384,9 +1380,9 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       html`
         <div class="header">
           <div class="back-title">
-            <mwc-icon-button @click=${this._goBack}>
+            <ha-icon-button @click=${this._goBack}>
               <ha-icon icon="mdi:arrow-left"></ha-icon>
-            </mwc-icon-button>
+            </ha-icon-button>
           </div>
         </div>
       `,
