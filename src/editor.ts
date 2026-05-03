@@ -857,8 +857,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           <ha-icon-picker .configValue=${'custom1_icon'} .value=${this._custom1_icon} name="custom1_icon"
             label="Custom 1 Icon" @value-changed=${this._valueChanged}>
           </ha-icon-picker>
-          <ha-textfield label="Custom 1 Units" .value=${this._custom1_units} .configValue=${'custom1_units'} @input=${this._valueChanged}>
-          </ha-textfield>
+          <ha-input label="Custom 1 Units" .value=${this._custom1_units} .configValue=${'custom1_units'} @input=${this._valueChanged}>
+          </ha-input>
         </div>
       ` : '';
 
@@ -871,8 +871,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           <ha-icon-picker .configValue=${'custom2_icon'} .value=${this._custom2_icon} name="custom2_icon"
             label="Custom 2 Icon" @value-changed=${this._valueChanged}>
           </ha-icon-picker>
-          <ha-textfield label="Custom 2 Units" .value=${this._custom2_units} .configValue=${'custom2_units'} @input=${this._valueChanged}>
-          </ha-textfield>
+          <ha-input label="Custom 2 Units" .value=${this._custom2_units} .configValue=${'custom2_units'} @input=${this._valueChanged}>
+          </ha-input>
         </div>
       ` : '';
 
@@ -885,8 +885,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           <ha-icon-picker .configValue=${'custom3_icon'} .value=${this._custom3_icon} name="custom3_icon"
             label="Custom 3 Icon" @value-changed=${this._valueChanged}>
           </ha-icon-picker>
-          <ha-textfield label="Custom 3 Units" .value=${this._custom3_units} .configValue=${'custom3_units'} @input=${this._valueChanged}>
-          </ha-textfield>
+          <ha-input label="Custom 3 Units" .value=${this._custom3_units} .configValue=${'custom3_units'} @input=${this._valueChanged}>
+          </ha-input>
         </div>
       ` : '';
 
@@ -899,8 +899,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           <ha-icon-picker .configValue=${'custom4_icon'} .value=${this._custom4_icon} name="custom4_icon"
             label="Custom 4 Icon" @value-changed=${this._valueChanged}>
           </ha-icon-picker>
-          <ha-textfield label="Custom 4 Units" .value=${this._custom4_units} .configValue=${'custom4_units'} @input=${this._valueChanged}>
-          </ha-textfield>
+          <ha-input label="Custom 4 Units" .value=${this._custom4_units} .configValue=${'custom4_units'} @input=${this._valueChanged}>
+          </ha-input>
         </div>
       ` : '';
 
@@ -949,19 +949,19 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       }
     }
 
-    if (!customElements.get('ha-switch') || !customElements.get('ha-textfield') || !customElements.get('ha-entity-picker')) {
+    if (!customElements.get('ha-switch') || !customElements.get('ha-input') || !customElements.get('ha-entity-picker')) {
       (customElements.get('hui-entities-card') as HassCustomElement)?.getConfigElement();
     }
   }
 
   private _sectionOverviewEditor(): TemplateResult {
     return html`
-      <ha-textfield label="Card Title Text Line 1" .value=${this._text_card_title} .configValue=${'text_card_title'}
+      <ha-input label="Card Title Text Line 1" .value=${this._text_card_title} .configValue=${'text_card_title'}
         @input=${this._valueChanged}>
-      </ha-textfield>
-      <ha-textfield label="Card Title Text Line 2" .value=${this._text_card_title_2} .configValue=${'text_card_title_2'}
+      </ha-input>
+      <ha-input label="Card Title Text Line 2" .value=${this._text_card_title_2} .configValue=${'text_card_title_2'}
         @input=${this._valueChanged}>
-      </ha-textfield>
+      </ha-input>
       <ha-entity-picker .hass=${this.hass} .configValue=${'entity_update_time'} .value=${this._entity_update_time} .includeDomains=${['sensor']}
         name="entity_update_time" label="Entity Update Time" allow-custom-entity
         @value-changed=${this._valueChangedPicker}>
@@ -982,9 +982,9 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           @value-changed=${this._valueChangedPicker}>
         </ha-selector>` : html``}
       </div>` : html``}
-      <ha-textfield label="Update Time Prefix" .value=${this._text_update_time_prefix}
+      <ha-input label="Update Time Prefix" .value=${this._text_update_time_prefix}
         .configValue=${'text_update_time_prefix'} @input=${this._valueChanged}>
-      </ha-textfield>
+      </ha-input>
       ${this._overview_layout !== 'forecast' ?
         html`<ha-entity-picker .hass=${this.hass} .configValue=${'entity_temperature'} .value=${this._entity_temperature} .includeDomains=${['sensor', 'weather']}
           name="entity_temperature" label="Entity Current Temperature" allow-custom-entity
@@ -1354,6 +1354,16 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
   private _optionGlobalOptionsEditor(): TemplateResult {
     return html`
       <div class="side-by-side">
+        <ha-select label="Time Format" .configValue=${'option_time_format'} .value=${this._option_time_format} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
+          <ha-dropdown-item></ha-dropdown-item>
+          <ha-dropdown-item value="system">System</ha-dropdown-item>
+          <ha-dropdown-item value="12hour">12 hour</ha-dropdown-item>
+          <ha-dropdown-item value="24hour">24 hour</ha-dropdown-item>
+        </ha-select>
+        <ha-input label="Locale" .value=${this._option_locale} .configValue=${'option_locale'} @input=${this._valueChanged}>
+        </ha-input>
+      </div>
+      <div class="side-by-side">
         <div>
           <ha-formfield .label=${'Show Static Icons'}>
             <ha-switch .checked=${this._option_static_icons !== false} .configValue=${'option_static_icons'} @change=${this._valueChanged}>
@@ -1361,16 +1371,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           </ha-formfield>
         </div>
         <div></div>
-      </div>
-      <div class="side-by-side">
-        <ha-select label="Time Format" .configValue=${'option_time_format'} .value=${this._option_time_format} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
-          <ha-dropdown-item></ha-dropdown-item>
-          <ha-dropdown-item value="system">System</ha-dropdown-item>
-          <ha-dropdown-item value="12hour">12 hour</ha-dropdown-item>
-          <ha-dropdown-item value="24hour">24 hour</ha-dropdown-item>
-        </ha-select>
-        <ha-textfield label="Locale" .value=${this._option_locale} .configValue=${'option_locale'} @input=${this._valueChanged}>
-        </ha-textfield>
       </div>
     `;
   }
@@ -1684,7 +1684,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     ha-select {
       display: block;
     }
-    ha-textfield {
+    ha-input {
       display: block;
     }
     ha-switch {
@@ -1720,8 +1720,8 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       background: var(--secondary-background-color);
     } */
     .section-flex {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: center;
     }
     .side-by-side {
@@ -1729,6 +1729,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
     .side-by-side > * {
       flex: 1;
+      width: 0;
     }
     .side-by-side :not(:last-child) {
       padding-right: 4px;
