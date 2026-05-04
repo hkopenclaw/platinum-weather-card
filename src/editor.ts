@@ -1259,8 +1259,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
             </ha-switch>
           </ha-formfield>
         </div>
-        <div>
-        </div>
       </div>
       <div class="side-by-side">
         <div>
@@ -1703,7 +1701,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     }
     .no-icon {
       display: inline-flex;
-      width: var(--mds-icon-button-size, 48px);
+      width: var(--ha-icon-button-size, 48px);
     }
     /* .option {
       cursor: pointer;
