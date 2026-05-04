@@ -172,11 +172,6 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       delete tmpConfig['show_separator'];
     }
 
-    if (tmpConfig.show_cardwidth) {
-      tmpConfig['option_show_overview_cardwidth'] = tmpConfig.show_cardwidth;
-      delete tmpConfig['show_cardwidth'];
-    }
-
     // Remane slot entries
     for (const slot of ['slot_l1, slot_l2, slot_l3, slot_l4, slot_l5, slot_l6, slot_l7, slot_l8, slot_r1, slot_r2, slot_r3, slot_r4, slot_r5, slot_r6, slot_r7, slot_r8']) {
       if (tmpConfig[slot] === 'daytime_high') tmpConfig[slot] = 'forecast_max';
@@ -559,6 +554,10 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   get _option_slot_pressure_decimals(): boolean {
     return this._config?.option_slot_pressure_decimals === true; // default off
+  }
+
+  get _use_old_column_format(): boolean {
+    return this._config?.use_old_column_format === true; // default off
   }
 
   get _option_color_fire_danger(): boolean {
@@ -1234,6 +1233,15 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
 
   private _optionSlotsEditor(): TemplateResult {
     return html`
+    <div class="side-by-side">
+        <div>
+          <ha-formfield .label=${'Use Old Column Format'}>
+            <ha-switch .checked=${this._use_old_column_format !== false} .configValue=${'use_old_column_format'}
+              @change=${this._valueChanged}>
+            </ha-switch>
+          </ha-formfield>
+        </div>
+      </div>
       <div class="side-by-side">
         <div>
           <ha-formfield .label=${'Slot Temperature Decimals'}>
