@@ -2619,7 +2619,7 @@ export class PlatinumWeatherCard extends LitElement {
         margin-block-end: -12px;
       }
       .f-slot-horiz-text {
-        height:20px;
+        line-height: 20px;
       }
       .f-slot-horiz-icon {
         height:50px;
