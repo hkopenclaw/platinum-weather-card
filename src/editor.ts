@@ -1381,6 +1381,29 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
     `;
   }
 
+  private _getSubElementEditorTitle(): string {
+    switch (this._subElementEditor) {
+      case 'section_overview':
+        return 'Overview Section';
+      case 'option_overview':
+        return 'Overview Options';
+      case 'section_extended':
+        return 'Extended Section';
+      case 'section_slots':
+        return 'Slots Section';
+      case 'option_slots':
+        return 'Slots Options';
+      case 'section_daily_forecast':
+        return 'Daily Forecast Section';
+      case 'option_daily_forecast':
+        return 'Daily Forecast Options';
+      case 'option_global_options':
+        return 'Global Options';
+      default:
+        return '';
+    }
+  }
+
   private _renderSubElementEditor(): TemplateResult {
     const subel: TemplateResult[] = [
       html`
@@ -1389,6 +1412,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
             <ha-icon-button @click=${this._goBack}>
               <ha-icon icon="mdi:arrow-left"></ha-icon>
             </ha-icon-button>
+            <div class="subeditor-title">${this._getSubElementEditorTitle()}</div>
           </div>
         </div>
       `,
@@ -1775,6 +1799,14 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
       }
     .condition_icon:hover .condition_icon_big {
       visibility: visible
+    }
+    .back-title {
+      display: flex;
+      align-items: center;
+    }
+    .subeditor-title {
+      font-size: 16px;
+      font-weight: 500;
     }
   `;
 }
