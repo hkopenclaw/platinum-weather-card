@@ -2362,8 +2362,8 @@ export class PlatinumWeatherCard extends LitElement {
     const tempFontSize = this._config.temp_font_size || "4em";
     const currentTextFontSize = this._config.current_text_font_size || "21px";
     const currentTextAlignment = this._config.current_text_alignment || "center";
-    const separatorTopMargin = this.config.separator_top_margin || "5px";
-    const separatorBottomMargin = this.config.separator_bottom_margin || "-9px";
+    const separatorTopMargin = this._config.separator_top_margin || "5px";
+    const separatorBottomMargin = this._config.separator_bottom_margin || "-9px";
     const separatorVisibility = this._config.option_show_overview_separator === true ? "visible" : "hidden";
 
     return css`
