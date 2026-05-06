@@ -270,7 +270,7 @@ export class PlatinumWeatherCard extends LitElement {
       </div>
     ` : html``;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
+    const separator = html`<hr class="line">`;
 
     const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
       html`<div class="forecast-text">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text">---</div>` : html``;
@@ -310,7 +310,7 @@ export class PlatinumWeatherCard extends LitElement {
       </div>
     ` : html``;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
+    const separator = html`<hr class="line">`;
 
     return html`
       <div class="overview-section section${stack}">
@@ -331,7 +331,7 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderTitleOnlyOverviewSection(): TemplateResult {
     if (this._config?.show_section_overview === false) return html``;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
+    const separator = html`<hr class="line">`;
 
     return html`
       <div class="overview-section section">
@@ -352,7 +352,7 @@ export class PlatinumWeatherCard extends LitElement {
     const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.currentIcon}</div>`;
     const biggerIcon = html`<div class="big-icon"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
 
-    const separator = this._config.option_show_overview_separator === true ? html`<hr class=line>` : html``;
+    const separator = html`<hr class="line">`;
 
     const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
       html`<div class="forecast-text-right">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text-right">---</div>` : html``;
@@ -2362,6 +2362,9 @@ export class PlatinumWeatherCard extends LitElement {
     const tempFontSize = this._config.temp_font_size || "4em";
     const currentTextFontSize = this._config.current_text_font_size || "21px";
     const currentTextAlignment = this._config.current_text_alignment || "center";
+    const separatorTopMargin = this.config.separator_top_margin || "5px";
+    const separatorBottomMargin = this.config.separator_bottom_margin || "-9px";
+    const separatorVisibility = this._config.option_show_overview_separator === true ? "visible" : "hidden";
 
     return css`
       .card {
@@ -2419,7 +2422,6 @@ export class PlatinumWeatherCard extends LitElement {
         display: flex;
         align-self: flex-start;
         flex-direction: column;
-        height: 60px;
       }
       .current-temp {
         display: table-row;
@@ -2466,9 +2468,10 @@ export class PlatinumWeatherCard extends LitElement {
         padding-left: 1px;
       }
       .line {
-        margin-top : 7px;
-        margin-bottom: -9px;
+        margin-top : ${unsafeCSS(separatorTopMargin)};
+        margin-bottom: ${unsafeCSS(separatorBottomMargin)};
         color: var(--primary-text-color);
+        visibility: ${unsafeCSS(separatorVisibility)};
       }
       .forecast-text {
         font-size: ${unsafeCSS(currentTextFontSize)};
