@@ -2364,7 +2364,7 @@ export class PlatinumWeatherCard extends LitElement {
     const currentTextAlignment = this._config.current_text_alignment || "center";
     const separatorTopMargin = this._config.separator_top_margin || "5px";
     const separatorBottomMargin = this._config.separator_bottom_margin || "-9px";
-    const separatorVisibility = this._config.option_show_overview_separator === true ? "visible" : "hidden";
+    const separatorVisible = this._config.option_show_overview_separator === true ? "visible" : "hidden";
 
     return css`
       .card {
@@ -2471,7 +2471,7 @@ export class PlatinumWeatherCard extends LitElement {
         margin-top : ${unsafeCSS(separatorTopMargin)};
         margin-bottom: ${unsafeCSS(separatorBottomMargin)};
         color: var(--primary-text-color);
-        visibility: ${unsafeCSS(separatorVisibility)};
+        visibility: ${unsafeCSS(separatorVisible)};
       }
       .forecast-text {
         font-size: ${unsafeCSS(currentTextFontSize)};
