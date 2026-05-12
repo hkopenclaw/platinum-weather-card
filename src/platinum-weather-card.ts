@@ -248,34 +248,34 @@ export class PlatinumWeatherCard extends LitElement {
 
   private _renderHKOOverviewSection(): TemplateResult {
       if (this._config?.show_section_overview === false)
-          return b ``;
+          return html``;
       const weatherIcon = this._weatherIcon(this.currentIcon);
       const url = new URL('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + weatherIcon + '.svg', import.meta.url);
       const wtcsgnlurl = new URL('weather_icons/warnsum/' + this.currentWtcsgnlIcon + '.svg', import.meta.url);
       const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.currentIcon}`;
-      const unknownDiv = weatherIcon !== 'unknown' ? b `` : b `<div class="unknown-forecast">${this.currentIcon}</div>`;
-      const biggerIcon = b `<div class="big-icon-hko"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
-      const wtcsgnlIcon = b `<div class="wtcsgnl-icon"><img src="${wtcsgnlurl.href}" width="100%" height="100%"></div>`;
-      const currentTemp = b `
+      const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.currentIcon}</div>`;
+      const biggerIcon = html`<div class="big-icon-hko"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
+      const wtcsgnlIcon = html`<div class="wtcsgnl-icon"><img src="${wtcsgnlurl.href}" width="100%" height="100%"></div>`;
+      const currentTemp = html`
     <div class="current-temp-hko">
       <div class="temp" id="current-temp-text">${this.currentTemperature}</div>
       <div class="unit-temp-big">${this.getUOM('temperature')}</div>
     </div>
   `;
       const apparent = this.currentApparentTemperature;
-      const apparentTemp = apparent != '' ? b `
+      const apparentTemp = apparent != '' ? html`
     <span class="apparent-temp-hko">
       <span class="apparent-hko">${this.localeTextFeelsLike}&nbsp;${apparent}${this.getUOM('temperature')}</span>
     </span>
-  ` : b ``;
-      const separator = b `<hr class="line">`;
+  ` : html``;
+      const separator = html`<hr class="line">`;
       const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
-          b `<span class="current-text-hko">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</span>` ?? b `<span class="current-text-hko">---</span>` : b ``;
-      return b `
+          html`<span class="current-text-hko">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</span>` ?? html`<span class="current-text-hko">---</span>` : html``;
+      return html`
     <div class="overview-section section">
-      ${this._config.text_card_title ? b `<div class="card-header">${this._config.text_card_title}</div>` : b ``}
-      ${this._config.text_card_title_2 ? b `<div class="card-header">${this._config.text_card_title_2}</div>` : b ``}
-      ${this._config.entity_update_time ? b `<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : b ``}
+      ${this._config.text_card_title ? html`<div class="card-header">${this._config.text_card_title}</div>` : html``}
+      ${this._config.text_card_title_2 ? html`<div class="card-header">${this._config.text_card_title_2}</div>` : html``}
+      ${this._config.entity_update_time ? html`<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : html``}
       <div class="overview-top-hko">
         <div class="top-left-hko">${biggerIcon}${wtcsgnlIcon}${unknownDiv}</div>
         <div class="currentTemps">${currentTemp}</div>
@@ -288,35 +288,35 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   private _renderNewOverviewSection(): TemplateResult {
-    if (this._config?.show_section_overview === false) return b``;
+    if (this._config?.show_section_overview === false) return html``;
     const weatherIcon = this._weatherIcon(this.currentIcon);
     const url = new URL('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + weatherIcon + '.svg', import.meta.url);
     const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.currentIcon}`;
-    const unknownDiv = weatherIcon !== 'unknown' ? b`` : b`<div class="unknown-forecast">${this.currentIcon}</div>`;
-    const biggerIcon = b`<div class="big-icon-new"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
-    const currentTemp = b`
+    const unknownDiv = weatherIcon !== 'unknown' ? html`` : html`<div class="unknown-forecast">${this.currentIcon}</div>`;
+    const biggerIcon = html`<div class="big-icon-new"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
+    const currentTemp = html`
       <div class="current-temp-new">
         <div class="temp-new" id="current-temp-text">${this.currentTemperature}</div>
         <div class="unit-temp-big-new">${this.getUOM('temperature')}</div>
       </div>
     `;
     const apparent = this.currentApparentTemperature;
-    const apparentTemp = apparent != '' ? b`
+    const apparentTemp = apparent != '' ? html`
       <div class="apparent-temp-new">
         <span class="apparent-new">${this.localeTextFeelsLike}&nbsp;${apparent}</span>
         <span class="unit-temp-new">${this.getUOM('temperature')}</span>
       </div>
-    ` : b``;
-    const separator = b`<hr class="line">`;
+    ` : html``;
+    const separator = html`<hr class="line">`;
     const currentText =
       (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary])
-        ? b`<div class="current-text-new">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>`
-        : b`<div class="current-text-new">---</div>`;
-    return b`
+        ? html`<div class="current-text-new">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>`
+        : html`<div class="current-text-new">---</div>`;
+    return html`
       <div class="overview-section section">
-        ${this._config.text_card_title ? b`<div class="card-header">${this._config.text_card_title}</div>` : b``}
-        ${this._config.text_card_title_2 ? b`<div class="card-header">${this._config.text_card_title_2}</div>` : b``}
-        ${this._config.entity_update_time ? b`<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : b``}
+        ${this._config.text_card_title ? html`<div class="card-header">${this._config.text_card_title}</div>` : html``}
+        ${this._config.text_card_title_2 ? html`<div class="card-header">${this._config.text_card_title_2}</div>` : html``}
+        ${this._config.entity_update_time ? html`<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : html``}
         <div class="overview-top-new">
           <div class="top-left-new">${biggerIcon}${unknownDiv}</div>
           <div class="summary-new">${currentText}</div>
