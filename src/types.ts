@@ -13,7 +13,7 @@ export interface HassCustomElement extends CustomElementConstructor {
 export const sectionNames = ['overview', 'extended', 'slots', 'daily_forecast'];
 export type sectionType = typeof sectionNames[number];
 
-export type layoutOverview = "hko" | "complete" | "observations" | "forecast" | "title only";
+export type layoutOverview = "hko" | "new" | "complete" | "observations" | "forecast" | "title only";
 export type layoutOrientation = "horizontal" | "vertical";
 export type layoutDays = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type timeFormat = 'system' | '12hour' | '24hour';
