@@ -246,6 +246,88 @@ export class PlatinumWeatherCard extends LitElement {
     return html`---`;
   }
 
+  private _renderHKOOverviewSection(): TemplateResult {
+      if (this._config?.show_section_overview === false)
+          return b ``;
+      const weatherIcon = this._weatherIcon(this.currentIcon);
+      const url = new URL('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + weatherIcon + '.svg', import.meta.url);
+      const wtcsgnlurl = new URL('weather_icons/warnsum/' + this.currentWtcsgnlIcon + '.svg', import.meta.url);
+      const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.currentIcon}`;
+      const unknownDiv = weatherIcon !== 'unknown' ? b `` : b `<div class="unknown-forecast">${this.currentIcon}</div>`;
+      const biggerIcon = b `<div class="big-icon-hko"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
+      const wtcsgnlIcon = b `<div class="wtcsgnl-icon"><img src="${wtcsgnlurl.href}" width="100%" height="100%"></div>`;
+      const currentTemp = b `
+    <div class="current-temp-hko">
+      <div class="temp" id="current-temp-text">${this.currentTemperature}</div>
+      <div class="unit-temp-big">${this.getUOM('temperature')}</div>
+    </div>
+  `;
+      const apparent = this.currentApparentTemperature;
+      const apparentTemp = apparent != '' ? b `
+    <span class="apparent-temp-hko">
+      <span class="apparent-hko">${this.localeTextFeelsLike}&nbsp;${apparent}${this.getUOM('temperature')}</span>
+    </span>
+  ` : b ``;
+      const separator = b `<hr class="line">`;
+      const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
+          b `<span class="current-text-hko">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</span>` ?? b `<span class="current-text-hko">---</span>` : b ``;
+      return b `
+    <div class="overview-section section">
+      ${this._config.text_card_title ? b `<div class="card-header">${this._config.text_card_title}</div>` : b ``}
+      ${this._config.text_card_title_2 ? b `<div class="card-header">${this._config.text_card_title_2}</div>` : b ``}
+      ${this._config.entity_update_time ? b `<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : b ``}
+      <div class="overview-top-hko">
+        <div class="top-left-hko">${biggerIcon}${wtcsgnlIcon}${unknownDiv}</div>
+        <div class="currentTemps">${currentTemp}</div>
+      </div>
+      ${apparentTemp}
+      ${currentText}
+      ${separator}
+    </div>
+  `;
+  }
+
+  private _renderNewOverviewSection(): TemplateResult {
+    if (this._config?.show_section_overview === false) return b``;
+    const weatherIcon = this._weatherIcon(this.currentIcon);
+    const url = new URL('weather_icons/' + (this._config.option_static_icons ? 'static' : 'animated') + '/' + weatherIcon + '.svg', import.meta.url);
+    const hoverText = weatherIcon !== 'unknown' ? '' : `Unknown condition\n${this.currentIcon}`;
+    const unknownDiv = weatherIcon !== 'unknown' ? b`` : b`<div class="unknown-forecast">${this.currentIcon}</div>`;
+    const biggerIcon = b`<div class="big-icon-new"><img src="${url.href}" width="100%" height="100%" title="${hoverText}"></div>`;
+    const currentTemp = b`
+      <div class="current-temp-new">
+        <div class="temp-new" id="current-temp-text">${this.currentTemperature}</div>
+        <div class="unit-temp-big-new">${this.getUOM('temperature')}</div>
+      </div>
+    `;
+    const apparent = this.currentApparentTemperature;
+    const apparentTemp = apparent != '' ? b`
+      <div class="apparent-temp-new">
+        <span class="apparent-new">${this.localeTextFeelsLike}&nbsp;${apparent}</span>
+        <span class="unit-temp-new">${this.getUOM('temperature')}</span>
+      </div>
+    ` : b``;
+    const separator = b`<hr class="line">`;
+    const currentText =
+      (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary])
+        ? b`<div class="current-text-new">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>`
+        : b`<div class="current-text-new">---</div>`;
+    return b`
+      <div class="overview-section section">
+        ${this._config.text_card_title ? b`<div class="card-header">${this._config.text_card_title}</div>` : b``}
+        ${this._config.text_card_title_2 ? b`<div class="card-header">${this._config.text_card_title_2}</div>` : b``}
+        ${this._config.entity_update_time ? b`<div class="updated">${this._config.text_update_time_prefix ? this._config.text_update_time_prefix + ' ' : ''}${this._renderUpdateTime()}</div>` : b``}
+        <div class="overview-top-new">
+          <div class="top-left-new">${biggerIcon}${unknownDiv}</div>
+          <div class="summary-new">${currentText}</div>
+          <div class="currentTemps-new">${currentTemp}</div>
+        </div>
+        ${apparentTemp}
+        ${separator}
+      </div>
+    `;
+  }
+
   private _renderCompleteOverviewSection(): TemplateResult {
     if (this._config?.show_section_overview === false) return html``;
 
@@ -273,7 +355,7 @@ export class PlatinumWeatherCard extends LitElement {
     const separator = html`<hr class="line">`;
 
     const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
-      html`<div class="forecast-text">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text">---</div>` : html``;
+      html`<div class="current-text">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="current-text">---</div>` : html``;
 
     return html`
       <div class="overview-section section">
@@ -355,7 +437,7 @@ export class PlatinumWeatherCard extends LitElement {
     const separator = html`<hr class="line">`;
 
     const currentText = (this._config.entity_current_summary) && (this.hass.states[this._config.entity_current_summary]) ?
-      html`<div class="forecast-text-right">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="forecast-text-right">---</div>` : html``;
+      html`<div class="current-text-right">${entityComputeStateDisplay(this.hass.localize, this.hass.states[this._config.entity_current_summary], getLocale(this.hass))}</div>` ?? html`<div class="current-text-right">---</div>` : html``;
 
     return html`
       <div class="overview-section section">
@@ -392,7 +474,7 @@ export class PlatinumWeatherCard extends LitElement {
   private _renderOverviewSection(): TemplateResult {
     if (this._config?.show_section_overview === false) return html``;
 
-    const layout = this._config.overview_layout || 'complete';
+    const layout = this._config.overview_layout || 'hko';
     switch (layout) {
       case 'observations':
         return this._renderObservationsOverviewSection();
@@ -401,8 +483,10 @@ export class PlatinumWeatherCard extends LitElement {
       case 'title only':
         return this._renderTitleOnlyOverviewSection();
       case 'complete':
-      default:
         return this._renderCompleteOverviewSection();
+      case 'hko':
+      default:
+        return this._renderHKOOverviewSection();
     }
   }
 
@@ -558,20 +642,20 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const tempUnit = html`<div class="unit-temp-small">${this.getUOM("temperature")}</div>`;
+      const tempUnit = html`${this.getUOM("temperature")}`;
       const minMaxTemp = this._config.old_daily_format === true
         ?
         html`
           <li class="f-slot-horiz-text">
             <span>
               <div class="slot-text highTemp">${maxTemp ? maxTemp : '---'}</div>
-              <div class="unit-temp-small highTemp">${this.getUOM("temperature")}</div>
+              <div class="unit-temp-s highTemp">${tempUnit}</div>
             </span>
           </li>
           <li class="f-slot-horiz-text">
             <span>
               <div class="slot-text lowTemp">${minTemp ? minTemp : '---'}</div>
-              <div class="unit-temp-small lowTemp">${this.getUOM("temperature")}</div>
+              <div class="unit-temp-s lowTemp">${tempUnit}</div>
             </span>
           </li>`
         :
@@ -581,9 +665,8 @@ export class PlatinumWeatherCard extends LitElement {
             <li class="f-slot-horiz-text">
               <span>
                 <div class="slot-text highTemp">${maxTemp ? maxTemp : "---"}</div>
-                <div class="slot-text slash">/</div>
-                <div class="slot-text lowTemp">${minTemp ? minTemp : "---"}</div>
-                ${tempUnit}
+                <div class="slot-text mark">/</div>
+                <div class="slot-text lowTemp">${minTemp ? minTemp : "---"}${tempUnit}</div>
               </span>
             </li>`
           :
@@ -591,9 +674,8 @@ export class PlatinumWeatherCard extends LitElement {
             <li class="f-slot-horiz-text">
               <span>
                 <div class="slot-text lowTemp">${minTemp ? minTemp : "---"}</div>
-                <div class="slot-text slash">/</div>
-                <div class="slot-text highTemp">${maxTemp ? maxTemp : "---"}</div>
-                ${tempUnit}
+                <div class="slot-text mark">/</div>
+                <div class="slot-text highTemp">${maxTemp ? maxTemp : "---"}${tempUnit}</div>
               </span>
             </li>
           `;
@@ -616,7 +698,7 @@ export class PlatinumWeatherCard extends LitElement {
             <li class="f-slot-horiz-text">
               <span>
                 <div class="slot-text rh">${minRH ? minRH : "---"}</div>
-                <div class="slot-text slash">-</div>
+                <div class="slot-text mark">-</div>
                 <div class="slot-text rh">${maxRH ? maxRH : "---"}</div>
                 ${rhUnit}
               </span>
@@ -724,14 +806,13 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_temp_1 ? this._config.entity_forecast_min_temp_1.match(/(\d+)(?!.*\d)/g) : false;
         minTemp = start && this._config.entity_forecast_min_temp_1 ? this.hass.states[this._config.entity_forecast_min_temp_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const tempUnit = html`<span class="unit-small-vert">${this.getUOM("temperature")}</span>`;
       const minMaxTemp = html`
         <span class="metric-inline">
           <span class="metric-label">
             <ha-icon icon="mdi:thermometer"></ha-icon>
           </span>
           <span class="metric-value">
-            <span class="lowTemp-vert">${minTemp ? minTemp : "---"}</span> / <span class="highTemp-vert">${maxTemp ? maxTemp : "---"}</span>${tempUnit}
+            <span class="lowTemp-vert">${minTemp ? minTemp : "---"}</span> / <span class="highTemp-vert">${maxTemp ? maxTemp : "---"}${this.getUOM("temperature")}</span>
           </span>
         </span>`;
       if (this._config.entity_hko_forecast) {
@@ -746,13 +827,12 @@ export class PlatinumWeatherCard extends LitElement {
         start = this._config.entity_forecast_min_rh_1 ? this._config.entity_forecast_min_rh_1.match(/(\d+)(?!.*\d)/g) : false;
         minRH = start && this._config.entity_forecast_min_rh_1 ? this.hass.states[this._config.entity_forecast_min_rh_1.replace(/(\d+)(?!.*\d)/g, String(Number(start) + i))].state : undefined;
       }
-      const rhUnit = html`<span class="unit-small-vert">%</span>`;
       const minMaxRH = html`
         <span class="metric-inline">
           <span class="metric-label">
             <ha-icon icon="mdi:water-percent"></ha-icon>
           </span>
-          <span class="metric-value">${minRH ? minRH : "---"} - ${maxRH ? maxRH : "---"}${rhUnit}
+          <span class="metric-value">${minRH ? minRH : "---"} - ${maxRH ? maxRH : "---"}%
           </span>
         </span>`;
       if (this._config.entity_hko_forecast) {
@@ -1226,7 +1306,7 @@ export class PlatinumWeatherCard extends LitElement {
     const digits = this._config.option_slot_temperature_decimals === true ? 1 : 0;
     const obs_max = this._config.entity_observed_max && this.hass.states[this._config.entity_observed_max] !== undefined ? (Number(this.hass.states[this._config.entity_observed_max].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
     const obs_min = this._config.entity_observed_min && this.hass.states[this._config.entity_observed_min] !== undefined ? (Number(this.hass.states[this._config.entity_observed_min].state)).toLocaleString(this.locale, { minimumFractionDigits: digits, maximumFractionDigits: digits }) : "---";
-    const units = html`<div class="unit-temp-small">${this.getUOM('temperature')}</div>`;
+    const units = html`${this.getUOM('temperature')}`;
     return html`
       <li>
         <div class="slot">
@@ -1234,8 +1314,8 @@ export class PlatinumWeatherCard extends LitElement {
             <ha-icon icon="mdi:thermometer"></ha-icon>
           </div>
           <div class="slot-text observed-min-text lowTemp">${obs_min}</div>
-          <div class="slot-text slash">/</div>
-          <div class="slot-text forecast-min-text">${obs_max}</div>${units}
+          <div class="slot-text mark">/</div>
+          <div class="slot-text forecast-min-text highTemp">${obs_max}${units}</div>
         </div>
       </li>
     `;
@@ -1536,6 +1616,12 @@ export class PlatinumWeatherCard extends LitElement {
       : '---';
   }
 
+  get currentWtcsgnlIcon(): string {
+    const entity = this._config.entity_wtcsgnl;
+    return entity && this.hass.states[entity]
+      ? this.hass.states[entity].state
+      : '---';
+
   get currentTemperature(): string {
     const entity = this._config.entity_temperature;
     const digits = this._config.option_show_overview_decimals === true ? 1 : 0;
@@ -1741,9 +1827,9 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   get _forecastWidthClass(): string {
-    if (this._cardWidth >= 430) return 'is-wide';
-    if (this._cardWidth < 387) return 'is-narrow';
-    return 'is-normal';
+    if (this._cardWidth >= 430) return 'wide';
+    if (this._cardWidth < 387) return 'narrow';
+    return 'normal';
   }
 
   get _psrVariant(): 'short' | 'full' {
@@ -2357,14 +2443,29 @@ export class PlatinumWeatherCard extends LitElement {
     // Get config flags or set defaults if not configured
     const biggerIconHeight = this._config.bigger_icon_height || "140px";
     const biggerIconWidth = this._config.bigger_icon_width || "140px";
+    const biggerIconTopMargin = this._config.bigger_icon_top_margin || "-30px";
+    const biggerIconLeftPos = this._config.bigger_icon_left_pos || "-18px";
+    const wtcsgnlIconHeight = this._config.wtcsgnl_icon_height || "40px";
+    const wtcsgnlIconWidth = this._config.wtcsgnl_icon_width || "40px";
+    const wtcsgnlIconTopMargin = this._config.wtcsgnl_icon_top_margin || "-58px";
+    const wtcsgnlIconLeftPos = this._config.wtcsgnl_icon_left_pos || "97px";
     const tooltipVisible = this._config.option_tooltips ? "visible" : "hidden";
     const tempFontWeight = this._config.temp_font_weight || "300";
     const tempFontSize = this._config.temp_font_size || "4em";
+    const currentTempTopMargin = this._config.current_temp_top_margin || "12px";
+    const currentTempRightPos = this._config.current_temp_right_pos || "0px";
     const currentTextFontSize = this._config.current_text_font_size || "21px";
     const currentTextAlignment = this._config.current_text_alignment || "center";
-    const separatorTopMargin = this._config.separator_top_margin || "5px";
+    const currentTextTopMargin = this._config.current_text_top_margin || "-63px";
+    const currentTextLeftPos = this._config.current_text_left_pos || "0px";
+    const currentTextWidth = this._config.current_text_width || "100%";
+    const separatorTopMargin = this._config.separator_top_margin || "7px";
     const separatorBottomMargin = this._config.separator_bottom_margin || "-9px";
     const separatorVisible = this._config.option_show_overview_separator === true ? "visible" : "hidden";
+    const topbarTopMargin = this._config.topbar_top_margin || "-23px";
+    const topbarRightPos =  this._config.topbar_right_pos || "16px";
+    const horizTextFontSize = this._cardWidth > 387 ? "14px" : "13px"
+    const variationsPadding = this._cardWidth > 387 ? "8px" : "4px"
 
     return css`
       .card {
@@ -2396,6 +2497,14 @@ export class PlatinumWeatherCard extends LitElement {
       .overview-top > .currentTemps {
         margin-left: auto;
       }
+      .overview-top-hko {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+      }
+      .overview-top-hko > .currentTemps {
+        margin-left: auto;
+      }
       .stacked {
         position: absolute;
       }
@@ -2404,6 +2513,11 @@ export class PlatinumWeatherCard extends LitElement {
         flex-direction: column;
         height: 85px;
       }
+      .top-left-hko {
+        display: flex;
+        flex-direction: column;
+        height: 89px;
+      }
       .top-left-obs {
         display: flex;
         flex-direction: column;
@@ -2411,6 +2525,20 @@ export class PlatinumWeatherCard extends LitElement {
       .big-icon {
         height: ${unsafeCSS(biggerIconHeight)};
         width: ${unsafeCSS(biggerIconWidth)};
+        position: relative;
+      }
+      .big-icon-hko {
+        height: ${unsafeCSS(biggerIconHeight)};
+        width: ${unsafeCSS(biggerIconWidth)};
+        margin-top: ${unsafeCSS(biggerIconTopMargin)};
+        left: ${unsafeCSS(biggerIconLeftPos)};
+        position: relative;
+      }
+      .wtcsgnl-icon {
+        height: ${unsafeCSS(wtcsgnlIconHeight)};
+        width: ${unsafeCSS(wtcsgnlIconWidth)};
+        margin-top: ${unsafeCSS(wtcsgnlIconTopMargin)};
+        left: ${unsafeCSS(wtcsgnlIconLeftPos)};
         position: relative;
       }
       .unknown-forecast {
@@ -2427,6 +2555,11 @@ export class PlatinumWeatherCard extends LitElement {
         display: table-row;
         margin-left: auto;
         padding: 2px 0px;
+      }
+      .current-temp-hko {
+        position: relative;
+        right: ${unsafeCSS(currentTempRightPos)};
+        margin-top: ${unsafeCSS(currentTempTopMargin)}
       }
       .temp {
         display:table-cell;
@@ -2450,12 +2583,28 @@ export class PlatinumWeatherCard extends LitElement {
         margin-left: auto;
         height: 24px;
       }
+      .apparent-temp-hko {
+        text-align: right;
+        height: 24px;
+        position: absolute;
+        right: ${unsafeCSS(topbarRightPos)};
+        margin-top: ${unsafeCSS(topbarTopMargin)};
+      }
+      .apparent-temp-new {
+        text-align: right;
+        height: 24px;
+      }
       .apparent {
         display: table-cell;
         color: var(--primary-text-color);
         font-weight: 1em;
         position: relative;
         line-height: 24px;
+      }
+      .apparent-hko {
+        color: var(--primary-text-color);
+        font-weight: 1em;
+        position: relative;
       }
       .unit-temp-small {
         display: table-cell;
@@ -2467,26 +2616,43 @@ export class PlatinumWeatherCard extends LitElement {
         padding-top: 3.6px;
         padding-left: 1px;
       }
+      .unit-temp-s {
+        display: table-cell;
+        position: relative;
+      }
       .line {
         margin-top : ${unsafeCSS(separatorTopMargin)};
         margin-bottom: ${unsafeCSS(separatorBottomMargin)};
         color: var(--primary-text-color);
         visibility: ${unsafeCSS(separatorVisible)};
       }
-      .forecast-text {
+      .current-text {
         font-size: ${unsafeCSS(currentTextFontSize)};
         text-align: ${unsafeCSS(currentTextAlignment)};
+        color: var(--secondary-text-color);
         line-height: 25px;
       }
-      .forecast-text-right {
+      .current-text-right {
         font-size: ${unsafeCSS(currentTextFontSize)};
         text-align: ${unsafeCSS(currentTextAlignment)};
         width: 100%;
         align-items: center;
         display: flex;
         justify-content: center;
+        color: var(--secondary-text-color);
         line-height: 25px;
         margin-left: -40px;
+      }
+      .current-text-hko {
+        font-size: 2em;
+        text-align: center;
+        width: ${unsafeCSS(currentTextWidth)};
+        color: var(--secondary-text-color);
+        position: absolute;
+        white-space: nowrap;
+        margin-top: ${unsafeCSS(currentTextTopMargin)};
+        left: ${unsafeCSS(currentTextLeftPos)};
+        line-height: 25px;
       }
       .variations {
         display: flex;
@@ -2496,7 +2662,7 @@ export class PlatinumWeatherCard extends LitElement {
         list-style: none;
         margin-block-start: 0px;
         margin-block-end: 0px;
-        padding-inline-start: 8px;
+        padding-inline-start: ${unsafeCSS(variationsPadding)};
       }
       .slot-list-item-1 {
         min-width:50%;
@@ -2505,6 +2671,7 @@ export class PlatinumWeatherCard extends LitElement {
       .slot-list {
         list-style: none;
         padding: 0;
+        font-size: ${unsafeCSS(horizTextFontSize)};
       }
       .slot-list li {
         height:24px;
@@ -2623,6 +2790,7 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .f-slot-horiz-text {
         line-height: 20px;
+        font-size: ${unsafeCSS(horizTextFontSize)};
       }
       .f-slot-horiz-icon {
         height:50px;
@@ -2650,7 +2818,7 @@ export class PlatinumWeatherCard extends LitElement {
         font-weight: 1em;
         color: var(--secondary-text-color);
       }
-      .slash {
+      .mark {
         padding-left: 2px;
         padding-right: 2px;
       }
@@ -2770,15 +2938,15 @@ export class PlatinumWeatherCard extends LitElement {
       }
       .day-vert-wind {
         display: block;
-        padding-top: 4px;
+        padding-top: 0px;
         text-align: left;
-        line-height: 22px;
+        line-height: 24px;
       }
       .day-vert-summary {
         display: block;
-        padding-top: 4px;
+        padding-top: 0px;
         text-align: left;
-        line-height: 22px;
+        line-height: 24px;
       }
       .highTemp-vert {
         display: inline-block;
@@ -2792,30 +2960,90 @@ export class PlatinumWeatherCard extends LitElement {
       .unit-small-vert {
         display: inline-block;
         font-size: 10.5px;
-      }      .day-vert.is-normal .day-vert-metrics {
+      }
+      .day-vert .normal .day-vert-metrics {
         gap: 6px 10px;
       }
-      .day-vert.is-narrow .day-vert-metrics {
+      .day-vert .narrow .day-vert-metrics {
         gap: 4px 6px;
         line-height: 20px;
       }
-
-      .day-vert.is-narrow .metric-label {
+      .day-vert .narrow .metric-label {
         margin-right: 2px;
       }
-
-      .day-vert.is-narrow .metric-value,
-      .day-vert.is-narrow .psr {
+      .day-vert .narrow .metric-value,
+      .day-vert .narrow .psr {
         font-size: 0.95em;
       }
-
-      .day-vert.is-wide .day-vert-metrics {
+      .day-vert .wide .day-vert-metrics {
         gap: 6px 10px;
       }
-
-      .day-vert.is-wide .metric-value,
-      .day-vert.is-wide .psr {
+      .day-vert.wide .metric-value,
+      .day-vert.wide .psr {
         font-size: 1em;
+      }
+      .overview-top-new {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        flex-wrap: nowrap;
+      }
+      .top-left-new {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 85px;
+      }
+      .big-icon-new {
+        height: ${unsafeCSS(biggerIconHeight)};
+        width: ${unsafeCSS(biggerIconWidth)};
+        margin-top: ${unsafeCSS(biggerIconTopMargin)};
+        left: ${unsafeCSS(biggerIconLeftPos)};
+        position: relative;
+      }
+      .summary-new {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+      .current-text-new {
+        font-size: 2em;
+        line-height: 25px;
+        text-align: center;
+        color: var(--secondary-text-color);
+        white-space: normal;
+      }
+      .currentTemps-new {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-start;
+        height: auto;
+      }
+      .current-temp-new {
+        display: table-row;
+        margin-left: auto;
+        padding: 2px 0px;
+      }
+      .temp-new {
+        display: table-cell;
+        font-weight: 300;
+        font-size: 4em;
+        color: var(--primary-text-color);
+        position: relative;
+        line-height: 74%;
+      }
+      .unit-temp-big-new {
+        display: table-cell;
+        vertical-align: top;
+        font-weight: 300;
+        font-size: 1.5em;
+        color: var(--primary-text-color);
+        position: relative;
+        line-height: 74%;
       }
     `;
   }
