@@ -1621,6 +1621,7 @@ export class PlatinumWeatherCard extends LitElement {
     return entity && this.hass.states[entity]
       ? this.hass.states[entity].state
       : '---';
+  }
 
   get currentTemperature(): string {
     const entity = this._config.entity_temperature;
