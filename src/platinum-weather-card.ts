@@ -484,6 +484,8 @@ export class PlatinumWeatherCard extends LitElement {
         return this._renderTitleOnlyOverviewSection();
       case 'complete':
         return this._renderCompleteOverviewSection();
+      case 'new':
+        return this._renderNewOverviewSection();
       case 'hko':
       default:
         return this._renderHKOOverviewSection();
