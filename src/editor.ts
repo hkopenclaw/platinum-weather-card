@@ -1018,6 +1018,7 @@ export class WeatherCardEditor extends LitElement implements LovelaceCardEditor 
           .value=${this._overview_layout} @closed=${(ev: { stopPropagation: () => any; }) => ev.stopPropagation()} @selected=${this._valueChanged}>
           <ha-dropdown-item></ha-dropdown-item>
           <ha-dropdown-item value="hko">hko</ha-dropdown-item>
+          <ha-dropdown-item value="new">new</ha-dropdown-item>
           <ha-dropdown-item value="complete">complete</ha-dropdown-item>
           <ha-dropdown-item value="observations">observations</ha-dropdown-item>
           <ha-dropdown-item value="forecast">forecast</ha-dropdown-item>
