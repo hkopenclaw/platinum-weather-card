@@ -6,7 +6,7 @@ import { HomeAssistant, LovelaceCardEditor, ActionHandlerEvent } from './ha-type
 import { getLovelace, debounce, hasAction, handleAction } from './ha-helpers.js';
 import { getLocale } from './helpers';
 import { entityComputeStateDisplay, stringComputeStateDisplay } from './compute_state_display';
-import type { timeFormat, WeatherCardConfig, HkoWeatherForecast } from './types';
+import type { timeFormat, WeatherCardConfig, HkoWeatherForecast, WarningIconMap, HkoWarningDetail, HkoWarnsumSignal, HkoWarnsumAttributes, HkoWarningData } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 
@@ -2075,38 +2075,22 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   get wrain(): string {
-    try {
-     const entity = this._config?.entity_hko_warnsum;
-     if (!entity) return '';
-     const wrainData = this.hass.states[entity]?.attributes?.WRAIN;
-     if (!wrainData || wrainData.actionCode === 'CANCEL') {
-      return '';
-     }
-     switch (wrainData.code) {
-       case 'WRAINA': return '-wraina';
-       case 'WRAINR': return '-wrainr';
-       case 'WRAINB': return '-wrainb';
-       default: return '';
-     }
-    } catch {
-     return '';
+    const wrainData = this._warnsumAttributes?.WRAIN;
+    if (!wrainData || wrainData.actionCode === 'CANCEL') return '';
+  
+    switch (wrainData.code ?? '') {
+      case 'WRAINA': return '-wraina';
+      case 'WRAINR': return '-wrainr';
+      case 'WRAINB': return '-wrainb';
+      default: return '';
     }
   }
 
   get wts(): string {
-    try {
-     const entity = this._config?.entity_hko_warnsum;
-     if (!entity) return '';
-     const wtsData = this.hass.states[entity]?.attributes?.WTS;
-     if (wtsData && wtsData.actionCode !== 'CANCEL') {
-      return '-wts';
-     }
-     return '';
-    } catch {
-     return '';
-    }
+    const wtsData = this._warnsumAttributes?.WTS;
+    return wtsData && wtsData.actionCode !== 'CANCEL' ? '-wts' : '';
   }
- 
+
   get sunny_icon(): string {
     return `sunny`;
   }
@@ -2230,6 +2214,180 @@ export class PlatinumWeatherCard extends LitElement {
     } catch {
       return undefined;
     }
+  }
+
+  private get _warnsumAttributes(): HkoWarnsumAttributes | undefined {
+    const entity = this._config.entityhkowarnsum;
+    if (!entity) return undefined;
+  
+    return this.hass.states[entity]?.attributes as HkoWarnsumAttributes | undefined;
+  }
+  
+  private get _warningDetails(): HkoWarningDetail[] {
+    const entity = this._config.entitywarninginfo;
+    if (!entity) return [];
+  
+    const details = this.hass.states[entity]?.attributes?.details;
+    return Array.isArray(details) ? (details as HkoWarningDetail[]) : [];
+  }
+  
+  private _warnsumActionCodeForDetail(detail: HkoWarningDetail): string | undefined {
+    const warningStatementCode = detail.warningStatementCode ?? '';
+    if (!warningStatementCode) return undefined;
+  
+    return this._warnsumAttributes?.[warningStatementCode]?.actionCode;
+  }
+  
+  private _isCancelledByWarnsum(detail: HkoWarningDetail): boolean {
+    return this._warnsumActionCodeForDetail(detail) === 'CANCEL';
+  }
+  
+  private _isTcWarning(detail: HkoWarningDetail): boolean {
+    const warningStatementCode = detail.warningStatementCode ?? '';
+    const code = detail.subtype ?? warningStatementCode;
+  
+    return (
+      warningStatementCode === 'WTCSGNL' ||
+      warningStatementCode.startsWith('WTC') ||
+      code.startsWith('TC')
+    );
+  }
+  
+  private get _tcwsStyle(): string {
+    switch (this._config.tcws_style) {
+      case 'og':
+        return '';
+      case 'grey':
+        return '-g';
+      default:
+        return '-c';
+    }
+  }
+  
+  private get _activeTCSignal(): HkoWarnsumSignal | undefined {
+    const tc = this._warnsumAttributes?.WTCSGNL;
+    if (!tc || tc.actionCode === 'CANCEL') return undefined;
+    return tc;
+  }
+  
+  private _parseWarnings(): HkoWarningData[] {
+    const WARNING_ICON_MAP: WarningIconMap = {
+      WFIREY: { icon: 'mdi:fire', className: 'yellow' },
+      WFIRER: { icon: 'mdi:fire', className: 'red' },
+      WFROST: { icon: 'mdi:snowflake', className: 'frost' },
+      WHOT: { icon: 'mdi:thermometer-high', className: 'red' },
+      WCOLD: { icon: 'mdi:thermometer-low', className: 'blue' },
+      WMSGNL: { icon: 'mdi:weather-windy', className: 'red' },
+      WRAINA: { icon: 'mdi:weather-pouring', className: 'yellow' },
+      WRAINR: { icon: 'mdi:weather-pouring', className: 'red' },
+      WRAINB: { icon: 'mdi:weather-pouring', className: 'black' },
+      WFNTSA: { icon: 'mdi:home-flood', className: 'flood' },
+      WL: { icon: 'mdi:landslide', className: 'landslide' },
+      WTMW: { icon: 'mdi:tsunami', className: 'blue' },
+      WTS: { icon: 'mdi:lightning-bolt', className: 'yellow' },
+    };
+
+    const warnings: HkoWarningData[] = [];
+  
+    for (const item of this._warningDetails) {
+      if (this._isTcWarning(item)) continue;
+  
+      const warningStatementCode = item.warningStatementCode ?? '';
+      const code = item.subtype ?? warningStatementCode;
+      if (!code) continue;
+  
+      const mapping = WARNING_ICON_MAP[code];
+      if (!mapping) continue;
+  
+      if (this._isCancelledByWarnsum(item) || item.actionCode === 'CANCEL') continue;
+  
+      const lines = Array.isArray(item.contents)
+        ? item.contents.filter((line): line is string => typeof line === 'string' && line.trim() !== '')
+        : [];
+  
+      warnings.push({
+        code,
+        icon: mapping.icon,
+        className: mapping.className,
+        lines,
+      });
+    }
+  
+    return warnings;
+  }
+  
+  private _renderWarningLines(lines: readonly string[]): TemplateResult {
+    if (lines.length === 0) return html`---`;
+  
+    const parts: Array<TemplateResult | string> = [];
+  
+    lines.forEach((line, index) => {
+      if (index > 0) parts.push(html`<br>`);
+      parts.push(line);
+    });
+  
+    return html`${parts}`;
+  }
+  
+  private _renderTcwsIcon(tc: HkoWarnsumSignal): TemplateResult {
+    const code = tc.code ?? '';
+    if (!code) return html``;
+  
+    const iconUrl = this.hass.hassUrl(
+      `/local/community/hko-weather-card/weather_icons/warnsum/${code}${this._tcwsStyle}.svg`
+    );
+  
+    const label = tc.name ?? code;
+  
+    return html`
+      <span class="hko-warning-item tcws-item" title="${label}">
+        <span
+          class="tcws"
+          id="tcws-icon"
+          role="img"
+          aria-label="${label}"
+          style="background-image:url('${iconUrl}');"
+        ></span>
+      </span>
+    `;
+  }
+  
+  private _renderWarningIcons(warnings: readonly HkoWarningData[]): TemplateResult {
+    if (warnings.length === 0) return html``;
+  
+    return html`
+      ${warnings.map(
+        (warning, index) => html`
+          <span
+            class="warninfotooltip hko-warning-item"
+            id="warning-${index}-icon"
+            tabindex="0"
+            role="button"
+            aria-haspopup="true"
+            aria-label="${warning.code}"
+          >
+            <ha-icon class="ha-icon-warn ${warning.className}" icon="${warning.icon}"></ha-icon>
+            <span class="warninfotooltiptext" id="warning-${index}-text">
+              ${this._renderWarningLines(warning.lines)}
+            </span>
+          </span>
+        `
+      )}
+    `;
+  }
+  
+  private _renderHKOWarnings(): TemplateResult {
+    const tc = this._activeTCSignal;
+    const warnings = this._parseWarnings();
+  
+    if (!tc && warnings.length === 0) return html``;
+  
+    return html`
+      <div class="hko-warning-strip">
+        ${tc ? this._renderTcwsIcon(tc) : html``}
+        ${this._renderWarningIcons(warnings)}
+      </div>
+    `;
   }
 
   get localeTextFeelsLike(): string {
@@ -3048,6 +3206,19 @@ export class PlatinumWeatherCard extends LitElement {
         position: relative;
         line-height: 74%;
       }
+      .ha-icon-warn {
+        height: 18px;
+        padding-right: 0px;
+      }
+      
+      .ha-icon-warn.yellow { color: #FFBF00; }
+      .ha-icon-warn.red { color: #EF4444; }
+      .ha-icon-warn.black { color: #606060; }
+      .ha-icon-warn.blue { color: #89CFF0; }
+      .ha-icon-warn.flood { color: #97F8C3; }
+      .ha-icon-warn.landslide { color: #AA7942; }
+      .ha-icon-warn.frost { color: #89CFF0; }
+
     `;
   }
 }
