@@ -158,6 +158,44 @@ export interface HkoWeatherForecast {
   forecastWind?: string;
 }
 
+export type WarningIconMap = Record<string, { icon: string; className: string }>;
+
+export interface HkoWarningDetail {
+  warningStatementCode?: string;
+  subtype?: string;
+  contents?: string[];
+  actionCode?: string;
+  name?: string;
+}
+
+export interface HkoWarnsumSignal {
+  code?: string;
+  actionCode?: string;
+  name?: string;
+}
+
+export interface HkoWarnsumAttributes {
+  [key: string]: HkoWarnsumSignal | undefined;
+  WFIRE?: HkoWarnsumSignal;
+  WFROST?: HkoWarnsumSignal;
+  WHOT?: HkoWarnsumSignal;
+  WCOLD?: HkoWarnsumSignal;
+  WMSGNL?: HkoWarnsumSignal;
+  WRAIN?: HkoWarnsumSignal;
+  WFNTSA?: HkoWarnsumSignal;
+  WL?: HkoWarnsumSignal;
+  WTCSGNL?: HkoWarnsumSignal;
+  WTMW?: HkoWarnsumSignal;
+  WTS?: HkoWarnsumSignal;
+}
+
+export interface HkoWarningData {
+  code: string;
+  icon: string;
+  className: string;
+  lines: string[];
+}
+
 // Valid keys for WeatherCardConfig - used to filter unknown config properties
 export const weatherCardConfigKeys: (keyof WeatherCardConfig)[] = [
   'type',
