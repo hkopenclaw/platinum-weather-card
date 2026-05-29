@@ -265,7 +265,7 @@ export class PlatinumWeatherCard extends LitElement {
       const apparent = this.currentApparentTemperature;
       const apparentTemp = apparent != '' ? html`
     <span class="apparent-temp-hko">
-      <span class="apparent-hko">${this.localeTextFeelsLike}&nbsp;${apparent}${this.getUOM('temperature')}</span>
+      <span class="apparent-hko">${this._renderHKOWarnings()}${this.localeTextFeelsLike}&nbsp;${apparent}${this.getUOM('temperature')}</span>
     </span>
   ` : html``;
       const separator = html`<hr class="line">`;
