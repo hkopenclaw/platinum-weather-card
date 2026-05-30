@@ -6,7 +6,7 @@ import { HomeAssistant, LovelaceCardEditor, ActionHandlerEvent } from './ha-type
 import { getLovelace, debounce, hasAction, handleAction } from './ha-helpers.js';
 import { getLocale } from './helpers';
 import { entityComputeStateDisplay, stringComputeStateDisplay } from './compute_state_display';
-import type { timeFormat, WeatherCardConfig, HkoWeatherForecast, WarningIconMap, HkoWarningDetail, HkoWarnsumSignal, HkoWarnsumAttributes, HkoWarningData } from './types';
+import type { timeFormat, WeatherCardConfig, HkoWeatherForecast, WarningIconMap, HkoWarningInfo, HkoWarnsum, HkoWarnsumCode, HkoWarningIcon } from './types';
 import { actionHandler } from './action-handler-directive';
 import { CARD_VERSION } from './const';
 
@@ -2075,7 +2075,7 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   get wrain(): string {
-    const wrainData = this._warnsumAttributes?.WRAIN;
+    const wrainData = this._warnsumCode?.WRAIN;
     if (!wrainData || wrainData.actionCode === 'CANCEL') return '';
   
     switch (wrainData.code ?? '') {
@@ -2087,7 +2087,7 @@ export class PlatinumWeatherCard extends LitElement {
   }
 
   get wts(): string {
-    const wtsData = this._warnsumAttributes?.WTS;
+    const wtsData = this._warnsumCode?.WTS;
     return wtsData && wtsData.actionCode !== 'CANCEL' ? '-wts' : '';
   }
 
@@ -2216,33 +2216,33 @@ export class PlatinumWeatherCard extends LitElement {
     }
   }
 
-  private get _warnsumAttributes(): HkoWarnsumAttributes | undefined {
-    const entity = this._config.entityhkowarnsum;
+  private get _warnsumCode(): HkoWarnsumCode | undefined {
+    const entity = this._config.entity_hko_warnsum;
     if (!entity) return undefined;
   
-    return this.hass.states[entity]?.attributes as HkoWarnsumAttributes | undefined;
+    return this.hass.states[entity]?.attributes as HkoWarnsumCode | undefined;
   }
   
-  private get _warningDetails(): HkoWarningDetail[] {
-    const entity = this._config.entitywarninginfo;
+  private get _warningInfo(): HkoWarningInfo[] {
+    const entity = this._config.entity_hko_warninginfo;
     if (!entity) return [];
   
     const details = this.hass.states[entity]?.attributes?.details;
-    return Array.isArray(details) ? (details as HkoWarningDetail[]) : [];
+    return Array.isArray(details) ? (details as HkoWarningInfo[]) : [];
   }
   
-  private _warnsumActionCodeForDetail(detail: HkoWarningDetail): string | undefined {
+  private _warnsumActionCodeForDetail(detail: HkoWarningInfo): string | undefined {
     const warningStatementCode = detail.warningStatementCode ?? '';
     if (!warningStatementCode) return undefined;
   
-    return this._warnsumAttributes?.[warningStatementCode]?.actionCode;
+    return this._warnsumCode?.[warningStatementCode]?.actionCode;
   }
   
-  private _isCancelledByWarnsum(detail: HkoWarningDetail): boolean {
+  private _isCancelledByWarnsum(detail: HkoWarningInfo): boolean {
     return this._warnsumActionCodeForDetail(detail) === 'CANCEL';
   }
   
-  private _isTcWarning(detail: HkoWarningDetail): boolean {
+  private _isTcWarning(detail: HkoWarningInfo): boolean {
     const warningStatementCode = detail.warningStatementCode ?? '';
     const code = detail.subtype ?? warningStatementCode;
   
@@ -2264,13 +2264,13 @@ export class PlatinumWeatherCard extends LitElement {
     }
   }
   
-  private get _activeTCSignal(): HkoWarnsumSignal | undefined {
-    const tc = this._warnsumAttributes?.WTCSGNL;
+  private get _activeTCSignal(): HkoWarnsum | undefined {
+    const tc = this._warnsumCode?.WTCSGNL;
     if (!tc || tc.actionCode === 'CANCEL') return undefined;
     return tc;
   }
   
-  private _parseWarnings(): HkoWarningData[] {
+  private _parseWarningIcons(): HkoWarningIcon[] {
     const WARNING_ICON_MAP: WarningIconMap = {
       WFIREY: { icon: 'mdi:fire', className: 'yellow' },
       WFIRER: { icon: 'mdi:fire', className: 'red' },
@@ -2287,9 +2287,9 @@ export class PlatinumWeatherCard extends LitElement {
       WTS: { icon: 'mdi:lightning-bolt', className: 'yellow' },
     };
 
-    const warnings: HkoWarningData[] = [];
+    const warningIcons: HkoWarningIcon[] = [];
   
-    for (const item of this._warningDetails) {
+    for (const item of this._warningInfo) {
       if (this._isTcWarning(item)) continue;
   
       const warningStatementCode = item.warningStatementCode ?? '';
@@ -2305,7 +2305,7 @@ export class PlatinumWeatherCard extends LitElement {
         ? item.contents.filter((line): line is string => typeof line === 'string' && line.trim() !== '')
         : [];
   
-      warnings.push({
+      warningIcons.push({
         code,
         icon: mapping.icon,
         className: mapping.className,
@@ -2313,7 +2313,7 @@ export class PlatinumWeatherCard extends LitElement {
       });
     }
   
-    return warnings;
+    return warningIcons;
   }
   
   private _renderWarningLines(lines: readonly string[]): TemplateResult {
@@ -2329,7 +2329,7 @@ export class PlatinumWeatherCard extends LitElement {
     return html`${parts}`;
   }
   
-  private _renderTcwsIcon(tc: HkoWarnsumSignal): TemplateResult {
+  private _renderTcwsIcon(tc: HkoWarnsum): TemplateResult {
     const code = tc.code ?? '';
     if (!code) return html``;
   
@@ -2352,23 +2352,23 @@ export class PlatinumWeatherCard extends LitElement {
     `;
   }
   
-  private _renderWarningIcons(warnings: readonly HkoWarningData[]): TemplateResult {
-    if (warnings.length === 0) return html``;
+  private _renderWarningIcons(warningIcons: readonly HkoWarningIcon[]): TemplateResult {
+    if (warningIcons.length === 0) return html``;
   
     return html`
-      ${warnings.map(
-        (warning, index) => html`
+      ${warningIcons.map(
+        (warningIcon, index) => html`
           <span
             class="warninfotooltip hko-warning-item"
             id="warning-${index}-icon"
             tabindex="0"
             role="button"
             aria-haspopup="true"
-            aria-label="${warning.code}"
+            aria-label="${warningIcon.code}"
           >
-            <ha-icon class="ha-icon-warn ${warning.className}" icon="${warning.icon}"></ha-icon>
+            <ha-icon class="ha-icon-warn ${warningIcon.className}" icon="${warningIcon.icon}"></ha-icon>
             <span class="warninfotooltiptext" id="warning-${index}-text">
-              ${this._renderWarningLines(warning.lines)}
+              ${this._renderWarningLines(warningIcon.lines)}
             </span>
           </span>
         `
@@ -2378,14 +2378,14 @@ export class PlatinumWeatherCard extends LitElement {
   
   private _renderHKOWarnings(): TemplateResult {
     const tc = this._activeTCSignal;
-    const warnings = this._parseWarnings();
+    const warningIcons = this._parseWarningIcons();
   
-    if (!tc && warnings.length === 0) return html``;
+    if (!tc && warningIcons.length === 0) return html``;
   
     return html`
       <div class="hko-warning-strip">
         ${tc ? this._renderTcwsIcon(tc) : html``}
-        ${this._renderWarningIcons(warnings)}
+        ${this._renderWarningIcons(warningIcons)}
       </div>
     `;
   }
