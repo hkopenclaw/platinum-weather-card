@@ -160,36 +160,39 @@ export interface HkoWeatherForecast {
 
 export type WarningIconMap = Record<string, { icon: string; className: string }>;
 
-export interface HkoWarningDetail {
+export interface HkoWarningInfo {
+  contents?: string[];
   warningStatementCode?: string;
   subtype?: string;
-  contents?: string[];
-  actionCode?: string;
+  updateTime?: string;
   name?: string;
+  actionCode?: string;
 }
 
-export interface HkoWarnsumSignal {
+export interface HkoWarnsum {
+  name?: string;
   code?: string;
   actionCode?: string;
-  name?: string;
+  issueTime?: string;
+  updateTime?: string;
 }
 
-export interface HkoWarnsumAttributes {
-  [key: string]: HkoWarnsumSignal | undefined;
-  WFIRE?: HkoWarnsumSignal;
-  WFROST?: HkoWarnsumSignal;
-  WHOT?: HkoWarnsumSignal;
-  WCOLD?: HkoWarnsumSignal;
-  WMSGNL?: HkoWarnsumSignal;
-  WRAIN?: HkoWarnsumSignal;
-  WFNTSA?: HkoWarnsumSignal;
-  WL?: HkoWarnsumSignal;
-  WTCSGNL?: HkoWarnsumSignal;
-  WTMW?: HkoWarnsumSignal;
-  WTS?: HkoWarnsumSignal;
+export interface HkoWarnsumCode {
+  [key: string]: HkoWarnsum | undefined;
+  WFIRE?: HkoWarnsum;
+  WFROST?: HkoWarnsum;
+  WHOT?: HkoWarnsum;
+  WCOLD?: HkoWarnsum;
+  WMSGNL?: HkoWarnsum;
+  WRAIN?: HkoWarnsum;
+  WFNTSA?: HkoWarnsum;
+  WL?: HkoWarnsum;
+  WTCSGNL?: HkoWarnsum;
+  WTMW?: HkoWarnsum;
+  WTS?: HkoWarnsum;
 }
 
-export interface HkoWarningData {
+export interface HkoWarningIcon {
   code: string;
   icon: string;
   className: string;
